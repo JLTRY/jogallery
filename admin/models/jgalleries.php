@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_helloworld
+ * @subpackage  com_jgallery
  *
  * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class JGalleryModelJGallerys extends JModelList
+class JGalleryModelJGalleries extends JModelList
 {
 	/**
 	 * Constructor.
@@ -30,7 +30,7 @@ class JGalleryModelJGallerys extends JModelList
 		{
 			$config['filter_fields'] = array(
 				'id',
-				'greeting',
+				'directory',
 				'published'
 			);
 		}
@@ -59,7 +59,7 @@ class JGalleryModelJGallerys extends JModelList
 		if (!empty($search))
 		{
 			$like = $db->quote('%' . $search . '%');
-			$query->where('greeting LIKE ' . $like);
+			$query->where('directory LIKE ' . $like);
 		}
 
 		// Filter by published state
@@ -75,7 +75,7 @@ class JGalleryModelJGallerys extends JModelList
 		}
 
 		// Add the list ordering clause.
-		$orderCol	= $this->state->get('list.ordering', 'greeting');
+		$orderCol	= $this->state->get('list.ordering', 'directory');
 		$orderDirn 	= $this->state->get('list.direction', 'asc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_helloworld
+ * @subpackage  com_jgallery
  *
  * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class HelloWorldModelHelloWorld extends JModelAdmin
+class JGalleryModelJGallery extends JModelAdmin
 {
 	/**
 	 * Method to get a table object, load it if necessary.
@@ -28,7 +28,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	 *
 	 * @since   1.6
 	 */
-	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array())
+	public function getTable($type = 'JGallery', $prefix = 'JGalleryTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -47,8 +47,8 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	{
 		// Get the form.
 		$form = $this->loadForm(
-			'com_helloworld.helloworld',
-			'helloworld',
+			'com_jgallery.jgallery',
+			'jgallery',
 			array(
 				'control' => 'jform',
 				'load_data' => $loadData
@@ -63,15 +63,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		return $form;
 	}
 	/**
-	 * Method to get the script that have to be included on the form
-	 *
-	 * @return string	Script files
-	 */
-	public function getScript() 
-	{
-		return 'administrator/components/com_helloworld/models/forms/helloworld.js';
-	}
-	/**
 	 * Method to get the data that should be injected in the form.
 	 *
 	 * @return  mixed  The data for the form.
@@ -82,7 +73,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	{
 		// Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState(
-			'com_helloworld.edit.helloworld.data',
+			'com_jgallery.edit.jgallery.data',
 			array()
 		);
 
@@ -100,7 +91,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	{
 		if( !empty( $record->id ) )
 		{
-			return JFactory::getUser()->authorise( "core.delete", "com_helloworld.message." . $record->id );
+			return JFactory::getUser()->authorise( "core.delete", "com_jgallery.message." . $record->id );
 		}
 	}
 }

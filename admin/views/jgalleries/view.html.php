@@ -15,7 +15,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class JGalleryViewJGallerys extends JViewLegacy
+class JGalleryViewJGalleries extends JViewLegacy
 {
 	/**
 	 * Display the Hello World view
@@ -34,7 +34,7 @@ class JGalleryViewJGallerys extends JViewLegacy
 		$this->items		= $this->get('Items');
 		$this->pagination	= $this->get('Pagination');
 		$this->state		= $this->get('State');
-		$this->filter_order	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'greeting', 'cmd');
+		$this->filter_order	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'directory', 'cmd');
 		$this->filter_order_Dir = $app->getUserStateFromRequest($context.'filter_order_Dir', 'filter_order_Dir', 'asc', 'cmd');
 		$this->filterForm    	= $this->get('FilterForm');
 		$this->activeFilters 	= $this->get('ActiveFilters');
@@ -45,13 +45,13 @@ class JGalleryViewJGallerys extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
+			//JError::raiseError(500, implode('<br />', $errors));
 
-			return false;
+			//return false;
 		}
 
 		// Set the submenu
-		JGalleryHelper::addSubmenu('jgallerys');
+		JGalleryHelper::addSubmenu('jgalleries');
 
 		// Set the toolbar and number of found items
 		$this->addToolBar();
@@ -72,7 +72,7 @@ class JGalleryViewJGallerys extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		$title = JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS');
+		$title = JText::_('COM_JGALLERY_MANAGER_JGALLERIES');
 
 		if ($this->pagination->total)
 		{
@@ -91,7 +91,11 @@ class JGalleryViewJGallerys extends JViewLegacy
 		}
 		if ($this->canDo->get('core.delete')) 
 		{
-			JToolBarHelper::deleteList('', 'jgallerys.delete', 'JTOOLBAR_DELETE');
+			JToolBarHelper::deleteList('', 'jgalleries.delete', 'JTOOLBAR_DELETE');
+		}
+		if ($this->canDo->get('core.edit')) 
+		{
+			JToolbarHelper ::custom('jgallery.thumbs', 'publish.png', 'publish_f2.png','JTOOLBAR_THUMBS', true);
 		}
 		if ($this->canDo->get('core.admin')) 
 		{
@@ -107,6 +111,6 @@ class JGalleryViewJGallerys extends JViewLegacy
 	protected function setDocument() 
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
+		$document->setTitle(JText::_('COM_JGALLERY_ADMINISTRATION'));
 	}
 }

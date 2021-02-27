@@ -11,20 +11,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * General Controller of HelloWorld component
+ * Hello World Component Controller
  *
- * @package     Joomla.Administrator
- * @subpackage  com_jgallery
- * @since       0.0.7
+ * @since  0.0.1
  */
 class JGalleryController extends JControllerLegacy
 {
-	/**
-	 * The default view for the display method.
-	 *
-	 * @var string
-	 * @since 12.2
-	 */
-	protected $default_view = 'jgalleries';
-	protected $model_prefix = "JGalleryModel";
 }

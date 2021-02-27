@@ -9,22 +9,18 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+ 
 /**
- * General Controller of HelloWorld component
- *
- * @package     Joomla.Administrator
- * @subpackage  com_jgallery
- * @since       0.0.7
+ * Form Rule class for the Joomla Framework.
  */
-class JGalleryController extends JControllerLegacy
+class JFormRuleDirectory extends JFormRule
 {
 	/**
-	 * The default view for the display method.
+	 * The regular expression.
 	 *
-	 * @var string
-	 * @since 12.2
+	 * @access	protected
+	 * @var		string
+	 * @since	2.5
 	 */
-	protected $default_view = 'jgalleries';
-	protected $model_prefix = "JGalleryModel";
+	protected $regex = '^.*$';
 }

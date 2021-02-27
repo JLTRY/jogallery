@@ -10,20 +10,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Set some global property
-$document = JFactory::getDocument();
-$document->addStyleDeclaration('.icon-jgallery {background-image: url(../media/com_jgallery/images/tux-16x16.png);}');
-
-// Access check: is this user allowed to access the backend of this component?
-if (!JFactory::getUser()->authorise('core.manage', 'com_jgallery'))
-{
-	//return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
-}
-
-// require helper file
-JLoader::import('components.com_jgallery.jgalleryregister', JPATH_ADMINISTRATOR);
-
-// Get an instance of the controller prefixed by JGallery
+// Get an instance of the controller prefixed by HelloWorld
 $controller = JControllerLegacy::getInstance('JGallery');
 
 // Perform the Request task

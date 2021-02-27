@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_helloworld
+ * @subpackage  com_jgallery
  *
  * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class JGalleryControllerJGallerys extends JControllerAdmin
+class JGalleryControllerJGalleries extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
@@ -33,4 +33,7 @@ class JGalleryControllerJGallerys extends JControllerAdmin
 
 		return $model;
 	}
+	
+	
+	
 }

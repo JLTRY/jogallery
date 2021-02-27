@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form
-				addrulepath="/administrator/components/com_jgallery/models/rules"
+		addrulepath="/administrator/components/com_jgallery/models/rules"
 >
 	<fieldset
 				name="details"
@@ -11,18 +11,14 @@
 				type="hidden"
 				/>
 		<field
-				name="greeting"
-				filter="JComponentHelper::filterText"
-				buttons="true"
-				hide="pagebreak,readmore"
-				type="editor" 
-				label="COM_JGALLERY_JGALLERY_GREETING_LABEL"
-				description="COM_JGALLERY_JGALLERY_GREETING_DESC"
-				size="40"
-				class="inputbox validate-greeting"
-				validate="greeting"
-				required="true"
+				name="directory"
+				type="folderlist" 
+				label="COM_JGALLERY_JGALLERY_DIRECTORY_LABEL"
+				description="COM_JGALLERY_JGALLERY_DIRECTORY_DESC"
+				required="true"				
 				default=""
+				directory=""
+				recursive="true"				
 				/>
 		<field
 				name="catid"

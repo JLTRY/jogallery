@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_helloworld
+ * @subpackage  com_jgallery
  *
  * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
  * HelloWorld Controller
  *
  * @package     Joomla.Administrator
- * @subpackage  com_helloworld
+ * @subpackage  com_jgallery
  * @since       0.0.9
  */
 class JGalleryControllerJGallery extends JControllerForm
@@ -46,5 +46,18 @@ class JGalleryControllerJGallery extends JControllerForm
 		{
 			return JFactory::getUser()->authorise( "core.edit", "com_jgallery.message." . $id );
 		}
+	}
+	
+	
+	public function thumbs() {
+		$view = $this->getView( 'jgallery', 'html' );
+		// sets the template to someview.php
+		$viewLayout  = JFactory::getApplication()->input->getVar( 'tmpl', 'thumbs' );
+		// tell the view which tmpl to use 
+		$view->setLayout($viewLayout);
+		$model = $this->getModel('jgallery');
+		$view->setModel($model, true);
+		// go off to the view and call the display method
+		$view->display();
 	}
 }

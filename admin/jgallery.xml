@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3.2.0" method="upgrade">
+<extension type="component" version="4.0.0" method="upgrade">
 
-	<name>COM_JGALLERY</name>
+	<name>com_jgallery</name>
 	<!-- The following elements are optional and free of formatting constraints -->
 	<creationDate>February 2021</creationDate>
 	<author>Jl Tryoen</author>
@@ -10,7 +10,7 @@
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>0.0.1</version>
+	<version>0.0.3</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_JGALLERY_DESCRIPTION</description>
 
@@ -43,8 +43,7 @@
 	</files>
 
         <languages folder="site/language">
-		<language tag="en-GB">en-GB/en-GB.com_jgallery.ini</language>
-        </languages>
+		</languages>
 
 	<media destination="com_jgallery" folder="media">
 		<filename>index.html</filename>

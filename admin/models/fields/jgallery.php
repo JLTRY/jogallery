@@ -35,7 +35,7 @@ class JFormFieldJGallery extends JFormFieldList
 	{
 		$db    = JFactory::getDBO();
 		$query = $db->getQuery(true);
-		$query->select('#__jgallery.id as id,greeting,#__categories.title as category,catid');
+		$query->select('#__jgallery.id as id,directory,#__categories.title as category,catid');
 		$query->from('#__jgallery');
 		$query->leftJoin('#__categories on catid=#__categories.id');
 		// Retrieve only published items
@@ -48,7 +48,7 @@ class JFormFieldJGallery extends JFormFieldList
 		{
 			foreach ($messages as $message)
 			{
-				$options[] = JHtml::_('select.option', $message->id, $message->greeting .
+				$options[] = JHtml::_('select.option', $message->id, $message->directory .
 				                      ($message->catid ? ' (' . $message->category . ')' : ''));
 			}
 		}
