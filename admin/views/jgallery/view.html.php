@@ -63,7 +63,9 @@ class JGalleryViewJGallery extends JViewLegacy
 			}
 		}
 		$this->getparam('force', 'force');
-		$this->getparam('image', 'image');	
+		if ($this->getparam('image64', 'image64')){
+			$this->image = base64_decode($this->image64);
+		}
 		
 		$this->rootdir = "images/" . JParametersHelper::get('rootdir');
 		$this->script = $this->get('Script');

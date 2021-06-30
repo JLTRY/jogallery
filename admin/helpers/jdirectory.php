@@ -14,40 +14,38 @@ JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR)
 abstract class JDirectoryHelper
 {
 	static $_excludes =array("thumbs", "jw_sig", "th");
-	public static function join_paths(...$paths) {
-		return preg_replace('~[/\\\\]+~', DIRECTORY_SEPARATOR, implode(DIRECTORY_SEPARATOR, $paths));
-	}
+	
 	/* https://rosettacode.org/wiki/Walk_a_directory/Recursively#PHP */
 	function findDirs1($sdir, $sdir1, &$content){
 		$subdirs = array();
 		foreach (new DirectoryIterator($sdir) as $fileInfo) {
 			if ($fileInfo->isDot()) continue;
 			$filename = $fileInfo->getFileName();
-			$dir1 = JDirectoryHelper::join_paths($sdir, $filename);
+			$dir1 = JGalleryHelper::join_paths($sdir, $filename);
 			if (is_dir($dir1) && !(in_array($filename, self::$_excludes))) {
-				$content .=  '<option value="'. base64_encode(JDirectoryHelper::join_paths($sdir1, $filename)) . '">' .
+				$content .=  '<option value="'. base64_encode(JGalleryHelper::join_paths($sdir1, $filename)) . '">' .
 							basename($sdir) ."/". $filename . 
 							'</option>';
-				array_push($subdirs, $filename);			
+				array_push($subdirs, $filename);
 			}
 		}
 		foreach ($subdirs as $subdir) {
-			JDirectoryHelper::findDirs1(JDirectoryHelper::join_paths($sdir, $subdir),
-									JDirectoryHelper::join_paths($sdir1, $subdir) ,
+			JDirectoryHelper::findDirs1(JGalleryHelper::join_paths($sdir, $subdir),
+									JGalleryHelper::join_paths($sdir1, $subdir) ,
 									$content);
-		}	
-		
+		}
+
 	}
-	
+
 	function findDirs($id, $dir, $sdir,  &$content) {
 		$content .= '<div class="form-floating" id="findir'. $id .'">
 						<select class="form-select" id="dirselect' . $id . '" aria-label="Floating label select example">
 							<option selected>Open this select menu</option>';
-		JDirectoryHelper::findDirs1($dir, $sdir, $content);			
-		$content .= 		'</select>						
-					</div>';								
+		JDirectoryHelper::findDirs1($dir, $sdir, $content);
+		$content .= 		'</select>
+					</div>';
 	}
-	
+
 	   
 	public static function display($id, $_params)
 	{
@@ -67,13 +65,14 @@ abstract class JDirectoryHelper
 			$rootdir = ".";
 		}
 		$directory = $_params['dir'];
-		$dir = utf8_decode(html_entity_decode(JDirectoryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
+		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
 		if (!is_dir($dir)) {
 			$content .= "Directory does not exists :". $dir;
 		} else {
+			//$content .= "Directory" . $dir . ":" . $directory;
 			JDirectoryHelper::findDirs($id, $dir, $directory, $content);
 			JGalleryHelper::gallery($id, $content);
-			$document = JFactory::getDocument();	
+			$document = JFactory::getDocument();
 			$url = JURI::root(true) . '/administrator/components/com_jgallery/helpers/jgallery.js';
 			$document->addScript($url);
 			$scriptDeclarations = array("(function($) {

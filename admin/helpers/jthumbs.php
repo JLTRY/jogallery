@@ -10,6 +10,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
 
 abstract class JThumbsHelper
@@ -24,7 +25,7 @@ abstract class JThumbsHelper
 				break;
 			case "large":
 				$format = JParametersHelper::get("thumb_large_format");
-				break;			
+				break;
 		}
 		if ($format === False) {
 			$thumbs == False;
@@ -34,11 +35,11 @@ abstract class JThumbsHelper
 		return $thumbs;
 	}
 
-	static function getthumbURL($rootdir , $directory, $mode, $img) {	
+	static function getthumbURL($rootdir , $directory, $mode, $img) {
 		return JURI::root(true) .  DIRECTORY_SEPARATOR . JThumbsHelper::getthumb( $rootdir . DIRECTORY_SEPARATOR . $directory, $mode, basename($img));
 	}
-	
-	static function read_image($original_file)	
+
+	static function read_image($original_file)
 	{
 		$original_extension = strtolower(pathinfo($original_file, PATHINFO_EXTENSION));
 		$exif_data = exif_read_data($original_file);
@@ -142,7 +143,7 @@ abstract class JThumbsHelper
 
         return $thumbnail;
     }
-	
+
 	public static function generatethumb($filename, $thumbimage, $thb_width, $thb_height, $jpg_quality, $forced = false, $errors=array()) {
 		if (file_exists($thumbimage)&& ($forced == False)){
 			array_push($errors, "Exists $thumbimage");
@@ -155,7 +156,7 @@ abstract class JThumbsHelper
 			$found = array();
 			$fileInfo = pathinfo($filename);
 			if (array_key_exists('extension', $fileInfo) && 
-								in_array(strtolower($fileInfo['extension']), $fileTypes)) {							
+								in_array(strtolower($fileInfo['extension']), $fileTypes)) {
 				// Begin by getting the details of the original
 				list($originalwidth, $originalheight, $type) = getimagesize($filename);
 
@@ -183,9 +184,15 @@ abstract class JThumbsHelper
 					array_push($errors, "Error in source");
 					$ret = false;
 				}
-				else {						
+				else {
 					$width  = imagesx($source);
 					$height = imagesy($source);
+					if ($thb_width > $originalwidth) {
+						$thb_width = $originalwidth;
+					}
+					if ($thb_height > $originalheight) {
+						$thb_height = $originalheight;
+					}
 					// Calculate thumbnails
 					$thumbnail = self::thumbDimCalc($width, $height, ($thb_width * $width)/$originalwidth, ($thb_height * $height) /$originalheight, $smartResize);
 					$thumb_width = $thumbnail['width'];
@@ -215,7 +222,7 @@ abstract class JThumbsHelper
 		}
 		return $ret;
 	}
-	
+
 	function generatethumbs($rootdir, $directory) {
 		$errors = array();
 		foreach (array("jpg", "JPG") as $ext) {
@@ -226,12 +233,12 @@ abstract class JThumbsHelper
 					$width = JParametersHelper::get('thumb_' . $format .'_width');
 					$height = JParametersHelper::get('thumb_' . $format . '_height');
 					$quality = JParametersHelper::get('thumb_quality');
-					self::generatethumb($filename, $thumb, $width, $height, $quality, False, $errors);				
+					self::generatethumb($filename, $thumb, $width, $height, $quality, False, $errors);
 				}
 			}
 		}
 	}
-	
+
 	function generatethumbimage($rootdir, $directory, $filename, $forced) {
 		$error = false;
 		$errors = array();
@@ -242,7 +249,7 @@ abstract class JThumbsHelper
 			$height = JParametersHelper::get('thumb_' . $format . '_height');
 			$quality = JParametersHelper::get('thumb_quality');
 			if (!self::generatethumb(JGalleryHelper::join_paths($dir, $filename), $thumb, $width, $height, $quality, $forced)) {
-				array_push($errors , "Error in generation of $thumb");
+				array_push($errors , "Error in generation of $filename => $thumb");
 				$error = true;
 			}
 		}
@@ -251,7 +258,7 @@ abstract class JThumbsHelper
 		}else {
 			return array($filename, "ERR",$errors);
 		}
-		
+
 	}
 	public static function display($id, $_params)
 	{
@@ -266,18 +273,18 @@ abstract class JThumbsHelper
 		}
 		if ( array_key_exists('rootdir', $_params))
 		{
-			$rootdir = $_params['rootdir'];		
+			$rootdir = $_params['rootdir'];
 		} else {
 			$rootdir = ".";
 		}
 		$directory = $_params['dir'];
-		$dir = utf8_decode(html_entity_decode(JDirectoryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
+		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
 		if (!is_dir($dir)) {
 			$content .= "Directory does not exists :". $dir;
 		} else {
 			JDirectoryHelper::findDirs($id, $dir, $directory, $content);
 			JGalleryHelper::gallery($id, $content);
-			$document = JFactory::getDocument();			
+			$document = JFactory::getDocument();
 			$url = JURI::root(true) . '/administrator/components/com_jgallery/helpers/jthumbs.js';
 			$document->addScript($url);
 			$url = JURI::root(true) . '/administrator/components/com_jgallery/helpers/tabselect.js';
@@ -285,14 +292,14 @@ abstract class JThumbsHelper
 			$scriptDeclarations = array("(function($) {
 					$(document).ready(function() {
 						 jthumbs_getimages($, " . $id .",'" . JURI::root(true) ."');
-						})})(jQuery);");			
+						})})(jQuery);");
 			foreach ($scriptDeclarations as $scriptDeclaration) {
 				 $document->addScriptDeclaration($scriptDeclaration);
 			}
 		}
 		$content .=  '<div id="jgallery1" class="form-group" style="height:auto" ></div>
 					<div id="jimages1" style="height:auto"></div>
-					<div id="jgallerylog1" class="form-group" >log</div>';	
+					<div id="jgallerylog1" class="form-group" >log</div>';
 		return $content;
 	}
 }	

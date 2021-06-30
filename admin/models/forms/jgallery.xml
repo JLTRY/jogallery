@@ -15,10 +15,10 @@
 				type="folderlist" 
 				label="COM_JGALLERY_JGALLERY_DIRECTORY_LABEL"
 				description="COM_JGALLERY_JGALLERY_DIRECTORY_DESC"
-				required="true"				
+				required="true"
 				default=""
 				directory=""
-				recursive="true"				
+				recursive="true"
 				/>
 		<field
 				name="catid"

@@ -11,7 +11,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 	this.getthumb = function(img) {	
 		$.ajax({
 			url: this._urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=thumb&directory64="
-				 + this._directory +"&image=" + img +"&force=" + Number(this._forced),
+				 + this._directory +"&image64=" + btoa(img) +"&force=" + Number(this._forced),
 			type: "POST",
 			dataType: "json",
 			async: 'false',

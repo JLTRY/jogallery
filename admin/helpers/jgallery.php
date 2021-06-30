@@ -11,6 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 use Joomla\CMS\Date\Date;
+use Joomla\CMS\Log\Log;
 /**
  * JGallery component helper.
  *
@@ -79,10 +80,39 @@ abstract class JGalleryHelper
 		return $result;
 	}
 	
-	public static function join_paths(...$paths) {
-		return preg_replace('~[/\\\\]+~', DIRECTORY_SEPARATOR, implode(DIRECTORY_SEPARATOR, $paths));
+	public static function join_paths(...$spaths) {
+		//return preg_replace('~[/\\\\]+~', DIRECTORY_SEPARATOR, implode(DIRECTORY_SEPARATOR, $spaths));
+		//JLog::add('join_paths:'. print_r($spaths, true), JLog::WARNING, 'jgallery');
+		$arpath = array();
+		$prefix = ($spaths[0][0] == DIRECTORY_SEPARATOR)? DIRECTORY_SEPARATOR : "";
+		foreach($spaths as $spath) {
+			array_push($arpath, ...array_filter(preg_split("~[/\\\\]+~" , $spath),
+										function($k) {return ($k !="" && $k != ".");}));
+		}
+		$nbupper = 0;
+		$arjoinpath = array();
+		for($i = count($arpath)-1; $i >= 0;) {
+			$spath = $arpath[$i];
+			$prev = $i - 1;
+			$found = false;
+			$nbfound = 0;
+			while (($spath == "..") && ($i >= 1))
+			{
+				$nbfound++;
+				$i = $i - 1;
+				$spath = $arpath[$i];
+			}
+			if ($nbfound == 0) {
+				array_push($arjoinpath, $spath);
+				$i--;
+			} else {
+				$i = max(0, $i - $nbfound);
+			}
+		}
+		//JLog::add('join_paths=>:'. $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath)), JLog::WARNING, 'jgallery');
+		return $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath));
 	}
-	
+
 	public static function guessDate($filename, &$date) {
 		if(preg_match('/IMG[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re))
 		{
@@ -117,15 +147,19 @@ abstract class JGalleryHelper
 		$listdirs = array();
 		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
 		if ($parent > 0 ) {
-			array_push($listdirs, "..");
+			array_push($listdirs, array("name" => "..", 
+									"parent" => $parent -1,
+									"url" => self::getRoute($directory, "..", $parent-1)));
 		}
-		foreach (glob(self::join_paths($dir , "*")) as $dirname) {
-			if (is_dir($dirname) && basename($dirname) != "thumbs" && basename($dirname) != "jw_sig") {	
-				array_push($listdirs, basename($dirname));
+		foreach (glob(JGalleryHelper::join_paths($dir , "*")) as $dirname) {
+			if (is_dir($dirname) && basename($dirname) != "thumbs" && basename($dirname) != "jw_sig") {
+				array_push($listdirs,  array("name" => basename($dirname),
+										"parent" => $parent,
+										"url" => self::getRoute($directory, basename($dirname), $parent + 1)));
 			}
 		}
 		return $listdirs;
-	}		
+	}
 	/**
 	* Function to insert JGallery introduction
 	*
@@ -157,7 +191,7 @@ abstract class JGalleryHelper
 		}
 		if ( array_key_exists('rootdir', $_params))
 		{
-			$rootdir = $_params['rootdir'];		
+			$rootdir = $_params['rootdir'];
 		} else {
 			$rootdir = ".";
 		}
@@ -191,16 +225,14 @@ abstract class JGalleryHelper
 		$listdirs = self::getDirectories($rootdir, $directory, $parent);
 		$content .= "<h2>$directory</h2>";
 		$i = 0;
-		foreach ($listdirs  as $dirname) {
+		foreach ($listdirs  as $dir) {
 			$urlshortfilename = "/media/com_phocagallery/images/icon-folder-medium.png";
-			$urlfilename = self::getRoute($directory, $dirname, $parent);
+			$urlfilename =  $dir["url"];
+			$dirname = $dir["name"];
 			$content .= "<a   href=\"$urlfilename\">
 						<img src=\"$urlshortfilename\">
 						<input style=\"border: 0; text-overflow:ellipsis;\" size=\"10\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
 						</a>";
-			if ($i == 0) {
-				$parent = $parent + 1;
-			}
 		}
 		$listfiles = self::getFiles($rootdir, $directory, false);
 		foreach ($listfiles  as $filename) {
@@ -214,11 +246,11 @@ abstract class JGalleryHelper
 			if (($startdate == -1) || (($moddate - $startdate) >= 0))	{
 				if (($enddate == -1 ) ||  (($enddate - $moddate) >= 0)) {
 					$urlfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"large", $filename );
-					$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"small", $filename );
+					$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory, "small", $filename );
 					$content .= "<a data-fancybox=\"gallery\"  href=\"$urlfilename\">
 									<img src=\"$urlshortfilename\">
 								</a>";
-							
+			
 				}
 			} else {
 				//$content .= $filename . ":" . date("Ymd", $moddate) . "<br/>"; 
@@ -226,11 +258,11 @@ abstract class JGalleryHelper
 		}
 		return $content;
 	}
-	
+
 	static function gallery($id, &$content){
 		$content .= '<div  id="jgallery'. $id .'"></div>';
 
 	}
-	
+
 
 }
