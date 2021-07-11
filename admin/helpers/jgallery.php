@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_jgallery
  *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2015 JL TRYOEN All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -125,6 +125,9 @@ abstract class JGalleryHelper
 		return JURI::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode("${parentdir}/${directory}") ."&parent=" .$parent . "&Itemid=0";
 	}
 	
+	public function sortFile($a, $b) {
+		return cmp($a[0], $b[0]);
+	}
 	public static function getFiles($rootdir, $directory,  $icon=true) {
 		$listfiles = array();
 		foreach (array("jpg", "JPG") as $ext) {
@@ -139,6 +142,11 @@ abstract class JGalleryHelper
 					array_push($listfiles, $file[0]);
 				}
 			}
+		}
+		if ($icon){
+			usort($listfiles,sortFile);
+		} else {
+			usort($listfiles, cmp);
 		}
 		return $listfiles;
 	}
@@ -202,6 +210,7 @@ abstract class JGalleryHelper
 			$parent = 0;
 		}
 		$directory = $_params['dir'];
+		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
 		$document->addScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js');
 		$document->addStyleSheet('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css');
@@ -260,7 +269,7 @@ abstract class JGalleryHelper
 	}
 
 	static function gallery($id, &$content){
-		$content .= '<div  id="jgallery'. $id .'"></div>';
+		$content .= '<div  id="jgallery'. $id .'" style="min-heigth:400px;height:400px"></div>';
 
 	}
 
