@@ -58,7 +58,7 @@ class JGalleryViewJGallery extends JViewLegacy
 			if (!$this->getparam('directory', 'directory'))
 			{
 				if ($this->getparam('directory64', 'directory64')) {
-					$this->directory = base64_decode($this->directory64);
+					$this->directory = utf8_decode(base64_decode($this->directory64));
 				}
 			}
 		}

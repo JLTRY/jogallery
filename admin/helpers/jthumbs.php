@@ -282,24 +282,19 @@ abstract class JThumbsHelper
 		if (!is_dir($dir)) {
 			$content .= "Directory does not exists :". $dir;
 		} else {
-			JDirectoryHelper::findDirs($id, $dir, $directory, $content);
-			JGalleryHelper::gallery($id, $content);
+
+			$scriptDeclarations = array();
+			$scripts = array('jgallery.js');
+			JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, 'select');
 			$document = JFactory::getDocument();
-			$url = JURI::root(true) . '/administrator/components/com_jgallery/helpers/jthumbs.js';
-			$document->addScript($url);
-			$url = JURI::root(true) . '/administrator/components/com_jgallery/helpers/tabselect.js';
-			$document->addScript($url);
-			$scriptDeclarations = array("(function($) {
-					$(document).ready(function() {
-						 jthumbs_getimages($, " . $id .",'" . JURI::root(true) ."');
-						})})(jQuery);");
+			foreach ($scripts as $script) {
+				 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+			}
 			foreach ($scriptDeclarations as $scriptDeclaration) {
 				 $document->addScriptDeclaration($scriptDeclaration);
 			}
 		}
-		$content .=  '<div id="jgallery1" class="form-group" style="height:auto" ></div>
-					<div id="jimages1" style="height:auto"></div>
-					<div id="jgallerylog1" class="form-group" >log</div>';
+		
 		return $content;
 	}
 }	

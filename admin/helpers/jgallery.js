@@ -3,7 +3,7 @@ function fillgallery($, value, params)
 	id = params[0];
 	rootdir = params[1];
 	$.ajax({
-		url:  "index.php?option=com_jgallery&view=jgallery&tmpl=component&directory64="
+		url:  rootdir + "index.php?option=com_jgallery&view=jgallery&tmpl=component&directory64="
 			 + value,
 		type: "POST",
 		success: function(rdata) {

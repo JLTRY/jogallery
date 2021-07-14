@@ -128,19 +128,30 @@ abstract class JGalleryHelper
 	public function sortFile($a, $b) {
 		return cmp($a[0], $b[0]);
 	}
-	public static function getFiles($rootdir, $directory,  $icon=true) {
+	public static function getFiles($rootdir, $directory,  $icon=true, $startdate=-1, $enddate=-1) {
 		$listfiles = array();
 		foreach (array("jpg", "JPG") as $ext) {
 			$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
 			foreach (glob($dir . "/*.$ext") as $filename) {
-				$file = array();	
-				array_push($file, basename($filename));
-				array_push($file, JThumbsHelper::getthumbURL($rootdir, $directory, 'small', $filename));
-				if ($icon) {
-					array_push($listfiles, $file);
+				$pathinfo = pathinfo($filename);				
+				$moddate = filemtime($filename);
+				$exif = exif_read_data($filename);
+				if (($exif !== false)&& array_key_exists('DateTimeOriginal', $exif)) {
+					$moddate = strtotime($exif['DateTimeOriginal'] . " UCT");
 				} else {
-					array_push($listfiles, $file[0]);
+					JGalleryHelper::guessDate(basename($filename), $moddate);
 				}
+				if (($startdate == -1) || (($moddate - $startdate) >= 0))	{
+					if (($enddate == -1 ) ||  (($enddate - $moddate) >= 0)) {
+						$urlfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"large", $filename );
+						$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory, "small", $filename );
+						array_push($listfiles, array('filename' => $pathinfo['filename'],
+													'basename' => basename($filename),
+													'moddate' => $moddate,
+													'urlfilename' => $urlfilename,
+													'urlshortfilename' => $urlshortfilename));
+					}
+				}				
 			}
 		}
 		if ($icon){
@@ -150,7 +161,36 @@ abstract class JGalleryHelper
 		}
 		return $listfiles;
 	}
+	
+	public static function ouputsync($directory, $listfiles, &$content, &$scriptDeclarations, &$scripts)
+	{
+		foreach ($listfiles  as $file) {			
+			$urlfilename = $file['urlfilename'];
+			$urlshortfilename = $file['urlshortfilename'];
+			$content .= "<a data-fancybox=\"gallery\"  href=\"$urlfilename\"><img src=\"$urlshortfilename\"/></a>";
+		}
+		array_push($scriptDeclarations, '(function($) {
+					$(document).ready(function() {
+						setTimeout(function() {	initfancybox($);},500);
+						})})(jQuery);');
+	}
 
+	public static function ouputasync($directory, $listfiles, &$content, &$scriptDeclarations, &$scripts)
+	{
+		$sid = "jgallery" . rand(1, 1024);
+		$content .= '<div id="' . $sid . '">';
+		$content .= '</div>';
+		array_push($scripts, "jimages.js");
+		array_push($scriptDeclarations, '(function($) {
+					$(document).ready(function() {
+							jimages_getimages($, "' . $sid .'", "' . JURI::root(true) .'","' . base64_encode($directory) .'",' . json_encode($listfiles) .');							
+						})})(jQuery);');
+		array_push($scriptDeclarations, '(function($) {
+					$(document).ready(function() {
+						setTimeout(function() {	initfancybox($);},500);
+						})})(jQuery);');						
+	}
+	
 	public static function getDirectories($rootdir, $directory,  $parent=0) {
 		$listdirs = array();
 		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
@@ -212,65 +252,50 @@ abstract class JGalleryHelper
 		$directory = $_params['dir'];
 		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
-		$document->addScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js');
-		$document->addStyleSheet('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css');
+		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
+		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
 		$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
-		$scriptDeclarations = array("
-			(function($) {
-				$(document).ready(function() {
-					$.fancybox.defaults.buttons = [
-						'slideShow',
-						'fullScreen',
-						'thumbs',
-						'share',
-						//'download',
-						'zoom',
-						'close'
-			];})})(jQuery);");
-		foreach ($scriptDeclarations as $scriptDeclaration) {
-			 $document->addScriptDeclaration($scriptDeclaration);
-		}
+						
 		//sub directories
 		$listdirs = self::getDirectories($rootdir, $directory, $parent);
 		$content .= "<h2>$directory</h2>";
+		$nbcar = 0;
+		$maxcar = 40;
 		$i = 0;
+		$maxitem = 8;
+		$content .= '<table><tr>';
 		foreach ($listdirs  as $dir) {
 			$urlshortfilename = "/media/com_phocagallery/images/icon-folder-medium.png";
 			$urlfilename =  $dir["url"];
 			$dirname = $dir["name"];
-			$content .= "<a   href=\"$urlfilename\">
-						<img src=\"$urlshortfilename\">
-						<input style=\"border: 0; text-overflow:ellipsis;\" size=\"10\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
-						</a>";
-		}
-		$listfiles = self::getFiles($rootdir, $directory, false);
-		foreach ($listfiles  as $filename) {
-			$moddate = filemtime($filename);
-			$exif = exif_read_data($filename);
-			if (($exif !== false)&& array_key_exists('DateTimeOriginal', $exif)) {
-				$moddate = strtotime($exif['DateTimeOriginal'] . " UCT");
-			} else {
-				JGalleryHelper::guessDate(basename($filename), $moddate);
-			}
-			if (($startdate == -1) || (($moddate - $startdate) >= 0))	{
-				if (($enddate == -1 ) ||  (($enddate - $moddate) >= 0)) {
-					$urlfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"large", $filename );
-					$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory, "small", $filename );
-					$content .= "<a data-fancybox=\"gallery\"  href=\"$urlfilename\">
-									<img src=\"$urlshortfilename\">
-								</a>";
-			
-				}
-			} else {
-				//$content .= $filename . ":" . date("Ymd", $moddate) . "<br/>"; 
+			$content .= "<td><a   href=\"$urlfilename\">
+						<img src=\"$urlshortfilename\"><input style=\"border: 0; text-overflow:ellipsis;\" size=\"12\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
+						</a></td>";
+			if ($i++ > $maxitem) {
+				$content .= '</tr><tr>';
+				$i = 0;
 			}
 		}
+		$content .= "</tr></table>";
+		$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
+		$scriptDeclarations = array();
+		$scripts = array('jgallery.js');
+		self::ouputasync($directory, $listfiles, $content, $scriptDeclarations, $scripts);
+		$document = JFactory::getDocument();
+		foreach ($scripts as $script) {
+			 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+		}
+
+		foreach ($scriptDeclarations as $scriptDeclaration) {
+			 $document->addScriptDeclaration($scriptDeclaration);
+		}
+		
+		
 		return $content;
 	}
 
 	static function gallery($id, &$content){
 		$content .= '<div  id="jgallery'. $id .'" style="min-heigth:400px;height:400px"></div>';
-
 	}
 
 

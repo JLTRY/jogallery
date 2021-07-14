@@ -9,9 +9,11 @@ function thumbretriever($, id, urlroot, directory, values) {
 	this._forced = false;
 	
 	this.getthumb = function(img) {	
+		url = this._urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=thumb&directory64="
+				 + this._directory +"&image64=" + btoa(img) +"&force=" + Number(this._forced);
+		console.log(url);
 		$.ajax({
-			url: this._urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=thumb&directory64="
-				 + this._directory +"&image64=" + btoa(img) +"&force=" + Number(this._forced),
+			url: url,
 			type: "POST",
 			dataType: "json",
 			async: 'false',
@@ -96,13 +98,15 @@ function thumbretriever($, id, urlroot, directory, values) {
 	return this;
 }		
 
-function jthumbs_getimages($, id, urlroot)
+function jthumbs_getimages($, sid, id, urlroot)
 {
-	$("#dirselect"+id).change(function() {
+	$("#"+sid).change(function() {
 		var dir = this.value;
+		var url = urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=json&directory64="
+				 + this.value;
+		console.log(url);
 		$.ajax({
-			url:  urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=json&directory64="
-				 + this.value,
+			url:  url,
 			type: "POST",
 			dataType: "json",
 			success: function(rdata) {

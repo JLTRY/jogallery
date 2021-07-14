@@ -45,7 +45,7 @@ class JDirectory
 	
 	
 	public function getbase64path() {
-		return base64_encode(JGalleryHelper::join_paths($this->dirname, $this->basename));
+		return base64_encode(utf8_encode(JGalleryHelper::join_paths($this->dirname, $this->basename)));
 	}
 	
 	public function insertDir($elem){
@@ -86,12 +86,13 @@ class JDirectory
 		}
 	}
 	
-	public function outputselect(&$content)
+	public function outputselect($id, &$content, &$scriptsdecl, &$scripts )
 	{
+		$sid = 'jgalleryselect' . $id;
 		if ($this->parent == null)
 		{
-			$content .= '<div class="form-floating" id="findir'. $this->id .'">
-						<select class="form-select" style="max-width:500px;" id="dirselect' . $this->id . '" aria-label="Floating label select example">
+			$content .= '<div class="form-floating">
+						<select class="form-select" style="max-width:500px;" id="' . $sid . '" aria-label="Floating label select example">
 							<option selected>Open this select menu</option>';
 		}
 		if ($this->parent) {
@@ -100,11 +101,20 @@ class JDirectory
 								'</option>';
 		}
 		foreach ($this->children as $child) {
-			$child->outputselect($content);
+			$child->outputselect($id, $content, $scriptsdecl, $scripts );
 		}
 		if ($this->parent == null)
 		{
 			$content .= 		'</select></div>';
+			array_push($scripts, "jthumbs.js");
+			array_push($scripts, "tabselect.js");
+			array_push($scriptsdecl, '(function($) {
+					$(document).ready(function() {
+						 jthumbs_getimages($, "' . $sid .'", "' . $id . '", "' . JURI::root(true) .'");
+						})})(jQuery);');
+			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto" ></div>
+					<div id="jimages' . $id . '" style="height:auto"></div>
+					<div id="jgallerylog' . $id . '" class="form-group" >log</div>';
 		}
 	}
 	
@@ -127,19 +137,24 @@ class JDirectory
 		$json = json_encode($arr);
 	}
 
-	public function outputradio($sid, $sidg, &$content, &$scriptsdecl, &$scripts )
+	public function outputradio($id, &$content, &$scriptsdecl, &$scripts )
 	{
 		$json = "";
 		$this->outputjson($json);
+		$sid = "findir" . $id1;
+		$sidg = "jgallery" . $id;
+		$content = '<div class="form-floating" id="'. $sid .'"></div>';
 		array_push($scriptsdecl, '$(function () {
-		initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JURI::root(true) .'"]);});');
+		initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JURI::root() .'"]);});');
 		array_push($scripts, "radiobox.js");
+		
 	}	
 }
 
 
 class JRootDirectory extends JDirectory
 {
+
 	function __construct($dirname, $basename)
 	{
 		parent::__construct(null, $dirname, $basename);
@@ -159,11 +174,17 @@ abstract class JDirectoryHelper
         return ($a[0] < $b[0]) ? 1 : -1;
 	}
 	
-	function findDirs($sid, $sidg, $dir, $sdir,  &$content, &$scriptsdecl, &$scripts) {
-		$jroot = new JRootDirectory($id, $dir, $sdir);
+	function findDirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, $type='radio') {
+		$jroot = new JRootDirectory($dir, $sdir);
 		$jroot->findDirs($dir, $sdir, self::$_excludes);
-		//$jroot->outputselect($content);
-		$jroot->outputradio($sid, $sidg, $content, $scriptsdecl, $scripts);
+		$sid = "findir" . $id1;
+		$sidg = "jgallery" . $id;
+		if ($type == 'select') {
+			$jroot->outputselect($id, $content, $scriptsdecl, $scripts);
+		}
+		else {
+			$jroot->outputradio($id, $content, $scriptsdecl, $scripts);
+		}
 	}
 
 	   
@@ -191,10 +212,7 @@ abstract class JDirectoryHelper
 		} else {
 			$scriptDeclarations = array();
 			$scripts = array('jgallery.js');
-			$sid = "findir". $id;
-			$sidg = "jgallery" . $id;
-			$content = '<div class="form-floating" id="'. $sid .'"></div>';
-			JDirectoryHelper::findDirs($sid, $sidg, $dir, $directory, $content, $scriptDeclarations, $scripts);
+			JDirectoryHelper::findDirs($id, $dir, $directory, $content, $scriptDeclarations, $scripts);
 			JGalleryHelper::gallery($id, $content);
 			$document = JFactory::getDocument();
 			foreach ($scripts as $script) {

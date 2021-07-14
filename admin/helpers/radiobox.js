@@ -28,7 +28,7 @@ function radiobox($, idp, values, callback, params) {
 						item.relative +
 						"</label>" +
 					'</td>';
-			nbcar += item.relative.length + 2;
+			nbcar += item.relative.length + 1;
 			if (nbcar > maxcar) {
 				text = text + '</tr><tr>';
 				nbcar = 0;

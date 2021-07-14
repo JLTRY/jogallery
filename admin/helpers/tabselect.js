@@ -34,10 +34,10 @@ function _tabselect($, idp, values, callback, params) {
 		var text = '<table>';
 		var that = this;
 		$.each(this._values,function(index, tvalue) {
-			var value = tvalue[0];
-			var image = tvalue[1]
+			var value = tvalue['basename'];
+			var image = tvalue['urlshortfilename'];
 			var checked = 0;			
-			var name = tvalue[0];
+			var name = tvalue['basename'];
 			var btclass = (checked)?"btn btn-sm btn-info":"btn btn-sm btn-light";
 			var checkedattr = (checked)?"checked":"";
 			var id = "checked_" + value;
