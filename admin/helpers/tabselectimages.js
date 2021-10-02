@@ -1,0 +1,86 @@
+
+function _tabselectimages($, idp, values, options, callback, params) {
+	this._idp = idp;
+	this._values = values;
+	this._callback = callback;
+	this._params = params;
+	this._options = options;
+	this.callback = function()
+	{
+		var listselected = [];
+		$(this._idp).find("[class='tabselectimages']").each(function() {
+				if ($(this).prop('checked')){
+					listselected.push($(this).attr('for'));
+				}
+		});
+		this._callback($, listselected, this._params);
+	}
+	
+	this.checkall = function(checked) {
+		$(this._idp).find("[class='tabselectimages']").each(function() {
+					$(this).prop('checked', checked);
+			}	
+		);
+		this.callback();
+	}
+	this.check = function(value, checked) {
+		$(this._idp).find('[class="tabselectimages"]').each(function() {
+			if ($(this).attr("for") == value) {
+				$(this).prop('checked', checked);
+			}
+		});
+	};	
+	this.init = function($) {
+		$(this._idp).html('');
+		var text = '<table>';
+		var that = this;
+		$.each(this._values,function(index, tvalue) {
+			var simage = tvalue['urlshortfilename'];
+			var limage = tvalue['urlfilename'];
+			var name = tvalue['filename'];
+			var basename = tvalue['basename'];			
+			var comment = tvalue['comment'];
+			var checked = 0;			
+			var btclass = (checked)?"btn btn-sm btn-info":"btn btn-sm btn-light";
+			var checkedattr = (checked)?"checked":"";
+			var id = "checked_" + name;
+			text += "<tr>";
+			if (that._options['checked']) {
+				text += "<td><input style=\"float:left;font-size:50%;\" class=\"tabselectimages\" type=\"checkbox\" " +  checkedattr +" id=\"" + id  +
+										"\" value=\""+index + "\" "
+										+ " for=\"" + basename + "\""
+										+ " idp=\"" + that._idp + "\""
+										+ checkedattr + " >"
+						+ "</td>";
+			}
+			if (that._options['name']) {
+				text += "<td>" 
+					+ name + 
+					"</td>";
+			}
+			text += '<td>'+
+            '<a class="fancybox-thumbs" data-fancybox="'+ name +'" href="' + limage +'">'
+            +' <img src="' + simage +'" id="' + basename + '" ' + 'alt="">'+
+            '</a></td>';
+            								
+			if (that._options['comments']) {
+				text += '<td><input type="textbox" size="80" name="comments['+ name +']" value="'+comment +'"></td>';
+			}	
+			text = text + '</tr>';			
+		});
+		text += "</table>";
+		$(this._idp).html(text);
+		$("input[class='tabselectimages']").data('tabselectimages', this);
+		$("input[class='tabselectimages']").change(function() {
+			$(this).data('tabselectimages').callback();			
+		});
+	};
+	this.init($);
+	return this;
+}
+
+function tabselectimages($, idp, values, options, callback, params) {
+	var tabselectimages = new _tabselectimages($, idp, values, options, callback, params);
+	$(idp).data('tabselectimages', tabselectimages);
+	return tabselectimages;
+}

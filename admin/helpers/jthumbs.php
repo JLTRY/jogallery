@@ -144,9 +144,9 @@ abstract class JThumbsHelper
         return $thumbnail;
     }
 
-	public static function generatethumb($filename, $thumbimage, $thb_width, $thb_height, $jpg_quality, $forced = false, $errors=array()) {
+	public static function generatethumb($filename, $thumbimage, $thb_width, $thb_height, $jpg_quality, $forced = false, &$errors=array()) {
 		if (file_exists($thumbimage)&& ($forced == False)){
-			array_push($errors, "Exists $thumbimage");
+			array_push($errors, "The file already exists Exists $thumbimage");
 			$ret = false;
 		} else {
 			mkdir(dirname($thumbimage));
@@ -238,6 +238,24 @@ abstract class JThumbsHelper
 			}
 		}
 	}
+	
+	
+		
+	
+	function deletethumbs($rootdir, $directory, $image, &$errors) {
+		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
+		foreach (self::$_formats as $format) {
+			$filename = JGalleryHelper::join_paths(self::getthumb($dir, $format, $image));
+			$width = JParametersHelper::get('thumb_' . $format .'_width');
+			$height = JParametersHelper::get('thumb_' . $format . '_height');
+			if (file_exists($filename)){
+				array_push($errors, "success deleting " . $filename);
+				unlink($filename);
+			} else {
+				array_push($errors, "file does not exist " . $filename);
+			}
+		}
+	}
 
 	function generatethumbimage($rootdir, $directory, $filename, $forced) {
 		$error = false;
@@ -248,13 +266,13 @@ abstract class JThumbsHelper
 			$width = JParametersHelper::get('thumb_' . $format .'_width');
 			$height = JParametersHelper::get('thumb_' . $format . '_height');
 			$quality = JParametersHelper::get('thumb_quality');
-			if (!self::generatethumb(JGalleryHelper::join_paths($dir, $filename), $thumb, $width, $height, $quality, $forced)) {
+			if (!self::generatethumb(JGalleryHelper::join_paths($dir, $filename), $thumb, $width, $height, $quality, $forced, $errors)) {
 				array_push($errors , "Error in generation of $filename => $thumb");
 				$error = true;
 			}
 		}
 		if ($error == false) {
-			return array($filename, "OK", "Generation of thumb for <img src=\"". self::getthumbURL($rootdir, $directory,"small", $filename ) ."\"></img> is OK");
+			return array($filename, "OK", ["Generation of thumb for <img src=\"". self::getthumbURL($rootdir, $directory,"small", $filename ) ."\"></img> is OK"]);
 		}else {
 			return array($filename, "ERR",$errors);
 		}
@@ -285,7 +303,7 @@ abstract class JThumbsHelper
 
 			$scriptDeclarations = array();
 			$scripts = array('jgallery.js');
-			JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, 'select');
+			JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, 'selectthumbs');
 			$document = JFactory::getDocument();
 			foreach ($scripts as $script) {
 				 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);

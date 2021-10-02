@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * General Controller of HelloWorld component
+ * General Controller of JGallerycomponent
  *
  * @package     Joomla.Administrator
  * @subpackage  com_jgallery

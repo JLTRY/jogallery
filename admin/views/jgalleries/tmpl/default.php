@@ -9,7 +9,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
-
+JHtml::_('jquery.framework');
 JHtml::_('formbehavior.chosen', 'select');
 
 $listOrder     = $this->escape($this->filter_order);

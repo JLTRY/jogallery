@@ -8,9 +8,10 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 
 /**
- * HelloWorld Controller
+ * JGalleryController
  *
  * @package     Joomla.Administrator
  * @subpackage  com_jgallery
@@ -18,19 +19,7 @@ defined('_JEXEC') or die('Restricted access');
  */
 class JGalleryControllerJGallery extends JControllerForm
 {
-	/**
-	* Implement to allowAdd or not
-	*
-	* Not used at this time (but you can look at how other components use it....)
-	* Overwrites: JControllerForm::allowAdd
-	*
-	* @param array $data
-	* @return bool
-	*/
-	protected function allowAdd($data = array())
-	{
-		return parent::allowAdd($data);
-	}
+
 	/**
 	* Implement to allow edit or not
 	* Overwrites: JControllerForm::allowEdit
@@ -49,15 +38,62 @@ class JGalleryControllerJGallery extends JControllerForm
 	}
 	
 	
-	public function thumbs() {
+	public function editthumbs() {
 		$view = $this->getView( 'jgallery', 'html' );
 		// sets the template to someview.php
-		$viewLayout  = JFactory::getApplication()->input->getVar( 'tmpl', 'thumbs' );
+		$input = JFactory::getApplication()->input;
+		$viewLayout  = $input->getVar( 'tmpl', 'thumbs' );
 		// tell the view which tmpl to use 
 		$view->setLayout($viewLayout);
 		$model = $this->getModel('jgallery');
 		$view->setModel($model, true);
 		// go off to the view and call the display method
 		$view->display();
+	}
+	
+	public function comments() {
+		$view = $this->getView( 'jgallery', 'html' );
+		// sets the template to someview.php
+		$viewLayout  = JFactory::getApplication()->input->getVar( 'tmpl', 'comments' );
+		// tell the view which tmpl to use 
+		$view->setLayout($viewLayout);
+		$model = $this->getModel('jgallery');
+		$view->setModel($model, true);
+		// go off to the view and call the display method
+		$view->display();
+	}
+	
+	
+	
+	public function savecomments() {
+		$input_options = JFilterInput::getInstance(
+        array(
+            'img','p','a','u','i','b','strong','span','div','ul','li','ol','h1','h2','h3','h4','h5',
+            'table','tr','td','th','tbody','theader','tfooter','br'
+        ),
+        array(
+            'src','width','height','alt','style','href','rel','target','align','valign','border','cellpading',
+            'cellspacing','title','id','class'
+        )
+		);
+		//$input = JFactory::getApplication()->input;
+		$input = new JInput($_POST, array('filter' => $input_options));
+		$directory64 = JFactory::getApplication()->getInput()->getVar( 'directory64', '' );
+		// tell the view which tmpl to use 
+		$post_data =$input->getVar('comments', array());
+		$ret = JGalleryHelper::savecomments(utf8_decode(base64_decode($directory64)), $post_data);
+		JGalleryHelper::json_answer($ret);
+	}
+	
+	public function delete() {
+		$input = JFactory::getApplication()->input;
+		//$input = new JInput($_POST);
+		$directory64 = JFactory::getApplication()->getInput()->getVar( 'directory64', '' );
+		// tell the view which tmpl to use 
+		$post_data = $input->getVar('images', array());
+		$keep = $input->getVar('keep', 1);
+		$errors = array();
+		$ret = JGalleryHelper::deleteimages(utf8_decode(base64_decode($directory64)), $post_data, $keep, $errors);
+		JGalleryHelper::json_answer($errors);
 	}
 }

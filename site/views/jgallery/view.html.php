@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 /**
- * HTML View class for the HelloWorld Component
+ * HTML View class for the JGalleryComponent
  *
  * @since  0.0.1
  */

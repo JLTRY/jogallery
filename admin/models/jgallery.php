@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * HelloWorld Model
+ * JGalleryModel
  *
  * @since  0.0.1
  */

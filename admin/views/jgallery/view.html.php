@@ -11,6 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\MVC\Factory\MVCFactory;
 /**
  * JGallery View
  *
@@ -50,9 +51,21 @@ class JGalleryViewJGallery extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// Get the Data		
-		$this->item = $this->get('Item');
-		if (($this->item)&& ($this->directory)){
-			$this->directory = $this->item->directory;
+		$this->getparam('id', 'id');
+		if (!$this->id) {
+			$this->getparam('cid', 'cid');
+			if (is_array($this->cid)) {
+				$this->id = $this->cid[0];
+			}
+		}
+		if ($this->id) {
+			$factory = JFactory::getApplication()->bootComponent('com_jgallery')->getMVCFactory();
+			$modelGallery = $factory->createModel('JGallery', 'JGalleryModel');
+			$modelGallery->setState("jgallery.id", $this->id);
+			$this->gallery = $modelGallery->getItem($this->id);
+		}
+		if (($this->gallery)&& ($this->gallery->directory)){
+			$this->directory = $this->gallery->directory;
 		}
 		else {
 			if (!$this->getparam('directory', 'directory'))
@@ -67,7 +80,7 @@ class JGalleryViewJGallery extends JViewLegacy
 			$this->image = base64_decode($this->image64);
 		}
 		
-		$this->rootdir = "images/" . JParametersHelper::get('rootdir');
+		$this->rootdir = JParametersHelper::getrootdir();
 		$this->script = $this->get('Script');
 		$form  = $this->form = $this->get('Form');		
 		if ($form) {
@@ -107,16 +120,14 @@ class JGalleryViewJGallery extends JViewLegacy
 
 		// Hide Joomla Administrator Main menu
 		$input->set('hidemainmenu', true);
-
 		$isNew = ($this->item->id == 0);
-		Log::add('my error message' . $this->getLayout(), Log::ERROR, 'my-error-category');
 		JToolBarHelper::title($isNew ? JText::_('COM_JGALLERY_MANAGER_JGALLERY_NEW')
 		                             : JText::_('COM_JGALLERY_MANAGER_JGALLERY_EDIT'), 'jgallery');
 		// Build the actions for new and existing records.
 		if ($isNew)
 		{
 			// For new records, check the create permission.
-			if ($this->getLayout() != "thumbs" && $this->canDo->get('core.create')) 
+			if (!in_array($this->getLayout(), array("thumbs", "comments")) && $this->canDo->get('core.create')) 
 			{
 				JToolBarHelper::apply('jgallery.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('jgallery.save', 'JTOOLBAR_SAVE');
@@ -127,9 +138,6 @@ class JGalleryViewJGallery extends JViewLegacy
 		}
 		else
 		{
-			
-
-			
 			if ($this->getLayout() && $this->canDo->get('core.edit'))
 			{
 				// We can save the new record

@@ -17,4 +17,7 @@ defined('_JEXEC') or die('Restricted access');
  */
 class JGalleryController extends JControllerLegacy
 {
+	
+	
 }
+

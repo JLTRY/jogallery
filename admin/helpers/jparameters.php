@@ -42,4 +42,10 @@ abstract class JParametersHelper
 	  }
 	  return $value;
 	}
+	
+	static function getrootdir() {
+		return "images/" . self::get('rootdir');
+	}
+
+	
 }	

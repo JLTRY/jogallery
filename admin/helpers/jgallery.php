@@ -12,6 +12,70 @@ defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Log\Log;
+
+class JGalleryImage
+{
+	public $filename;
+	public $basename;
+	public $moddate;
+	public $urlfilename;
+	public $urlshortfilename;
+	public $comment;
+	
+	public function __construct($filename, $basename, $moddate, $urlfilename, $urlshortfilename, $comment="") {
+		$this->filename = $filename;
+		$this->basename = $basename;
+		$this->moddate = $moddate;
+		$this->urlfilename = $urlfilename;
+		$this->urlshortfilename = $urlshortfilename;
+		$this->comment = $comment;
+	}
+
+	
+	
+	static function savecsv($file, $results)
+	{
+		$fp = fopen($file, 'w');
+		if ($fp) {
+			if (count ($results)) {
+				fputcsv($fp, array_keys(get_object_vars($results[0])), ";");
+			}
+			foreach ($results as $fields) {
+				fputcsv($fp, get_object_vars($fields), ";");
+			}
+			fflush($fp);
+			fclose($fp);
+		} else
+		{
+			print "error writing to file" . $file;
+		}
+	}
+
+	static function readcsv($file)
+	{
+		$results = array();
+		$fp = fopen($file, 'r');
+		if ($fp) {
+			$header =  fgetcsv($fp, 1024, ";");
+			while (!feof($fp) ) {
+				$array = fgetcsv($fp, 1024, ";");
+				if (is_array($array)) {
+					$obj = new JImage(); 
+					foreach($header as $field) {
+						if (is_array($array) && count($array))
+							$obj->$field = array_shift($array);
+					}
+					array_push($results, $obj);
+				}
+			}
+			fclose($fp);
+		}
+		return $results;
+	}
+	
+
+}
+
 /**
  * JGallery component helper.
  *
@@ -21,9 +85,8 @@ use Joomla\CMS\Log\Log;
  *
  * @since   1.6
  */
-abstract class JGalleryHelper
+class JGalleryHelper
 {
-	
 	static function json_answer($data) {
 		$Jsession = JFactory::getSession();
 		if ($Jsession != NULL)
@@ -81,8 +144,6 @@ abstract class JGalleryHelper
 	}
 	
 	public static function join_paths(...$spaths) {
-		//return preg_replace('~[/\\\\]+~', DIRECTORY_SEPARATOR, implode(DIRECTORY_SEPARATOR, $spaths));
-		//JLog::add('join_paths:'. print_r($spaths, true), JLog::WARNING, 'jgallery');
 		$arpath = array();
 		$prefix = ($spaths[0][0] == DIRECTORY_SEPARATOR)? DIRECTORY_SEPARATOR : "";
 		foreach($spaths as $spath) {
@@ -112,11 +173,19 @@ abstract class JGalleryHelper
 		//JLog::add('join_paths=>:'. $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath)), JLog::WARNING, 'jgallery');
 		return $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath));
 	}
+	
+	public static function getrootdir() {
+		return self::join_paths(JPATH_SITE, "images", JParametersHelper::get('rootdir'));
+	}
 
 	public static function guessDate($filename, &$date) {
 		if(preg_match('/IMG[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re))
 		{
 			$date = strtotime($re[1] . "-" . $re[2] . "-" . $re[3] . " " . $re[4] . ":" . $re[5] . ":" . $re[6] . " UCT");
+		} elseif (preg_match('/IMG[-_](\d{4})(\d{2})(\d{2}).*/', $filename, $re)) {
+			$date = strtotime($re[1] . "-" . $re[2] . "-" . $re[3]  . " UCT");
+		} else {
+			$date = -1;
 		}
 	}
 	
@@ -126,15 +195,34 @@ abstract class JGalleryHelper
 	}
 	
 	public function sortFile($a, $b) {
-		return cmp($a[0], $b[0]);
+		return cmp($a->filename, $b->filename);
 	}
 	public static function getFiles($rootdir, $directory,  $icon=true, $startdate=-1, $enddate=-1) {
-		$listfiles = array();
-		foreach (array("jpg", "JPG") as $ext) {
-			$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
-			foreach (glob($dir . "/*.$ext") as $filename) {
+		$jgallerydir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
+		$jgalleryfile = JGalleryHelper::join_paths($jgallerydir, "gallery.csv");
+		$exist = $modified = false;
+		if (file_exists($jgalleryfile)) {
+			$listfiles = JGalleryImage::readcsv($jgalleryfile);
+			$exist = true;
+		}
+		else {
+			$listfiles = array();
+		}
+		foreach (array("jpg", "JPG") as $ext) {			
+			foreach (glob($jgallerydir . "/*.$ext") as $filename) {
 				$pathinfo = pathinfo($filename);				
 				$moddate = filemtime($filename);
+				$exist = false;
+				foreach ($listfiles as $file) {
+					if ($file->filename == $pathinfo['filename']) {
+						$exist = true;
+						break;
+					}
+				}
+				if ($exist) {
+					continue;
+				}
+				$modified = true;
 				$exif = exif_read_data($filename);
 				if (($exif !== false)&& array_key_exists('DateTimeOriginal', $exif)) {
 					$moddate = strtotime($exif['DateTimeOriginal'] . " UCT");
@@ -145,19 +233,23 @@ abstract class JGalleryHelper
 					if (($enddate == -1 ) ||  (($enddate - $moddate) >= 0)) {
 						$urlfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"large", $filename );
 						$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory, "small", $filename );
-						array_push($listfiles, array('filename' => $pathinfo['filename'],
-													'basename' => basename($filename),
-													'moddate' => $moddate,
-													'urlfilename' => $urlfilename,
-													'urlshortfilename' => $urlshortfilename));
+						array_push($listfiles, new JGalleryImage($pathinfo['filename'],
+													basename($filename),
+													$moddate,
+													$urlfilename,
+													$urlshortfilename));
 					}
 				}				
 			}
-		}
+		}		
 		if ($icon){
 			usort($listfiles,sortFile);
 		} else {
 			usort($listfiles, cmp);
+		}
+		if (!$exist || $modified)
+		{
+			JGalleryImage::savecsv($jgalleryfile, $listfiles);
 		}
 		return $listfiles;
 	}
@@ -299,4 +391,80 @@ abstract class JGalleryHelper
 	}
 
 
+	static function savecomments($directory, $jcomments) {
+		$rootdir = JParametersHelper::getrootdir();
+		$jgalleryfiles = JGalleryHelper::getFiles($rootdir , $directory, true);
+		$modif = false;
+		foreach($jcomments as $array_key => $comment) {
+			foreach($jgalleryfiles as $file)
+			{
+				if (($file->filename == $array_key)) {
+					if ($file->comment != $comment) {
+						$modif = true;
+						$file->comment = $comment;
+					}
+					break;
+				}					
+			}
+		}
+		if ($modif)
+		{
+			$jgallerydir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
+			$jgalleryfile = JGalleryHelper::join_paths($jgallerydir, "gallery.csv");
+			JGalleryImage::savecsv($jgalleryfile, $jgalleryfiles);
+			return "savecsv ok";
+		}		
+		else 
+		{
+			return "no modifications";
+		}
+	}
+	
+	static function deleteimage($rootdirectory, $directory, $jimage, $keep, &$errors) {
+		$filename = self::join_paths(JPATH_SITE,$rootdirectory, $directory, $jimage);
+		if (file_exists($filename)){
+			if ($keep) {
+				array_push($errors, "keep " . $filename);
+			}
+			else {
+				unlink($filename);
+				array_push($errors, "success deleting " . $filename);
+			}
+		}
+		else {
+			array_push($errors, "file does not exist " . $filename);
+		}
+	}
+	
+	static function deleteimages($directory, $jimages, $keep, &$errors) {
+		$rootdir = JParametersHelper::getrootdir();
+		$jgalleryfiles = JGalleryHelper::getFiles($rootdir , $directory, true);
+		$modif = false;
+		foreach ($jimages as $jimage)
+		{
+			self::deleteimage($rootdir, $directory, $jimage, $keep, $errors);
+			JThumbsHelper::deletethumbs($rootdir, $directory, $jimage, $errors);
+			$i = 0;
+			$found = false;
+			foreach($jgalleryfiles as $file)
+			{
+				if ($file->basename == $jimage) {
+					$found = true;
+					break;			
+				}
+				$i++;
+			}
+			if ($found) {
+				array_splice($jgalleryfiles, $i, 1);
+				$modif = true;				
+			}
+		}
+		if ($modif) {
+			$jgallerydir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
+			$jgalleryfile = JGalleryHelper::join_paths($jgallerydir, "gallery.csv");
+			JGalleryImage::savecsv($jgalleryfile, $jgalleryfiles);
+			array_push($errors, "file saved");
+		}		
+		return $errors;
+	}
 }

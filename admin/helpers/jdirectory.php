@@ -9,6 +9,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 
 
@@ -66,7 +67,7 @@ class JDirectory
 	}
 
 	/* https://rosettacode.org/wiki/Walk_a_directory/Recursively#PHP */	
-	public function findDirs($sdir, $sdir1, $excludes)
+	public function findDirs($sdir, $sdir1, $excludes, $root=False)
 	{
 		$subdirs = array();
 		$dirs = array();
@@ -76,47 +77,125 @@ class JDirectory
 			$dir1 = JGalleryHelper::join_paths($sdir, $filename);
 			if (is_dir($dir1) && !(in_array($filename, $excludes))) {
 				$this->insertDir(new JDirectory($this, $sdir1, $filename));
-				array_push($subdirs, $filename);
 			}
 		}
 		foreach ($this->children as $subdir) {
 			$subdir->findDirs(JGalleryHelper::join_paths($sdir, $subdir->getbasename()),
 								JGalleryHelper::join_paths($sdir1, $subdir->getbasename()),
-								$excludes);
+								$excludes);	
 		}
 	}
 	
-	public function outputselect($id, &$content, &$scriptsdecl, &$scripts )
+	public function outputselectthumbs($id, &$content, &$scriptsdecl, &$scripts )
 	{
 		$sid = 'jgalleryselect' . $id;
-		if ($this->parent == null)
+		$urlroot = JURI::root(true);
+		if (($this->parent == null) && (count($this->children)))		
 		{
 			$content .= '<div class="form-floating">
 						<select class="form-select" style="max-width:500px;" id="' . $sid . '" aria-label="Floating label select example">
 							<option selected>Open this select menu</option>';
 		}
-		if ($this->parent) {
+		if (true) {
 			$content .= '<option value="'. $this->getbase64path() . '">' .
-								JGalleryHelper::join_paths($this->dirname , $this->basename) . 
+								JGalleryHelper::join_paths(($this->parent)?$this->dirname:"." , $this->basename) . 
 								'</option>';
 		}
 		foreach ($this->children as $child) {
-			$child->outputselect($id, $content, $scriptsdecl, $scripts );
+			$child->outputselectthumbs($id, $content, $scriptsdecl, $scripts );
 		}
 		if ($this->parent == null)
 		{
 			$content .= 		'</select></div>';
 			array_push($scripts, "jthumbs.js");
-			array_push($scripts, "tabselect.js");
+			array_push($scripts, "tabselectimages.js");
+			array_push($scripts, "jimages.js");
+			$document = JFactory::getDocument();
+			$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
+			$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
+			$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
+		}
+		if (($this->parent == null) && (count($this->children))) {
 			array_push($scriptsdecl, '(function($) {
 					$(document).ready(function() {
-						 jthumbs_getimages($, "' . $sid .'", "' . $id . '", "' . JURI::root(true) .'");
+						 jthumbs_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot .'");
 						})})(jQuery);');
+		}
+		if ($this->parent == null)
+		{
 			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto" ></div>
-					<div id="jimages' . $id . '" style="height:auto"></div>
-					<div id="jgallerylog' . $id . '" class="form-group" >log</div>';
+					<div id="jgallerylog' . $id . '" class="form-group" >log</div>
+					<div id="jimages' . $id . '" style="height:auto"></div>';
+		}
+		if (($this->parent == null) && (!count($this->children)))
+		{
+			array_push($scriptsdecl, '(function($) {
+					$(document).ready(function() {
+						 jthumbs_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot  .'","' . $this->getbase64path() .'");
+						})})(jQuery);');
 		}
 	}
+	
+	public function outputselectcomments($id, &$content, &$scriptsdecl, &$scripts )
+	{
+		$urlroot = JURI::root(true);
+		$app = JFactory::getApplication();
+		if ($app->isClient('administrator'))
+		{
+			$urlroot .= "/administrator";
+		}
+
+		if (($this->parent == null) && (count($this->children)))
+		{
+			$sid = 'jgalleryselect' . $id;
+			$content .= '<div class="form-floating">
+						<select class="form-select" style="max-width:500px;" id="' . $sid . '" aria-label="Floating label select example">
+							<option selected>Open this select menu</option>';
+		}
+		$content .= '<option value="'. $this->getbase64path() . '">' .
+							JGalleryHelper::join_paths(($this->parent)?$this->dirname:"." , $this->basename) . 
+					'</option>';
+		foreach ($this->children as $child) {
+			$child->outputselectcomments($id, $content, $scriptsdecl, $scripts );
+		}
+		if ($this->parent == null)
+		{
+			$content .= 		'</select></div>';
+			array_push($scripts, "jcomments.js");
+			array_push($scripts, "tabselectimages.js");
+			array_push($scripts, "jimages.js");
+			$document = JFactory::getDocument();
+			$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
+			$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
+			$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');			
+		}
+		if (($this->parent == null) && (count($this->children)))
+		{
+			array_push($scriptsdecl, '(function($) {
+					$(document).ready(function() {
+						 jcomments_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot .'");
+						})})(jQuery);');
+		}
+		if (($this->parent == null) && (!count($this->children)))
+		{
+			array_push($scriptsdecl, '(function($) {
+					$(document).ready(function() {
+						 jcomments_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot  .'","' . $this->getbase64path() .'");
+						})})(jQuery);');
+		}
+		if ($this->parent == null) {
+			array_push($scriptsdecl, '(function($) {
+					$(document).ready(function() {
+						setTimeout(function() {	initfancybox($);},500);
+						})})(jQuery);');
+		}
+		if ($this->parent == null) {
+			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto" ></div>
+					<div id="jgallerylog' . $id . '" class="form-group" >log</div>
+					<div id="jimages' . $id . '" style="height:auto"></div>';
+		}
+	}
+	
 	
 	public function outputarray(&$arr)
 	{
@@ -159,6 +238,10 @@ class JRootDirectory extends JDirectory
 	{
 		parent::__construct(null, $dirname, $basename);
 	}
+	
+	public function getbase64path() {
+		return base64_encode(utf8_encode(JGalleryHelper::join_paths(".", $this->basename)));
+	}
 }
 
 
@@ -174,16 +257,23 @@ abstract class JDirectoryHelper
         return ($a[0] < $b[0]) ? 1 : -1;
 	}
 	
+
+	
 	function findDirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, $type='radio') {
 		$jroot = new JRootDirectory($dir, $sdir);
-		$jroot->findDirs($dir, $sdir, self::$_excludes);
+		$jroot->findDirs($dir, $sdir, self::$_excludes, $root);
 		$sid = "findir" . $id1;
 		$sidg = "jgallery" . $id;
-		if ($type == 'select') {
-			$jroot->outputselect($id, $content, $scriptsdecl, $scripts);
-		}
-		else {
-			$jroot->outputradio($id, $content, $scriptsdecl, $scripts);
+		switch($type) {
+			case 'selectthumbs':
+				$jroot->outputselectthumbs($id, $content, $scriptsdecl, $scripts);
+				break;
+			case 'selectcomments':
+				$jroot->outputselectcomments($id, $content, $scriptsdecl, $scripts);
+				break;				
+			default: 
+				$jroot->outputradio($id, $content, $scriptsdecl, $scripts);
+				break;
 		}
 	}
 
@@ -206,7 +296,7 @@ abstract class JDirectoryHelper
 			$rootdir = ".";
 		}
 		$directory = $_params['dir'];
-		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
+		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths($rootdir,  $directory)));
 		if (!is_dir($dir)) {
 			$content .= "Directory does not exists :". $dir;
 		} else {

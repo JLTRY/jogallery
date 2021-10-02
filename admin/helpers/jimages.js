@@ -54,8 +54,16 @@ function imagesretriever($, id, urlroot, dir, values) {
 				var value = this._values[i];
 				sid = value['filename'];
 				urlfilename = value['urlfilename'];
-				urlshortfilename = value['urlshortfilename'];
-				content = "<a data-fancybox=\"gallery\"  href=\"" +urlfilename +"\"><img id=\""+ sid + "\" src=\"" + urlshortfilename +"\" /></a>";
+				urlshortfilename = value['urlshortfilename'];				
+				moddate = value['moddate'];
+				if (moddate != -1) {
+					date = new Date(moddate* 1000);
+					sdate =  "<b>" + date.getDate()+ "/"+(date.getMonth()+1)+ "/"+date.getFullYear() + " </b>";
+				} else {
+					sdate = "";
+				}
+				comment = sdate + value['comment'];
+				content = "<a data-fancybox=\"gallery\"  href=\"" + urlfilename +"\"  data-caption=\"" + comment + "\"><img id=\""+ sid + "\" src=\"" + urlshortfilename +"\" /></a>";
 				divid.append(content);
 			}
 		//this.getthumbs(index , this._modulo);
@@ -91,14 +99,13 @@ function initfancybox($) {
 										'close',
 										'zoomIn',
 										'zoomOut'
-										
 										]
 					}			,
 					on: {  
 					'*': (event, fancybox, slide) => {        console.log(`event: ${event}`);      },
 					load: (fancybox, slide) => {      
-						console.log(`#${slide.index} slide is loaded!`);    
-						console.log(`${slide.caption}`);
+						//console.log(`#${slide.index} slide is loaded!`);    
+						//console.log(`${slide.caption}`);
 							},								},
 					template : {  // Close button icon  
 					closeButton:      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" tabindex="-1"><path d="M20 20L4 4m16 0L4 20"/></svg>', 
