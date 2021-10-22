@@ -76,9 +76,10 @@ class plgContentJGallery extends JPlugin
 		// Number of plugins
 		$count = count($matches[0]);
 		 // plugin only processes if there are any instances of the plugin in the text
-		if ($count) {
+		if ($count) {			
 			for ($i = 0; $i < $count; $i++)
 			{
+				$_result = array();
 				if (@$matches[1][$i]) {
 					$inline_params = $matches[1][$i];
 					$pairs = explode('|', trim($inline_params));
@@ -89,7 +90,9 @@ class plgContentJGallery extends JPlugin
 						$_result[$key] = $value;
 					}
 					$_result['rootdir'] = JGalleryHelper::join_paths(plgContentJGallery::$_ROOT);
-					if (array_key_exists('browse', $_result)) {
+					if (array_key_exists('img', $_result)) {
+						$p_content = JGalleryHelper::display($_result);								
+					}elseif (array_key_exists('browse', $_result)) {
 						$p_content = JDirectoryHelper::display(1, $_result);
 					} else {
 						$p_content = JGalleryHelper::display($_result);								

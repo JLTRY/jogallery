@@ -283,6 +283,23 @@ class JGalleryHelper
 						})})(jQuery);');						
 	}
 	
+	public static function ouputimg($rootdir, $directory, $file, $name, $icon,$width, &$content, &$scriptDeclarations, &$scripts)
+	{
+		$urlfilename = $file->urlfilename;
+		if ($icon == 'small') {
+			$urlshortfilename = $file->urlshortfilename;
+			$width = JParametersHelper::get('thumb_' . $icon .'_width');
+		} else {
+			$urlshortfilename = JThumbsHelper::getthumb( JGalleryHelper::join_paths($rootdir, $directory), $icon, $file->basename);
+			JParametersHelper::get('thumb_' . $icon .'_width');			
+		}
+		$content .= "<a data-fancybox=\"". $name ."\"  href=\"$urlfilename\"><img src=\"$urlshortfilename\"/ width=\"$width\"></a>";
+		array_push($scriptDeclarations, '(function($) {
+					$(document).ready(function() {
+						setTimeout(function() {	initfancybox($);},500);
+						})})(jQuery);');
+	}
+	
 	public static function getDirectories($rootdir, $directory,  $parent=0) {
 		$listdirs = array();
 		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
@@ -341,38 +358,71 @@ class JGalleryHelper
 		} else {
 			$parent = 0;
 		}
+		if ( array_key_exists('name', $_params))
+		{
+			$name = $_params['name'];
+		} else {
+			$name = "gallery";
+		}
+		if ( array_key_exists('icon', $_params))
+		{
+			$icon = $_params['icon'];
+		} else {
+			$icon = "small";
+		}
+		if ( array_key_exists('width', $_params))
+		{
+			$width = $_params['width'];
+		} else {
+			$width = "?";
+		}
 		$directory = $_params['dir'];
 		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
 		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
 		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
 		$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
-						
-		//sub directories
-		$listdirs = self::getDirectories($rootdir, $directory, $parent);
-		$content .= "<h2>$directory</h2>";
-		$nbcar = 0;
-		$maxcar = 40;
-		$i = 0;
-		$maxitem = 8;
-		$content .= '<table><tr>';
-		foreach ($listdirs  as $dir) {
-			$urlshortfilename = "/media/com_phocagallery/images/icon-folder-medium.png";
-			$urlfilename =  $dir["url"];
-			$dirname = $dir["name"];
-			$content .= "<td><a   href=\"$urlfilename\">
-						<img src=\"$urlshortfilename\"><input style=\"border: 0; text-overflow:ellipsis;\" size=\"12\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
-						</a></td>";
-			if ($i++ > $maxitem) {
-				$content .= '</tr><tr>';
-				$i = 0;
-			}
-		}
-		$content .= "</tr></table>";
-		$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 		$scriptDeclarations = array();
-		$scripts = array('jgallery.js');
-		self::ouputasync($directory, $listfiles, $content, $scriptDeclarations, $scripts);
+		$scripts = array('jgallery.js');		
+		if ( array_key_exists('img', $_params)) {
+			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
+			$found = False;
+			foreach ($listfiles as $file) {
+				if ($file->basename == $_params['img']) {
+					self::ouputimg($rootdir, $directory, $file, $name, $icon, $width, $content, $scriptDeclarations, $scripts);
+					$found = true;
+					break;
+				}
+			}
+			if (!$found) {
+				$content .= "image not found :" . $_params['img'] . " in " . $directory;
+			}
+		}else {
+			//sub directories
+			$listdirs = self::getDirectories($rootdir, $directory, $parent);
+			$content .= "<h2>$directory</h2>";
+			$nbcar = 0;
+			$maxcar = 40;
+			$i = 0;
+			$maxitem = 8;
+			$content .= '<table><tr>';
+			foreach ($listdirs  as $dir) {
+				$urlshortfilename = "/media/com_phocagallery/images/icon-folder-medium.png";
+				$urlfilename =  $dir["url"];
+				$dirname = $dir["name"];
+				$content .= "<td><a   href=\"$urlfilename\">
+							<img src=\"$urlshortfilename\"><input style=\"border: 0; text-overflow:ellipsis;\" size=\"12\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
+							</a></td>";
+				if ($i++ > $maxitem) {
+					$content .= '</tr><tr>';
+					$i = 0;
+				}
+			}
+			$content .= "</tr></table>";
+			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
+
+			self::ouputasync($directory, $listfiles, $content, $scriptDeclarations, $scripts);
+		}
 		$document = JFactory::getDocument();
 		foreach ($scripts as $script) {
 			 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
