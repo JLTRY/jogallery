@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.0" type="plugin" group="content">
+	<name>Content - JDirectory</name>
+	<author>Jean-Luc TRYOEN</author>
+	<creationDate>February 2021</creationDate>
+	<copyright>Copyright (C) 2021 Jean-Luc TRYOEN. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+	<authorEmail>jltryoen@orange.fr</authorEmail>
+	<authorUrl>www.jltryoen.fr</authorUrl>
+	<version>1.0</version>
+	<description>JDirectory plugin, use it with {jdirectory directory=dir}</description>
+	<files>
+		<filename plugin="jdirectory">jdirectory.php</filename>
+	</files>
+</extension>
