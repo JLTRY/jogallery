@@ -87,7 +87,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 			url: url,
 			type: "POST",
 			dataType: "json",
-		data : { 'images' : values },
+			data : { 'images' : values },
 			async: 'false',
 			context: this,
 			success: function(tvalue) {
@@ -97,6 +97,12 @@ function thumbretriever($, id, urlroot, directory, values) {
 					txt += item +"<br/>";
 				});
 				$("#jgallerylog"+this._id).html(txt);
+				$.each(this._listimages, 
+					$.proxy(function(index, value) {
+						var imge = $("img[id='"+ value + "']");
+						imge.closest('tr').remove();
+					}, this)
+				);
 			},
 			error: function(xhr, status, text) {
 				var response = xhr.responseText;
@@ -117,7 +123,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 			+ '<td><label><input type="checkbox" name="keep" value="keep">keep</label></td>'
 			+ '</tr></table>'	;
 		var onchange = this.onchange.bind(this);				
-		this._tabselectimages =  tabselectimages($, "#jimages1" , this._values, {'checked':true, 'name': true}, onchange, []);
+		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true}, onchange, []);
 		$("#jgallery"+this._id).html(html);
 		$('#thumbs'+this._id).data('thumbretriever', this);
 		$('#delete'+this._id).data('delete', this);

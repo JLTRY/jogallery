@@ -199,7 +199,7 @@ class JDirectory
 	
 	public function outputarray(&$arr)
 	{
-		if ($this->parent != null) {
+		if (($this->parent != null) || (!count($this->children))) {
 			array_push($arr, array("name" => JGalleryHelper::join_paths($this->dirname , $this->basename),
 								"relative" =>$this->getrelativepath(),
 								"value" => $this->getbase64path()));
@@ -296,7 +296,7 @@ abstract class JDirectoryHelper
 			$rootdir = ".";
 		}
 		$directory = $_params['dir'];
-		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths($rootdir,  $directory)));
+		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
 		if (!is_dir($dir)) {
 			$content .= "Directory does not exists :". $dir;
 		} else {

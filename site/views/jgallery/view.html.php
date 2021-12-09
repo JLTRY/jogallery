@@ -65,6 +65,8 @@ class JGalleryViewJGallery extends JViewLegacy
 			$errors = $this->get('Errors');
 		}
 		$this->getparam('image', 'image');
+		$this->page= -1;
+		$this->getparam('page', 'page');
 		if ($this->getparam('image64', 'image64')){
 			$this->image = base64_decode($this->image64);
 		}

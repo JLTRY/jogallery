@@ -46,7 +46,7 @@ function _tabselectimages($, idp, values, options, callback, params) {
 			var id = "checked_" + name;
 			text += "<tr>";
 			if (that._options['checked']) {
-				text += "<td><input style=\"float:left;font-size:50%;\" class=\"tabselectimages\" type=\"checkbox\" " +  checkedattr +" id=\"" + id  +
+				text += "<td ><input style=\"float:left;font-size:50%;\" class=\"tabselectimages\" type=\"checkbox\" " +  checkedattr +" id=\"" + id  +
 										"\" value=\""+index + "\" "
 										+ " for=\"" + basename + "\""
 										+ " idp=\"" + that._idp + "\""

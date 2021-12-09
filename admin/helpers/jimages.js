@@ -86,7 +86,7 @@ function jimages_getimages($, id, urlroot, directory, listfiles)
 	thmb.show($, 0, 500);					
 }
 
-function initfancybox($) {
+function initfancybox($, page=null) {
 	Fancybox.bind("[data-fancybox]", {
 	  // Your options go here
 					default: { buttons : [
@@ -114,5 +114,15 @@ function initfancybox($) {
 					// Main container element 
 					main: '<div  class="fancybox__container"  role="dialog"  aria-modal="true"  aria-hidden="true"  aria-label="{{MODAL}}"  tabindex="-1">  <div class="fancybox__backdrop"></div><input type="text" id="comment" name="lname">  <div class="fancybox__carousel"></div></div>'
 					}
-	});	
+	});
+	if (page != -1) {
+		$("a[data-fancybox='gallery']").each(function(index, value) 
+			{ 
+				if (index== page)
+				{
+					$(value)[0].click();
+				}
+			});
+			
+	}		
 }

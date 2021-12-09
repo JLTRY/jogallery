@@ -38,6 +38,7 @@ function radiobox($, idp, values, callback, params) {
 		$(this._idp).html(text);
 		$("#findir" + this._idp).data('radiobox', this);
 		var that = this;
+		var lastval = null;
 		$(this._idp).find("input").each(function(){
 			$(this).change(function() {
 								var radiobox = that;
@@ -58,9 +59,14 @@ function radiobox($, idp, values, callback, params) {
 								}								
 								radiobox.callback($(this).val());
 						});
+			lastval = $(this).val();
 		});
+		return lastval;
 	};
-	this.init();
+	lastval = this.init();
+	if (lastval != null) {
+		this.callback(lastval);
+	}
 	return this;
 }
 

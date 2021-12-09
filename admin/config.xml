@@ -15,7 +15,7 @@
 		</field>
 		<field name="rootdir" 
 				type="folderlist" 
-				default="" 
+				default="." 
 				label="Select a root folder" 
 				directory="images" 
 				filter="" 

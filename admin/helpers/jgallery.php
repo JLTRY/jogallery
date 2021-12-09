@@ -10,6 +10,8 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
+
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Log\Log;
 
@@ -208,7 +210,7 @@ class JGalleryHelper
 		else {
 			$listfiles = array();
 		}
-		foreach (array("jpg", "JPG") as $ext) {			
+		foreach (array("jpg", "JPG", "png") as $ext) {			
 			foreach (glob($jgallerydir . "/*.$ext") as $filename) {
 				$pathinfo = pathinfo($filename);				
 				$moddate = filemtime($filename);
@@ -229,29 +231,36 @@ class JGalleryHelper
 				} else {
 					JGalleryHelper::guessDate(basename($filename), $moddate);
 				}
-				if (($startdate == -1) || (($moddate - $startdate) >= 0))	{
-					if (($enddate == -1 ) ||  (($enddate - $moddate) >= 0)) {
-						$urlfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"large", $filename );
-						$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory, "small", $filename );
-						array_push($listfiles, new JGalleryImage($pathinfo['filename'],
-													basename($filename),
-													$moddate,
-													$urlfilename,
-													$urlshortfilename));
-					}
-				}				
+
+				$urlfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"large", $filename );
+				$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory, "small", $filename );
+				array_push($listfiles, new JGalleryImage($pathinfo['filename'],
+											basename($filename),
+											$moddate,
+											$urlfilename,
+											$urlshortfilename));
 			}
-		}		
-		if ($icon){
-			usort($listfiles,sortFile);
-		} else {
-			usort($listfiles, cmp);
 		}
 		if (!$exist || $modified)
 		{
 			JGalleryImage::savecsv($jgalleryfile, $listfiles);
 		}
-		return $listfiles;
+		$listfilteredfiles = array();
+		foreach ($listfiles as $file) {
+			$moddate = $file->moddate;
+			if (($startdate == -1) || (($moddate - $startdate) >= 0)){
+				if (($enddate == -1 ) ||  (($moddate != -1) && ($enddate - $moddate) >= 0)) {
+					array_push($listfilteredfiles, $file);
+				}
+			}
+		}
+		if ($icon){
+			usort($listfilteredfiles,sortFile);
+		} else {
+			usort($listfilteredfiles, cmp);
+		}
+
+		return $listfilteredfiles;
 	}
 	
 	public static function ouputsync($directory, $listfiles, &$content, &$scriptDeclarations, &$scripts)
@@ -267,7 +276,7 @@ class JGalleryHelper
 						})})(jQuery);');
 	}
 
-	public static function ouputasync($directory, $listfiles, &$content, &$scriptDeclarations, &$scripts)
+	public static function ouputasync($directory, $listfiles, $page, &$content, &$scriptDeclarations, &$scripts)
 	{
 		$sid = "jgallery" . rand(1, 1024);
 		$content .= '<div id="' . $sid . '">';
@@ -279,7 +288,7 @@ class JGalleryHelper
 						})})(jQuery);');
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
-						setTimeout(function() {	initfancybox($);},500);
+						setTimeout(function() {	initfancybox($, ' . $page .');},500);
 						})})(jQuery);');						
 	}
 	
@@ -287,11 +296,12 @@ class JGalleryHelper
 	{
 		$urlfilename = $file->urlfilename;
 		if ($icon == 'small') {
-			$urlshortfilename = $file->urlshortfilename;
-			$width = JParametersHelper::get('thumb_' . $icon .'_width');
+			$urlshortfilename = $file->urlshortfilename;			
 		} else {
 			$urlshortfilename = JThumbsHelper::getthumb( JGalleryHelper::join_paths($rootdir, $directory), $icon, $file->basename);
-			JParametersHelper::get('thumb_' . $icon .'_width');			
+		}
+		if ($width == "?") {
+			$width = JParametersHelper::get('thumb_' . $icon .'_width');
 		}
 		$content .= "<a data-fancybox=\"". $name ."\"  href=\"$urlfilename\"><img src=\"$urlshortfilename\"/ width=\"$width\"></a>";
 		array_push($scriptDeclarations, '(function($) {
@@ -309,7 +319,7 @@ class JGalleryHelper
 									"url" => self::getRoute($directory, "..", $parent-1)));
 		}
 		foreach (glob(JGalleryHelper::join_paths($dir , "*")) as $dirname) {
-			if (is_dir($dirname) && basename($dirname) != "thumbs" && basename($dirname) != "jw_sig") {
+			if (is_dir($dirname) && !(in_array(basename($dirname), JDirectoryHelper::$_excludes))) {
 				array_push($listdirs,  array("name" => basename($dirname),
 										"parent" => $parent,
 										"url" => self::getRoute($directory, basename($dirname), $parent + 1)));
@@ -376,6 +386,18 @@ class JGalleryHelper
 		} else {
 			$width = "?";
 		}
+		if ( array_key_exists('title', $_params))
+		{
+			$title = (bool)$_params['title'];
+		} else {
+			$width = true;
+		}
+		if ( array_key_exists('page', $_params))
+		{
+			$page = $_params['page'];
+		} else {
+			$page = -1;
+		}
 		$directory = $_params['dir'];
 		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
@@ -400,28 +422,32 @@ class JGalleryHelper
 		}else {
 			//sub directories
 			$listdirs = self::getDirectories($rootdir, $directory, $parent);
-			$content .= "<h2>$directory</h2>";
-			$nbcar = 0;
-			$maxcar = 40;
-			$i = 0;
-			$maxitem = 8;
-			$content .= '<table><tr>';
-			foreach ($listdirs  as $dir) {
-				$urlshortfilename = "/media/com_phocagallery/images/icon-folder-medium.png";
-				$urlfilename =  $dir["url"];
-				$dirname = $dir["name"];
-				$content .= "<td><a   href=\"$urlfilename\">
-							<img src=\"$urlshortfilename\"><input style=\"border: 0; text-overflow:ellipsis;\" size=\"12\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
-							</a></td>";
-				if ($i++ > $maxitem) {
-					$content .= '</tr><tr>';
-					$i = 0;
-				}
+			if ($title) {
+				$content .= "<h2>$directory</h2>";
 			}
-			$content .= "</tr></table>";
+			if (count($listdirs)) {
+				$nbcar = 0;
+				$maxcar = 40;
+				$i = 0;
+				$maxitem = 8;
+				$content .= '<table><tr>';
+				foreach ($listdirs  as $dir) {
+					$urlshortfilename = "/media/com_phocagallery/images/icon-folder-medium.png";
+					$urlfilename =  $dir["url"];
+					$dirname = $dir["name"];
+					$content .= "<td><a   href=\"$urlfilename\">
+								<img src=\"$urlshortfilename\"><input style=\"border: 0; text-overflow:ellipsis;\" size=\"12\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
+								</a></td>";
+					if ($i++ > $maxitem) {
+						$content .= '</tr><tr>';
+						$i = 0;
+					}
+				}
+				$content .= "</tr></table>";
+			}
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 
-			self::ouputasync($directory, $listfiles, $content, $scriptDeclarations, $scripts);
+			self::ouputasync($directory, $listfiles, $page, $content, $scriptDeclarations, $scripts);
 		}
 		$document = JFactory::getDocument();
 		foreach ($scripts as $script) {

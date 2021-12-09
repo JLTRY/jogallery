@@ -11,6 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('behavior.formvalidator');
+HTMLHelper::_('jquery.framework');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_jgallery&layout=edit&id=' . (int) $this->item->id); ?>"
     method="post" name="adminForm" id="adminForm" class="form-validate">

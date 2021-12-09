@@ -23,7 +23,6 @@ JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATO
 */
 class plgContentJGallery extends JPlugin
 {
-	protected static $_ROOT = "images/phocagallery";
 	/**
 	* Constructor
 	*
@@ -33,6 +32,17 @@ class plgContentJGallery extends JPlugin
 	function __construct( &$subject, $params )
 	{
 		parent::__construct( $subject, $params );
+	}
+	
+	function getparam($name, $param) {
+		$found = false;
+		$app     = JFactory::getApplication();
+		$input   = $app->getInput();
+		if ($input->get($param) !== null) {
+			$this->{$name} = $input->get($param);
+			$found = true;
+		}
+		return $found;
 	}
 
 	/**
@@ -68,7 +78,7 @@ class plgContentJGallery extends JPlugin
         if (!$this->params->get('enabled', 1)) {
             return true;
         }
-
+		
  		if ( strpos( $row->text, '{jgallery' ) === false ) {
             return true;
 		}
@@ -80,6 +90,9 @@ class plgContentJGallery extends JPlugin
 			for ($i = 0; $i < $count; $i++)
 			{
 				$_result = array();
+				if ($this->getparam('page', 'page')) {
+					$_result['page'] = $this->page;
+				}
 				if (@$matches[1][$i]) {
 					$inline_params = $matches[1][$i];
 					$pairs = explode('|', trim($inline_params));
@@ -89,7 +102,7 @@ class plgContentJGallery extends JPlugin
 						$value = substr($pair, $pos + 1);
 						$_result[$key] = $value;
 					}
-					$_result['rootdir'] = JGalleryHelper::join_paths(plgContentJGallery::$_ROOT);
+					$_result['rootdir'] = JParametersHelper::getrootdir();
 					if (array_key_exists('img', $_result)) {
 						$p_content = JGalleryHelper::display($_result);								
 					}elseif (array_key_exists('browse', $_result)) {

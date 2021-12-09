@@ -13,6 +13,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 jimport( 'joomla.plugin.plugin' );
 JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 define('PF_REGEX_JDIRECTORYI_PATTERN', "#{jdirectory (.*?)}#s");
 
 
@@ -24,7 +25,6 @@ define('PF_REGEX_JDIRECTORYI_PATTERN', "#{jdirectory (.*?)}#s");
 */
 class plgContentJDirectory extends JPlugin
 {
-	protected static $_ROOT = "/images/phocagallery";
 	protected static $_ID = 0;
 	/**
 	* Constructor
@@ -91,7 +91,7 @@ class plgContentJDirectory extends JPlugin
 						$value = substr($pair, $pos + 1);
 						$_result[$key] = $value;
 					}
-					$_result['rootdir'] = JGalleryHelper::join_paths(plgContentJDirectory::$_ROOT);
+					$_result['rootdir'] = JParametersHelper::getrootdir();
 					$p_content = JDirectoryHelper::display(plgContentJDirectory::$_ID, $_result);	
 					$row->text = str_replace("{jdirectory " . $matches[1][$i] . "}", $p_content, $row->text);
 				}
