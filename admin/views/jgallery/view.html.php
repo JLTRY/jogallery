@@ -121,8 +121,19 @@ class JGalleryViewJGallery extends JViewLegacy
 		// Hide Joomla Administrator Main menu
 		$input->set('hidemainmenu', true);
 		$isNew = ($this->item->id == 0);
-		JToolBarHelper::title($isNew ? JText::_('COM_JGALLERY_MANAGER_JGALLERY_NEW')
-		                             : JText::_('COM_JGALLERY_MANAGER_JGALLERY_EDIT'), 'jgallery');
+        switch ($this->getLayout())
+        {
+            case "thumbs":
+                $id = 'COM_JGALLERY_MANAGER_THUMBS';
+                break;
+            case "comments":
+                $id = 'COM_JGALLERY_MANAGER_COMMENTS';
+                break;
+            default: 
+                $id = $isNew ? 'COM_JGALLERY_MANAGER_JGALLERY_NEW': 'COM_JGALLERY_MANAGER_JGALLERY_EDIT';
+                break;
+        }
+        JToolBarHelper::title(JText::_($id), 'jgallery');
 		// Build the actions for new and existing records.
 		if ($isNew)
 		{
@@ -135,6 +146,7 @@ class JGalleryViewJGallery extends JViewLegacy
 				                       'JTOOLBAR_SAVE_AND_NEW', false);
 			}
 			JToolBarHelper::cancel('jgallery.cancel', 'JTOOLBAR_CANCEL');
+            JToolBarHelper::spacer("30");
 		}
 		else
 		{
@@ -158,6 +170,7 @@ class JGalleryViewJGallery extends JViewLegacy
 				                       'JTOOLBAR_SAVE_AS_COPY', false);
 			}
 			JToolBarHelper::cancel('jgallery.cancel', 'JTOOLBAR_CLOSE');
+            JToolBarHelper::spacer("30");
 		}
 	}
 	/**

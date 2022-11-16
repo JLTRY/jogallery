@@ -125,6 +125,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 		var onchange = this.onchange.bind(this);				
 		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true}, onchange, []);
 		$("#jgallery"+this._id).html(html);
+        //$("#toolbar").html(html);
 		$('#thumbs'+this._id).data('thumbretriever', this);
 		$('#delete'+this._id).data('delete', this);
 		$( '#thumbs'+this._id).click(function() {
@@ -182,7 +183,7 @@ function jthumbs_ajax($, id, urlroot, value) {
 				console.log(response['data']['error']);
 			} else {
 				// This would mean an invalid response from the server - maybe the site went down or whatever...
-			}			
+			}
 		}
 	});
 }
@@ -195,7 +196,7 @@ function jthumbs_getimages($, sid, id, urlroot, value)
 	}
 	else {
 		$("#"+sid).change(function() {
-			jthumbs_ajax($, id, urlroot, this.value);			
+			jthumbs_ajax($, id, urlroot, this.value);
 		});
 	}
 }

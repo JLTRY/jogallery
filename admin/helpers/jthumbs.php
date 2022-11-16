@@ -58,7 +58,7 @@ abstract class JThumbsHelper
 			$new_angle[3] = 180;
 			$new_angle[6] = -90;
 			$new_angle[8] = 90;
-			imagesetinterpolation($im, IMG_MITCHELL);
+			imagesetinterpolation($original_image, IMG_MITCHELL);
 			$rotated_image = imagerotate($original_image, $new_angle[$exif_orientation], 0);
 			imagedestroy($original_image); 
 		}else {
@@ -67,7 +67,7 @@ abstract class JThumbsHelper
 		return $rotated_image;
 	}
 	 // Calculate thumbnail dimensions
-    private function thumbDimCalc($width, $height, $thb_width, $thb_height, $smartResize)
+    private static function thumbDimCalc($width, $height, $thb_width, $thb_height, $smartResize)
     {
         if ($smartResize) {
             // thumb ratio bigger that container ratio
@@ -257,7 +257,7 @@ abstract class JThumbsHelper
 		}
 	}
 
-	function generatethumbimage($rootdir, $directory, $filename, $forced) {
+	public static function generatethumbimage($rootdir, $directory, $filename, $forced) {
 		$error = false;
 		$errors = array();
 		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);

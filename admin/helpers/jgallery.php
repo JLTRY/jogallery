@@ -196,8 +196,8 @@ class JGalleryHelper
 		return JURI::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode("${parentdir}/${directory}") ."&parent=" .$parent . "&Itemid=0";
 	}
 	
-	public function sortFile($a, $b) {
-		return cmp($a->filename, $b->filename);
+	public static function sortFile($a, $b) {
+		return strcasecmp($a->filename, $b->filename);
 	}
 	public static function getFiles($rootdir, $directory,  $icon=true, $startdate=-1, $enddate=-1) {
 		$jgallerydir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
@@ -254,12 +254,7 @@ class JGalleryHelper
 				}
 			}
 		}
-		if ($icon){
-			usort($listfilteredfiles,sortFile);
-		} else {
-			usort($listfilteredfiles, cmp);
-		}
-
+		usort($listfilteredfiles, array('JGalleryHelper', 'sortFile'));
 		return $listfilteredfiles;
 	}
 	

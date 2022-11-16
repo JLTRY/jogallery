@@ -89,11 +89,11 @@ class JDirectory
 	public function outputselectthumbs($id, &$content, &$scriptsdecl, &$scripts )
 	{
 		$sid = 'jgalleryselect' . $id;
+        $divid = "float" . $id;
 		$urlroot = JURI::root(true);
 		if (($this->parent == null) && (count($this->children)))		
 		{
-			$content .= '<div class="form-floating">
-						<select class="form-select" style="max-width:500px;" id="' . $sid . '" aria-label="Floating label select example">
+			$content .= '<select class="form-select" style="max-width:500px;margin-left:10px" id="' . $sid . '" >
 							<option selected>Open this select menu</option>';
 		}
 		if (true) {
@@ -106,7 +106,7 @@ class JDirectory
 		}
 		if ($this->parent == null)
 		{
-			$content .= 		'</select></div>';
+			$content .= 		'</select>';
 			array_push($scripts, "jthumbs.js");
 			array_push($scripts, "tabselectimages.js");
 			array_push($scripts, "jimages.js");
@@ -117,14 +117,16 @@ class JDirectory
 		}
 		if (($this->parent == null) && (count($this->children))) {
 			array_push($scriptsdecl, '(function($) {
-					$(document).ready(function() {
+					$(document).ready(function() {                                                 
+                         $("#toolbar").append($("#'. $sid .'").detach());
+                         $("#toolbar").append($("#jgallery'. $id .'").detach());
 						 jthumbs_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot .'");
 						})})(jQuery);');
 		}
 		if ($this->parent == null)
 		{
-			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto" ></div>
-					<div id="jgallerylog' . $id . '" class="form-group" >log</div>
+			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto;margin-left:10px" ></div>
+					<div id="jgallerylog' . $id . '" class="form-group"  >log</div>
 					<div id="jimages' . $id . '" style="height:auto"></div>';
 		}
 		if (($this->parent == null) && (!count($this->children)))
@@ -149,7 +151,7 @@ class JDirectory
 		{
 			$sid = 'jgalleryselect' . $id;
 			$content .= '<div class="form-floating">
-						<select class="form-select" style="max-width:500px;" id="' . $sid . '" aria-label="Floating label select example">
+						<select class="form-select" style="max-width:500px;;margin-left:10px" id="' . $sid . '" aria-label="Floating label select example">
 							<option selected>Open this select menu</option>';
 		}
 		$content .= '<option value="'. $this->getbase64path() . '">' .
@@ -173,6 +175,8 @@ class JDirectory
 		{
 			array_push($scriptsdecl, '(function($) {
 					$(document).ready(function() {
+                         $("#toolbar").append($("#'. $sid .'").detach());
+                         $("#toolbar").append($("#jgallery'. $id .'").detach());
 						 jcomments_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot .'");
 						})})(jQuery);');
 		}
@@ -190,7 +194,7 @@ class JDirectory
 						})})(jQuery);');
 		}
 		if ($this->parent == null) {
-			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto" ></div>
+			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto;margin-left:10px" ></div>
 					<div id="jgallerylog' . $id . '" class="form-group" >log</div>
 					<div id="jimages' . $id . '" style="height:auto"></div>';
 		}
@@ -259,10 +263,10 @@ abstract class JDirectoryHelper
 	
 
 	
-	function findDirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, $type='radio') {
+	public static function findDirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, $type='radio') {
 		$jroot = new JRootDirectory($dir, $sdir);
 		$jroot->findDirs($dir, $sdir, self::$_excludes, $root);
-		$sid = "findir" . $id1;
+		$sid = "findir" . $id;
 		$sidg = "jgallery" . $id;
 		switch($type) {
 			case 'selectthumbs':
