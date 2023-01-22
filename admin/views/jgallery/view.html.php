@@ -76,6 +76,9 @@ class JGalleryViewJGallery extends JViewLegacy
 			}
 		}
 		$this->getparam('force', 'force');
+        $this->small_width = $this->large_width = 0;
+        $this->getparam('small_width', 'small_width');
+        $this->getparam('large_width', 'large_width');
 		if ($this->getparam('image64', 'image64')){
 			$this->image = base64_decode($this->image64);
 		}

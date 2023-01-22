@@ -9,9 +9,13 @@ function thumbretriever($, id, urlroot, directory, values) {
 	this._forced = false;
 	this._keep = false;
 	
-	this.getthumb = function(imgname) {	
+	this.getthumb = function(imgname, params) {	
 		url = this._urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
 				 + this._directory +"&image64=" + btoa(imgname) +"&force=" + Number(this._forced);
+        $.map(params, function(value, key) {
+                        url += "&" + key + "=" + value;
+                    }        
+        );
 		console.log(url);
 		$.ajax({
 			url: url,
@@ -57,13 +61,14 @@ function thumbretriever($, id, urlroot, directory, values) {
 	this.isstarted = function() {
 		return this._isstarted;
 	}
-	this.startthumbs = function() {
+	this.startthumbs = function(params) {
 		this._isstarted = true;
 		console.log("started");
+        console.log(params);
 		$.each(this._listimages, 
 				$.proxy(function(index, value) {
 					if (this._isstarted) {
-						this.getthumb(value);
+						this.getthumb(value, params);
 					}
 				}, this)
 		);
@@ -117,25 +122,30 @@ function thumbretriever($, id, urlroot, directory, values) {
 	};
 	this.show = function($) {
 		var html = '<table><tr><td><button type="button" id="thumbs' + id + '" class="btn btn-primary">Thumbs</button></td>'
-			+ '<td><label><input type="checkbox" name="checkall" value="checkall">checkall</label></td>'	
+        	+ '<td><label><input type="checkbox" name="checkall" value="checkall">checkall</label></td>'	
 			+ '<td><label><input type="checkbox" name="force" value="force">force</label></td>'
 			+ '<td><button type="button" id="delete' + id + '" class="btn btn-primary">Delete</button></td>'
 			+ '<td><label><input type="checkbox" name="keep" value="keep">keep</label></td>'
-			+ '</tr></table>'	;
+			+ '</tr>'
+            + '<tr><td><label>small_width<input type="text" name="small_width" id="small_width' + id +'" value="256" size="5"></label></td>'	
+            + '<td><label>large_width<input type="text" name="small_width" id="large_width' + id +'" value="1024" size="5"></label></td>'
+            +'</tr></table>'	;
 		var onchange = this.onchange.bind(this);				
 		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true}, onchange, []);
 		$("#jgallery"+this._id).html(html);
         //$("#toolbar").html(html);
 		$('#thumbs'+this._id).data('thumbretriever', this);
 		$('#delete'+this._id).data('delete', this);
-		$( '#thumbs'+this._id).click(function() {
-			var dataretriever = $(this).data('thumbretriever');
+		$( '#thumbs'+this._id).click($.proxy(function() {
+			var dataretriever = $('#thumbs'+this._id).data('thumbretriever');
 			if (dataretriever.isstarted()) {
 				dataretriever.stopthumbs();
 			} else {
-				dataretriever.startthumbs();
+				dataretriever.startthumbs({'small_width': $('#small_width' + this._id).val(),
+                                           'large_width': $('#large_width' + this._id).val()}
+                );
 			}
-		});
+		}, this));
 		$( '#delete'+this._id).click(function() {
 			var dataretriever = $(this).data('delete');
 			dataretriever.deleteselection();

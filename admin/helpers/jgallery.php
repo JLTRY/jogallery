@@ -492,18 +492,22 @@ class JGalleryHelper
 	}
 	
 	static function deleteimage($rootdirectory, $directory, $jimage, $keep, &$errors) {
-		$filename = self::join_paths(JPATH_SITE,$rootdirectory, $directory, $jimage);
+		$filename = self::join_paths(JPATH_ROOT, $rootdirectory, $directory, $jimage);        
+        JLog::add("deleteimage:" . $filename, JLog::WARNING, 'com_jgallery');
 		if (file_exists($filename)){
 			if ($keep) {
 				array_push($errors, "keep " . $filename);
+                JLog::add("deleteimage:keep:" . $filename, JLog::WARNING, 'com_jgallery');
 			}
 			else {
 				unlink($filename);
+                JLog::add("deleteimage:delete:" . $filename, JLog::WARNING, 'com_jgallery');
 				array_push($errors, "success deleting " . $filename);
 			}
 		}
 		else {
 			array_push($errors, "file does not exist " . $filename);
+            JLog::add("deleteimage:dose not exist:" . $filename, JLog::WARNING, 'com_jgallery');
 		}
 	}
 	
@@ -513,8 +517,11 @@ class JGalleryHelper
 		$modif = false;
 		foreach ($jimages as $jimage)
 		{
+            JLog::add("delete" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
 			self::deleteimage($rootdir, $directory, $jimage, $keep, $errors);
+            JLog::add("delete end:" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
 			JThumbsHelper::deletethumbs($rootdir, $directory, $jimage, $errors);
+            JLog::add("delete end thumbs:" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
 			$i = 0;
 			$found = false;
 			foreach($jgalleryfiles as $file)

@@ -9,6 +9,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Log\Log;
 
 // Set some global property
 $document = JFactory::getDocument();
@@ -28,7 +29,20 @@ $controller = JControllerLegacy::getInstance('JGallery');
 
 // Perform the Request task
 $input = JFactory::getApplication()->input;
+JLog::addLogger(
+    array(
+         // Sets file name
+         'text_file' => 'com_jgallery.log.php'
+    ),
+    // Sets messages of all log levels to be sent to the file.
+    JLog::ALL,
+    // The log category/categories which should be recorded in this file.
+    // In this case, it's just the one category from our extension.
+    // We still need to put it inside an array.
+    array('com_jgallery')
+);
 $controller->execute($input->getCmd('task'));
+
 
 // Redirect if set by the controller
 $controller->redirect();

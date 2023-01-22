@@ -226,7 +226,7 @@ abstract class JThumbsHelper
 	function generatethumbs($rootdir, $directory) {
 		$errors = array();
 		foreach (array("jpg", "JPG") as $ext) {
-			$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
+			$dir = JGalleryHelper::join_paths(JPATH_ROOT, $rootdir,  $directory);
 			foreach (glob($dir . "/*.$ext") as $filename) {
 				foreach (self::$_formats as $format) {
 					$thumb = self::getthumb($dir, $format, basename($filename));
@@ -242,29 +242,40 @@ abstract class JThumbsHelper
 	
 		
 	
-	function deletethumbs($rootdir, $directory, $image, &$errors) {
-		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
+	public static function deletethumbs($rootdir, $directory, $image, &$errors) {
+        JLog::add("deletethumbs:" . $image, JLog::WARNING, 'com_jgallery');
+		$dir = JGalleryHelper::join_paths(JPATH_ROOT, $rootdir,  $directory);
+        JLog::add("deletethumbs:2:" . $image, JLog::WARNING, 'com_jgallery');
 		foreach (self::$_formats as $format) {
-			$filename = JGalleryHelper::join_paths(self::getthumb($dir, $format, $image));
-			$width = JParametersHelper::get('thumb_' . $format .'_width');
-			$height = JParametersHelper::get('thumb_' . $format . '_height');
+			$filename = self::getthumb($dir, $format, $image);
+			JLog::add("deletethumbs:" . $filename, JLog::WARNING, 'com_jgallery');
 			if (file_exists($filename)){
 				array_push($errors, "success deleting " . $filename);
+                JLog::add("deletethumbs:delete:" . $filename, JLog::WARNING, 'com_jgallery');
 				unlink($filename);
 			} else {
+                JLog::add("deletethumbs:dos not exist:" . $filename, JLog::WARNING, 'com_jgallery');
 				array_push($errors, "file does not exist " . $filename);
 			}
 		}
 	}
 
-	public static function generatethumbimage($rootdir, $directory, $filename, $forced) {
+	public static function generatethumbimage($rootdir, $directory, $filename, $forced, $small_width, $large_width) {
 		$error = false;
 		$errors = array();
-		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
+		$dir = JGalleryHelper::join_paths(JPATH_ROOT, $rootdir,  $directory);        
 		foreach (self::$_formats as $format) {
 			$thumb = self::getthumb($dir, $format, basename($filename));
 			$width = JParametersHelper::get('thumb_' . $format .'_width');
 			$height = JParametersHelper::get('thumb_' . $format . '_height');
+            if ($format == "small" && $small_width != 0) {
+                $height = $height * $small_width/ $width;
+                $width = $small_width;
+            }
+            if ($format == "large" && $large_width != 0) {
+                $height = $height * $large_width/ $width;
+                $width = $large_width;
+            }
 			$quality = JParametersHelper::get('thumb_quality');
 			if (!self::generatethumb(JGalleryHelper::join_paths($dir, $filename), $thumb, $width, $height, $quality, $forced, $errors)) {
 				array_push($errors , "Error in generation of $filename => $thumb");
@@ -296,7 +307,7 @@ abstract class JThumbsHelper
 			$rootdir = ".";
 		}
 		$directory = $_params['dir'];
-		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
+		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_ROOT, $rootdir,  $directory)));
 		if (!is_dir($dir)) {
 			$content .= "Directory does not exists :". $dir;
 		} else {

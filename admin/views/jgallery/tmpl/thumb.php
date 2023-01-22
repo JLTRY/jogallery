@@ -15,7 +15,9 @@ JLoader::import('components.com_jgallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 $data = JThumbsHelper::generatethumbimage(JGalleryHelper::join_paths($this->rootdir),
 									 JGalleryHelper::join_paths($this->directory),
 									 $this->image,
-									 $this->force);
+									 $this->force,
+                                     $this->small_width,
+                                     $this->large_width);
 JGalleryHelper::json_answer($data);
 ?>									 
 
