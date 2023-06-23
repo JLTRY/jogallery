@@ -210,7 +210,7 @@ class JGalleryHelper
 		else {
 			$listfiles = array();
 		}
-		foreach (array("jpg", "JPG", "png") as $ext) {			
+		foreach (array("jpg", "JPG", "jpeg", "JPEG", "png") as $ext) {			
 			foreach (glob($jgallerydir . "/*.$ext") as $filename) {
 				$pathinfo = pathinfo($filename);				
 				$moddate = filemtime($filename);
@@ -244,17 +244,17 @@ class JGalleryHelper
 		if (!$exist || $modified)
 		{
 			JGalleryImage::savecsv($jgalleryfile, $listfiles);
-		}
-		$listfilteredfiles = array();
-		foreach ($listfiles as $file) {
-			$moddate = $file->moddate;
-			if (($startdate == -1) || (($moddate - $startdate) >= 0)){
-				if (($enddate == -1 ) ||  (($moddate != -1) && ($enddate - $moddate) >= 0)) {
-					array_push($listfilteredfiles, $file);
-				}
-			}
-		}
-		usort($listfilteredfiles, array('JGalleryHelper', 'sortFile'));
+        }
+        $listfilteredfiles = array();
+        foreach ($listfiles as $file) {
+            $moddate = $file->moddate;
+            if (($startdate == -1) || (($moddate - $startdate) >= 0)){
+                if (($enddate == -1 ) ||  (($moddate != -1) && ($enddate - $moddate) >= 0)) {
+                    array_push($listfilteredfiles, $file);
+                }
+            }
+        }
+        usort($listfilteredfiles, array('JGalleryHelper', 'sortFile'));
 		return $listfilteredfiles;
 	}
 	

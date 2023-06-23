@@ -38,11 +38,24 @@ class JGalleryControllerJGallery extends JControllerForm
 	}
 	
 	
-	public function editthumbs() {
+	public function genthumbs() {
 		$view = $this->getView( 'jgallery', 'html' );
 		// sets the template to someview.php
 		$input = JFactory::getApplication()->input;
 		$viewLayout  = $input->getVar( 'tmpl', 'thumbs' );
+		// tell the view which tmpl to use 
+		$view->setLayout($viewLayout);
+		$model = $this->getModel('jgallery');
+		$view->setModel($model, true);
+		// go off to the view and call the display method
+		$view->display();
+	}
+    
+    public function genrecthumbs() {
+		$view = $this->getView( 'jgallery', 'html' );
+		// sets the template to someview.php
+		$input = JFactory::getApplication()->input;
+		$viewLayout  = $input->getVar( 'tmpl', 'recthumbs' );
 		// tell the view which tmpl to use 
 		$view->setLayout($viewLayout);
 		$model = $this->getModel('jgallery');

@@ -13,9 +13,9 @@ JLoader::import('components.com_jgallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 use Joomla\CMS\HTML\HTMLHelper;
 JHtml::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
+echo JThumbsHelper::display(1, array("dir" => JGalleryHelper::join_paths($this->directory),
+									    "rootdir" => JGalleryHelper::join_paths($this->rootdir)));
 ?>
-<?php   echo JThumbsHelper::display(1, array("dir" => JGalleryHelper::join_paths($this->directory),
-									    "rootdir" => JGalleryHelper::join_paths($this->rootdir)));?>
 
 
 <form action="<?php echo JRoute::_('index.php?option=com_jgallery&layout=thumbs&id=' . (int) $this->item->id); ?>"

@@ -45,19 +45,6 @@ class plgContentJGallery extends JPlugin
 		return $found;
 	}
 
-	/**
-	* Example prepare content method in Joomla 1.5
-	*
-	* Method is called by the view
-	*
-	* @param object The article object. Note $article->text is also available
-	* @param object The article params
-	* @param int The 'page' number
-	*/
-	function onPrepareContent( &$article, &$params, $limitstart )
-	{
-		return $this->OnPrepareRow($article);
-	}
 
  	/**
 	* Example prepare content method in Joomla 1.6/1.7/2.5
@@ -107,6 +94,7 @@ class plgContentJGallery extends JPlugin
 						$p_content = JGalleryHelper::display($_result);								
 					}elseif (array_key_exists('browse', $_result)) {
 						$p_content = JDirectoryHelper::display(1, $_result);
+                        //$p_content="";
 					} else {
 						$p_content = JGalleryHelper::display($_result);								
 					}					

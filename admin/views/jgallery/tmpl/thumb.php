@@ -19,5 +19,5 @@ $data = JThumbsHelper::generatethumbimage(JGalleryHelper::join_paths($this->root
                                      $this->small_width,
                                      $this->large_width);
 JGalleryHelper::json_answer($data);
-?>									 
+
 

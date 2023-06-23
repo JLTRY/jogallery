@@ -306,8 +306,9 @@ abstract class JDirectoryHelper
 		} else {
 			$scriptDeclarations = array();
 			$scripts = array('jgallery.js');
-			JDirectoryHelper::findDirs($id, $dir, $directory, $content, $scriptDeclarations, $scripts);
+			JDirectoryHelper::findDirs($id, $dir, $directory, $content, $scriptDeclarations, $scripts);            
 			JGalleryHelper::gallery($id, $content);
+
 			$document = JFactory::getDocument();
 			foreach ($scripts as $script) {
 				 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
@@ -315,7 +316,7 @@ abstract class JDirectoryHelper
 			foreach ($scriptDeclarations as $scriptDeclaration) {
 				 $document->addScriptDeclaration($scriptDeclaration);
 			}
-		}
+		}        
 		return $content;
 	}
 }

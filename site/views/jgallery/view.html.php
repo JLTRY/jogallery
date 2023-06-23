@@ -81,6 +81,8 @@ class JGalleryViewJGallery extends JViewLegacy
 		}
 
 		// Display the view
+        echo "avant";
 		parent::display($tpl);
+        echo "apres";
 	}
 }

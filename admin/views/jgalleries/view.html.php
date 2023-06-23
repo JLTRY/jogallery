@@ -95,7 +95,11 @@ class JGalleryViewJGalleries extends JViewLegacy
 		}
 		if ($this->canDo->get('core.edit')) 
 		{
-			JToolbarHelper::custom('jgallery.editthumbs', 'publish.png', 'publish_f2.png','JTOOLBAR_THUMBS', true);
+			JToolbarHelper::custom('jgallery.genthumbs', 'publish.png', 'publish_f2.png','JTOOLBAR_THUMBS', true);
+		}
+        if ($this->canDo->get('core.edit')) 
+		{
+			JToolbarHelper::custom('jgallery.genrecthumbs', 'publish.png', 'publish_f2.png','JTOOLBAR_GENRECTHUMBS', true);
 		}
 		if ($this->canDo->get('core.edit')) 
 		{
