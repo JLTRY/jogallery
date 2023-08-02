@@ -289,7 +289,7 @@ abstract class JThumbsHelper
 		}
 
 	}
-	public static function display($id, $_params)
+	public static function display($id, $_params, $recurse = false)
 	{
 		$content = "";
 		if (is_array( $_params )== false)
@@ -313,14 +313,24 @@ abstract class JThumbsHelper
 		} else {
 
 			$scriptDeclarations = array();
-			$scripts = array('jgallery.js');
-			JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, 'selectthumbs');
+			$css = array();
+            if ($recurse) {
+                $scripts = array();
+                JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'recthumbs');
+            } else {
+                $scripts = array('jgallery.js');
+                JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'selectthumbs');
+            }
+            
 			$document = JFactory::getDocument();
 			foreach ($scripts as $script) {
 				 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
 			}
 			foreach ($scriptDeclarations as $scriptDeclaration) {
 				 $document->addScriptDeclaration($scriptDeclaration);
+			}
+            foreach ($css as $cssi) {
+				 $document->addStyleSheet($cssi);
 			}
 		}
 		

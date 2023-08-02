@@ -13,8 +13,8 @@ function thumbretriever($, id, urlroot, directory, values) {
 		url = this._urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
 				 + this._directory +"&image64=" + btoa(imgname) +"&force=" + Number(this._forced);
         $.map(params, function(value, key) {
-                        url += "&" + key + "=" + value;
-                    }        
+                url += "&" + key + "=" + value;
+            }        
         );
 		console.log(url);
 		$.ajax({
@@ -71,7 +71,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 						this.getthumb(value, params);
 					}
 				}, this)
-		);
+		);       
 		this._isstarted = false;
 	};
 	this.stopthumbs = function() {
@@ -133,7 +133,6 @@ function thumbretriever($, id, urlroot, directory, values) {
 		var onchange = this.onchange.bind(this);				
 		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true}, onchange, []);
 		$("#jgallery"+this._id).html(html);
-        //$("#toolbar").html(html);
 		$('#thumbs'+this._id).data('thumbretriever', this);
 		$('#delete'+this._id).data('delete', this);
 		$( '#thumbs'+this._id).click($.proxy(function() {
@@ -201,13 +200,8 @@ function jthumbs_ajax($, id, urlroot, value) {
 
 function jthumbs_getimages($, sid, id, urlroot, value)
 {
-	if (value) {
-		jthumbs_ajax($, id, urlroot, value);
-	}
-	else {
-		$("#"+sid).change(function() {
-			jthumbs_ajax($, id, urlroot, this.value);
-		});
-	}
+	$("#"+sid).change(function() {
+		jthumbs_ajax($, id, urlroot, this.value);
+	});
 }
 

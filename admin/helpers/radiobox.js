@@ -22,7 +22,7 @@ function radiobox($, idp, values, callback, params) {
 						'<input name="' + this._idp +
 						        '" type="radio" '+
 								" id=\""+ item.name + '"' +
-								'style="display:none;" value="'+ item.value + '" />' +
+								'style="dsplay:none;" value="'+ item.value + '" />' +
 						"<label class=\"" + btclass + "\"" +
 									" for=\""+  item.name  + "\" >" +
 						item.relative +
@@ -41,24 +41,25 @@ function radiobox($, idp, values, callback, params) {
 		var lastval = null;
 		$(this._idp).find("input").each(function(){
 			$(this).change(function() {
-								var radiobox = that;
-								//radiobox.change(this);
-								var label = $('label[for="'+$(this).attr('value')+'"]');
-								if (label.length <= 0) {
-									var parentElem = $(this).parent(),
-										parentTagName = parentElem.get(0).tagName.toLowerCase();
-									if (parentTagName == "label") {
-										label = parentElem;
-									}
-								}
-								if ($(this).checked) {
-									label.attr('class', 'btn btn-sm btn-info');
-								}
-								else {
-									label.attr('class', 'btn btn-sm btn-warning');
-								}								
-								radiobox.callback($(this).val());
-						});
+                var radiobox = that;                
+                var label = $('label[for="'+$(this).attr('value')+'"]');
+                if (label.length <= 0) {
+                    var parentElem = $(this).parent(),
+                        parentTagName = parentElem.get(0).tagName.toLowerCase();
+                    if (parentTagName == "label") {
+                        label = parentElem;
+                    }
+                }
+                if ($(this).checked) {
+                    label.attr('class', 'btn btn-sm btn-info');
+                    //$(this).prop("checked", false );
+                }
+                else {
+                    label.attr('class', 'btn btn-sm btn-warning');
+                    //$(this).prop("checked", true);
+                }								
+				radiobox.callback($(this).val());
+			});
 			lastval = $(this).val();
 		});
 		return lastval;

@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
-
+use Joomla\CMS\Uri\Uri;
 
 class JDirectory
 {
@@ -67,7 +67,7 @@ class JDirectory
 	}
 
 	/* https://rosettacode.org/wiki/Walk_a_directory/Recursively#PHP */	
-	public function findDirs($sdir, $sdir1, $excludes, $root=False)
+	public function findDirs($sdir, $sdir1, $excludes, $root=False, $recurse = False)
 	{
 		$subdirs = array();
 		$dirs = array();
@@ -79,14 +79,16 @@ class JDirectory
 				$this->insertDir(new JDirectory($this, $sdir1, $filename));
 			}
 		}
-		foreach ($this->children as $subdir) {
-			$subdir->findDirs(JGalleryHelper::join_paths($sdir, $subdir->getbasename()),
-								JGalleryHelper::join_paths($sdir1, $subdir->getbasename()),
-								$excludes);	
-		}
+        if ($recurse) {
+            foreach ($this->children as $subdir) {
+                $subdir->findDirs(JGalleryHelper::join_paths($sdir, $subdir->getbasename()),
+                                    JGalleryHelper::join_paths($sdir1, $subdir->getbasename()),
+                                    $excludes);	
+            }
+        }
 	}
 	
-	public function outputselectthumbs($id, &$content, &$scriptsdecl, &$scripts )
+	public function outputselectthumbs($id, &$content, &$scriptsdecl, &$scripts, &$css)
 	{
 		$sid = 'jgalleryselect' . $id;
         $divid = "float" . $id;
@@ -102,7 +104,7 @@ class JDirectory
 								'</option>';
 		}
 		foreach ($this->children as $child) {
-			$child->outputselectthumbs($id, $content, $scriptsdecl, $scripts );
+			$child->outputselectthumbs($id, $content, $scriptsdecl, $scripts, $css);
 		}
 		if ($this->parent == null)
 		{
@@ -110,10 +112,9 @@ class JDirectory
 			array_push($scripts, "jthumbs.js");
 			array_push($scripts, "tabselectimages.js");
 			array_push($scripts, "jimages.js");
-			$document = JFactory::getDocument();
-			$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
-			$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
-			$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
+			array_push($scripts, 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
+			array_push($css, 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
+			array_push($css, JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
 		}
 		if (($this->parent == null) && (count($this->children))) {
 			array_push($scriptsdecl, '(function($) {
@@ -128,15 +129,9 @@ class JDirectory
 			$content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto;margin-left:10px" ></div>
 					<div id="jgallerylog' . $id . '" class="form-group"  >log</div>
 					<div id="jimages' . $id . '" style="height:auto"></div>';
-		}
-		if (($this->parent == null) && (!count($this->children)))
-		{
-			array_push($scriptsdecl, '(function($) {
-					$(document).ready(function() {
-						 jthumbs_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot  .'","' . $this->getbase64path() .'");
-						})})(jQuery);');
-		}
+		}		
 	}
+        
 	
 	public function outputselectcomments($id, &$content, &$scriptsdecl, &$scripts )
 	{
@@ -180,13 +175,6 @@ class JDirectory
 						 jcomments_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot .'");
 						})})(jQuery);');
 		}
-		if (($this->parent == null) && (!count($this->children)))
-		{
-			array_push($scriptsdecl, '(function($) {
-					$(document).ready(function() {
-						 jcomments_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot  .'","' . $this->getbase64path() .'");
-						})})(jQuery);');
-		}
 		if ($this->parent == null) {
 			array_push($scriptsdecl, '(function($) {
 					$(document).ready(function() {
@@ -224,14 +212,42 @@ class JDirectory
 	{
 		$json = "";
 		$this->outputjson($json);
-		$sid = "findir" . $id1;
+		$sid = "findir" . $id;
 		$sidg = "jgallery" . $id;
 		$content = '<div class="form-floating" id="'. $sid .'"></div>';
-		array_push($scriptsdecl, '$(function () {
-		initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JURI::root() .'"]);});');
+		array_push($scriptsdecl, '$(document).ready(function() {
+                initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JURI::root() .'"]);
+            });'
+        );
 		array_push($scripts, "radiobox.js");
-		
-	}	
+	}
+    
+	
+    public function outputrecthumbs($id, &$content, &$scriptsdecl, &$scripts, &$css )
+	{
+		$json = "";
+		$this->outputjson($json);
+		$sid = "findir" . $id;
+		$sidg = "jimages" . $id;
+		$content = '<div class="form-floating" id="'. $sid .'"></div>';
+        $content .=  '<div id="jgallery' . $id . '" class="form-group" style="height:auto;margin-left:10px" ></div>
+					<div id="jgallerylog' . $id . '" class="form-group" style="min-height: 30px;" ></div>
+					<div id="jimages' . $id . '" style="height:auto"></div>';
+        array_push($scripts, "multicheckbox.js");
+        array_push($css, Uri::base() . JGalleryHelper::join_paths("components", "com_jgallery", "helpers", "multicheckbox.css"));
+        array_push($css, Uri::root() . JGalleryHelper::join_paths("templates/bootstrap4/css/template.css"));
+        array_push($scripts, "jdirectories.js");
+        array_push($scripts, "radiobox.js");
+        array_push($scripts, "jgallery.js");		
+        array_push($scripts, "jrecthumbs.js");	                    
+		array_push($scriptsdecl, '$(document).ready(function() {
+                //initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JURI::root() .'"]);      
+                jrecthumbs_getdirectories($, "#' . $sid .'" , ' . $id .' , "' . JURI::root() .'",' . $json .' );
+                $("#toolbar").append($("#'. $sid .'").detach());
+                $("#toolbar").append($("#jgallery'. $id .'").detach());                
+            });'
+        );
+	}			
 }
 
 
@@ -263,18 +279,24 @@ abstract class JDirectoryHelper
 	
 
 	
-	public static function findDirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, $type='radio') {
+	public static function findDirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, &$css, $type='radio') {
 		$jroot = new JRootDirectory($dir, $sdir);
-		$jroot->findDirs($dir, $sdir, self::$_excludes, $root);
+		$jroot->findDirs($dir, $sdir, self::$_excludes, $root, true);
 		$sid = "findir" . $id;
 		$sidg = "jgallery" . $id;
 		switch($type) {
 			case 'selectthumbs':
-				$jroot->outputselectthumbs($id, $content, $scriptsdecl, $scripts);
+				$jroot->outputselectthumbs($id, $content, $scriptsdecl, $scripts, $css);
 				break;
 			case 'selectcomments':
 				$jroot->outputselectcomments($id, $content, $scriptsdecl, $scripts);
 				break;				
+            case 'selectdirs':
+				$jroot->outputselectdirs($id, $content, $scriptsdecl, $scripts, $css);
+				break;
+            case 'recthumbs':
+				$jroot->outputrecthumbs($id, $content, $scriptsdecl, $scripts, $css);
+				break;    
 			default: 
 				$jroot->outputradio($id, $content, $scriptsdecl, $scripts);
 				break;
@@ -306,15 +328,23 @@ abstract class JDirectoryHelper
 		} else {
 			$scriptDeclarations = array();
 			$scripts = array('jgallery.js');
-			JDirectoryHelper::findDirs($id, $dir, $directory, $content, $scriptDeclarations, $scripts);            
+            $css = array();
+			JDirectoryHelper::findDirs($id, $dir, $directory, $content, $scriptDeclarations, $scripts, $css);            
 			JGalleryHelper::gallery($id, $content);
 
 			$document = JFactory::getDocument();
 			foreach ($scripts as $script) {
-				 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+                if (preg_match('/http/', $script)) {
+                    $document->addScript($script);
+                } else {
+                    $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+                }
 			}
 			foreach ($scriptDeclarations as $scriptDeclaration) {
 				 $document->addScriptDeclaration($scriptDeclaration);
+			}
+            foreach ($css as $cssi) {
+				 $document->addStyleSheet($cssi);
 			}
 		}        
 		return $content;

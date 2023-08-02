@@ -76,13 +76,9 @@ class JGalleryViewJGallery extends JViewLegacy
 		if (count($errors))
 		{
 			JLog::add(implode('<br />', $errors), JLog::WARNING, 'jerror');
-
 			return false;
 		}
-
 		// Display the view
-        echo "avant";
 		parent::display($tpl);
-        echo "apres";
 	}
 }

@@ -66,15 +66,6 @@ function imagesretriever($, id, urlroot, dir, values) {
 				content = "<a data-fancybox=\"gallery\"  href=\"" + urlfilename +"\"  data-caption=\"" + comment + "\"><img id=\""+ sid + "\" src=\"" + urlshortfilename +"\" /></a>";
 				divid.append(content);
 			}
-		//this.getthumbs(index , this._modulo);
-		
-		/*$.each(this._values, 
-				$.proxy(function(index, value) {
-					if (index % this._modulo == 0) {
-						
-					}
-				}, this)
-			);		*/
 		}
 	};
 	return this;

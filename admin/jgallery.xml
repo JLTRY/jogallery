@@ -40,6 +40,7 @@
 		<filename>controller.php</filename>
 		<folder>views</folder>
 		<folder>models</folder>
+        <folder>controllers</folder>
 	</files>
 
         <languages folder="site/language">
@@ -53,6 +54,11 @@
 	<administration>
 		<!-- Administration Menu Section -->
 		<menu link='index.php?option=com_jgallery' img="../media/com_jgallery/images/tux-16x16.png">COM_JGALLERY_MENU</menu>
+        <submenu>
+            <menu view="categories" link="option=com_categories&amp;view=categories&amp;extension=com_jgallery">Categories</menu>
+            <menu view="galleries" link='option=com_jgallery' img="../media/com_jgallery/images/tux-16x16.png">Galleries</menu>
+            <menu view="foldergroups" link='option=com_jgallery&amp;view=foldergroups'>Groupes</menu>
+        </submenu>
 		<!-- Administration Main File Copy Section -->
 		<!-- Note the folder attribute: This attribute describes the folder
 			to copy FROM in the package to install therefore files copied

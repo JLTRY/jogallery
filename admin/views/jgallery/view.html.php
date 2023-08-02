@@ -82,7 +82,9 @@ class JGalleryViewJGallery extends JViewLegacy
 		if ($this->getparam('image64', 'image64')){
 			$this->image = base64_decode($this->image64);
 		}
-		
+		if ($this->getparam('imageall', 'imageall')){
+			$this->imageall = true;
+		}
 		$this->rootdir = JParametersHelper::getrootdir();
 		$this->script = $this->get('Script');
 		$form  = $this->form = $this->get('Form');		
@@ -127,6 +129,7 @@ class JGalleryViewJGallery extends JViewLegacy
         switch ($this->getLayout())
         {
             case "thumbs":
+            case "recthumbs":
                 $id = 'COM_JGALLERY_MANAGER_THUMBS';
                 break;
             case "comments":
@@ -141,7 +144,7 @@ class JGalleryViewJGallery extends JViewLegacy
 		if ($isNew)
 		{
 			// For new records, check the create permission.
-			if (!in_array($this->getLayout(), array("thumbs", "comments")) && $this->canDo->get('core.create')) 
+			if (!in_array($this->getLayout(), array("recthumbs", "thumbs", "comments")) && $this->canDo->get('core.create')) 
 			{
 				JToolBarHelper::apply('jgallery.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('jgallery.save', 'JTOOLBAR_SAVE');

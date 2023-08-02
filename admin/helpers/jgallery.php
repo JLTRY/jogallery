@@ -304,6 +304,29 @@ class JGalleryHelper
 						setTimeout(function() {	initfancybox($);},500);
 						})})(jQuery);');
 	}
+    
+    
+    public static function ouputdirs($title, $directories, &$content, &$scriptDeclarations, &$scripts)
+	{    
+        $nbcar = 0;
+        $maxcar = 40;
+        $i = 0;
+        $maxitem = 8;
+        $sid = "jgallerydir"  . rand(1, 1024);
+        $icon = "/media/com_phocagallery/images/icon-folder-medium.png";
+        $json = json_encode($directories);
+        if ($title) {
+			$content .= "<h2>$directory</h2>";
+		}
+        $content .= '<div id="' . $sid . '"></div>';
+        array_push($scripts, "jdirectories.js");
+        array_push($scriptDeclarations, '(function($) {
+                                $(document).ready(function() {
+                                    jdirectories_show($, "' . $sid . '","' . $icon .'",' . $json . ');
+                                })
+                                })(jQuery);');
+        
+    }
 	
 	public static function getDirectories($rootdir, $directory,  $parent=0) {
 		$listdirs = array();
@@ -417,28 +440,8 @@ class JGalleryHelper
 		}else {
 			//sub directories
 			$listdirs = self::getDirectories($rootdir, $directory, $parent);
-			if ($title) {
-				$content .= "<h2>$directory</h2>";
-			}
 			if (count($listdirs)) {
-				$nbcar = 0;
-				$maxcar = 40;
-				$i = 0;
-				$maxitem = 8;
-				$content .= '<table><tr>';
-				foreach ($listdirs  as $dir) {
-					$urlshortfilename = "/media/com_phocagallery/images/icon-folder-medium.png";
-					$urlfilename =  $dir["url"];
-					$dirname = $dir["name"];
-					$content .= "<td><a   href=\"$urlfilename\">
-								<img src=\"$urlshortfilename\"><input style=\"border: 0; text-overflow:ellipsis;\" size=\"12\" type=\"text\"  name=\"$dirname\" value=\"$dirname\" readonly>
-								</a></td>";
-					if ($i++ > $maxitem) {
-						$content .= '</tr><tr>';
-						$i = 0;
-					}
-				}
-				$content .= "</tr></table>";
+                self::ouputdirs($title, $listdirs, $content, $scriptDeclarations, $scripts);				
 			}
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 
