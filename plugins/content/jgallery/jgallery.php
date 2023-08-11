@@ -15,7 +15,8 @@ define('PF_REGEX_JGALLERYI_PATTERN', "#{jgallery (.*?)}#s");
 
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
-
+JLoader::import('components.com_jgallery.helpers.foldergroup', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.models.foldergroup', JPATH_SITE);
 
 /**
 * WikipediaArticle Content Plugin
@@ -59,6 +60,18 @@ class plgContentJGallery extends JPlugin
 		return $this->OnPrepareRow($row);
 	}
 	
+    function getfolders($id, &$folders) {
+        $model = new JGalleryModelFolderGroup;
+        $model->setstate('folder.id', $id);
+        $model = $model->getItem();
+        if ($model !== null) {
+            $folders = $model->folders;
+            return true;
+        }else {
+            return false;
+        }
+    }
+    
 	function onPrepareRow(&$row) 
 	{  
 		//Escape fast
@@ -76,9 +89,9 @@ class plgContentJGallery extends JPlugin
 		if ($count) {			
 			for ($i = 0; $i < $count; $i++)
 			{
-				$_result = array();
+				$_params = array();
 				if ($this->getparam('page', 'page')) {
-					$_result['page'] = $this->page;
+					$_params['page'] = $this->page;
 				}
 				if (@$matches[1][$i]) {
 					$inline_params = $matches[1][$i];
@@ -87,16 +100,25 @@ class plgContentJGallery extends JPlugin
 						$pos = strpos($pair, "=");
 						$key = substr($pair, 0, $pos);
 						$value = substr($pair, $pos + 1);
-						$_result[$key] = $value;
+						$_params[$key] = $value;
 					}
-					$_result['rootdir'] = JParametersHelper::getrootdir();
-					if (array_key_exists('img', $_result)) {
-						$p_content = JGalleryHelper::display($_result);								
-					}elseif (array_key_exists('browse', $_result)) {
-						$p_content = JDirectoryHelper::display(1, $_result);
-                        //$p_content="";
-					} else {
-						$p_content = JGalleryHelper::display($_result);								
+					$_params['rootdir'] = JParametersHelper::getrootdir();
+					if (array_key_exists('img', $_params)) {
+						$p_content = JGalleryHelper::display($_params);								
+					}elseif (array_key_exists('browse', $_params)) {
+						$p_content = JDirectoryHelper::display(1, $_params);
+					} elseif (array_key_exists('group', $_params)){
+                        $folders = array();
+                        $id = $_params['group'];
+                        if ($this->getfolders($id, $folders))
+                        {
+                            $_params['folders'] = $folders;
+                            $_params['id'] = $id;
+                            $p_content = FolderGroupHelper::display($_params);
+                        }
+                    }
+                    else {    
+						$p_content = JGalleryHelper::display($_params);								
 					}					
 					$row->text = str_replace("{jgallery " . $matches[1][$i] . "}", $p_content, $row->text);
 				}

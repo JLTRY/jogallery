@@ -10,12 +10,13 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.helpers.foldergroup', JPATH_ADMINISTRATOR);
 /**
  * HTML View class for the JGalleryComponent
  *
  * @since  0.0.1
  */
-class JGalleryViewJGallery extends JViewLegacy
+class JGalleryViewFolderGroup extends JViewLegacy
 {
 	static $_id;
 	function getparam($name, $param) {
@@ -41,40 +42,34 @@ class JGalleryViewJGallery extends JViewLegacy
 	 */
 	function display($tpl = null)
 	{
-		$this->item = $this->get('Item');
-		if ($this->item){
-			$this->directory = $this->item->directory;
-		}
-		else {
-			if (!$this->getparam('directory', 'directory'))
-			{
-				if ($this->getparam('directory64', 'directory64')) {
-					$this->directory = base64_decode($this->directory64);
-				}
+       
+		// Assign data to the view
+		
+        $this->getparam('parent', 'parent');
+        $this->getparam('id', 'id');
+        $model = new JGalleryModelFolderGroup;
+        $model->setstate('folder.id', $this->id);
+        $this->item = $model->getItem();
+        $this->getparam('tmpl', 'tmpl');
+        $this->directory = null;
+        if (!$this->getparam('directory', 'directory'))
+		{
+			if ($this->getparam('directory64', 'directory64')) {
+				$this->directory = base64_decode($this->directory64);
 			}
 		}
-		$this->rootdir = JParametersHelper::getrootdir();
-		if (!is_string($this->directory))
-		{
-			$errors = array("directory not defined");
-		} else
-		{
-			$errors = $this->get('Errors');
-		}
-		$this->getparam('image', 'image');
-		$this->page= -1;
-		$this->getparam('page', 'page');
-		if ($this->getparam('image64', 'image64')){
-			$this->image = base64_decode($this->image64);
-		}
-		$this->parent = false;
-		$this->getparam('parent', 'parent');	
-		// Check for errors.
-		if (count($errors))
-		{
-			JLog::add(implode('<br />', $errors), JLog::WARNING, 'jerror');
-			return false;
-		}
+		if ($this->item){
+			$this->folders = $this->item->folders;
+            $this->name = $this->item->name;
+            $this->id = $this->item->id;
+		}        
+        $user = JFactory::getUser();
+        if (!FolderGroupHelper::usercanviewcategory($user, $this->item->catid)) {
+            $errors =[ "No rights acces to view " . $this->name];
+            JLog::add(implode('<br />', $errors), JLog::WARNING, 'jerror');
+            return;
+        }
+		$this->rootdir = JParametersHelper::getrootdir();		
 		// Display the view
 		parent::display($tpl);
 	}

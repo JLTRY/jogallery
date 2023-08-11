@@ -46,21 +46,6 @@ class JGalleryModelJGallery extends JModelItem
 		parent::populateState();
 	}
 
-	/**
-	 * Method to get a table object, load it if necessary.
-	 *
-	 * @param   string  $type    The table name. Optional.
-	 * @param   string  $prefix  The class prefix. Optional.
-	 * @param   array   $config  Configuration array for model. Optional.
-	 *
-	 * @return  JTable  A JTable object
-	 *
-	 * @since   1.6
-	 */
-	public function getTable($type = 'JGallery', $prefix = 'JGalleryTable', $config = array())
-	{
-		return JTable::getInstance($type, $prefix, $config);
-	}
 
 	/**
 	 * Get the message

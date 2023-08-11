@@ -177,7 +177,7 @@ class JGalleryHelper
 	}
 	
 	public static function getrootdir() {
-		return self::join_paths(JPATH_SITE, "images", JParametersHelper::get('rootdir'));
+		return self::join_paths(JPATH_SITE, JParametersHelper::getrootdir());
 	}
 
 	public static function guessDate($filename, &$date) {
@@ -360,10 +360,22 @@ class JGalleryHelper
 		{
 			return  "errorf:" . print_r($_params, true);
 		}
-		if (! array_key_exists('dir', $_params))
+		if (! array_key_exists('directory', $_params) && 
+            ! array_key_exists('dir', $_params))
 		{
-			return  "errorf: missing dir param" . print_r($_params, true);
+			return  "errorf: missing dir/directory param" . print_r($_params, true);
 		}
+        $directory = $null;
+        $keys= array('dir', 'directory');
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $_params)) {
+                $directory = $_params[$key];
+                break;
+            }
+        }
+        if ($directory == null) {
+            return  "errorf: missing dir/directory param" . print_r($_params, true);
+        }
 		if ( array_key_exists('start', $_params))
 		{
 			$start = new Date($_params['start']);
@@ -416,7 +428,7 @@ class JGalleryHelper
 		} else {
 			$page = -1;
 		}
-		$directory = $_params['dir'];
+
 		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
 		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');

@@ -9,9 +9,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Uri\Uri;
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
-use Joomla\CMS\Uri\Uri;
 
 class JDirectory
 {
@@ -241,7 +241,6 @@ class JDirectory
         array_push($scripts, "jgallery.js");		
         array_push($scripts, "jrecthumbs.js");	                    
 		array_push($scriptsdecl, '$(document).ready(function() {
-                //initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JURI::root() .'"]);      
                 jrecthumbs_getdirectories($, "#' . $sid .'" , ' . $id .' , "' . JURI::root() .'",' . $json .' );
                 $("#toolbar").append($("#'. $sid .'").detach());
                 $("#toolbar").append($("#jgallery'. $id .'").detach());                
@@ -279,7 +278,7 @@ abstract class JDirectoryHelper
 	
 
 	
-	public static function findDirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, &$css, $type='radio') {
+	public static function outputdirs($id, $dir, $sdir, &$content, &$scriptsdecl, &$scripts, &$css, $type='radio') {
 		$jroot = new JRootDirectory($dir, $sdir);
 		$jroot->findDirs($dir, $sdir, self::$_excludes, $root, true);
 		$sid = "findir" . $id;
@@ -329,7 +328,7 @@ abstract class JDirectoryHelper
 			$scriptDeclarations = array();
 			$scripts = array('jgallery.js');
             $css = array();
-			JDirectoryHelper::findDirs($id, $dir, $directory, $content, $scriptDeclarations, $scripts, $css);            
+			JDirectoryHelper::outputDirs($id, $dir, $directory, $content, $scriptDeclarations, $scripts, $css);            
 			JGalleryHelper::gallery($id, $content);
 
 			$document = JFactory::getDocument();
