@@ -16,7 +16,6 @@ define('PF_REGEX_JGALLERYI_PATTERN', "#{jgallery (.*?)}#s");
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.foldergroup', JPATH_ADMINISTRATOR);
-JLoader::import('components.com_jgallery.models.foldergroup', JPATH_SITE);
 
 /**
 * WikipediaArticle Content Plugin
@@ -60,12 +59,14 @@ class plgContentJGallery extends JPlugin
 		return $this->OnPrepareRow($row);
 	}
 	
-    function getfolders($id, &$folders) {
+    function getfolders($id, &$folders, &$name) {
+        JLoader::import('components.com_jgallery.models.foldergroup', JPATH_SITE);
         $model = new JGalleryModelFolderGroup;
         $model->setstate('folder.id', $id);
         $model = $model->getItem();
         if ($model !== null) {
             $folders = $model->folders;
+            $name = $model->name;
             return true;
         }else {
             return false;
@@ -110,10 +111,11 @@ class plgContentJGallery extends JPlugin
 					} elseif (array_key_exists('group', $_params)){
                         $folders = array();
                         $id = $_params['group'];
-                        if ($this->getfolders($id, $folders))
+                        if ($this->getfolders($id, $folders, $name))
                         {
                             $_params['folders'] = $folders;
                             $_params['id'] = $id;
+                            $_params['name'] = $name;
                             $p_content = FolderGroupHelper::display($_params);
                         }
                     }

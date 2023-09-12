@@ -27,9 +27,10 @@ class JGalleryControllerFolderGroups extends JControllerAdmin
 	 *
 	 * @since   1.6
 	 */
-	public function getModel($name = 'foldergroup', $prefix = 'JGalleryModel', $config = array('ignore_request' => true))
+	public function getModel($name = 'foldergroup', $prefix = 'JGalleryAdmModel', $config = array('ignore_request' => true))
 	{
-		$model = parent::getModel($name, $prefix, $config);
+		$model = parent::getModel($name,'JGalleryAdmModel' , $config);
+
 
 		return $model;
 	}

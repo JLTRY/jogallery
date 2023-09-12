@@ -316,10 +316,10 @@ abstract class JThumbsHelper
 			$css = array();
             if ($recurse) {
                 $scripts = array();
-                JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'recthumbs');
+                JDirectoryHelper::outputdirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'recthumbs');
             } else {
                 $scripts = array('jgallery.js');
-                JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'selectthumbs');
+                JDirectoryHelper::outputdirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'selectthumbs');
             }
             
 			$document = JFactory::getDocument();

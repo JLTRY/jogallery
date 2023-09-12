@@ -99,4 +99,7 @@ class JGalleryModelFolderGroup extends AdminModel
     {
         return parent::save($data);
     }
+    
+    
+    
 }

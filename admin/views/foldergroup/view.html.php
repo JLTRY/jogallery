@@ -21,6 +21,25 @@ class JGalleryViewFolderGroup extends JViewLegacy
 	protected $item;
 	protected $script;
 	protected $canDo;
+    
+    function getparam($name, $param) {
+		$found = false;
+		$app     = JFactory::getApplication();
+		$input   = $app->getInput();
+		if ($input->get($param) !== null) {
+			$this->{$name} = $input->get($param);
+			$found = true;
+		} else  if (method_exists($app, 'getParams')) {
+			$params  = $app->getParams();
+			if ($params->get($param) !== null) {
+				$this->{$name} = $params->get($param);
+				$found = true;
+			}
+		} 
+		return $found;
+	}
+
+
 
 	/**
 	 * Display the Calendar view
@@ -32,8 +51,16 @@ class JGalleryViewFolderGroup extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// Get the Data
+        $this->item = $this->get('Item');
+        $this->getparam('id', 'id');
+        if ($this->id) {
+			$factory = JFactory::getApplication()->bootComponent('com_jgallery')->getMVCFactory();
+			$modelGallery = $factory->createModel('FolderGroup', 'JGalleryModel');
+			$modelGallery->setState("folder.id", $this->id);
+			$this->item = $modelGallery->getItem($this->id);
+		}
 		$this->form = $this->get('Form');
-		$this->item = $this->get('Item');
+		
 		$this->script = $this->get('Script');
 
 		// What Access Permissions does this user have? What can (s)he do?
@@ -85,7 +112,7 @@ class JGalleryViewFolderGroup extends JViewLegacy
 		$isNew = ($this->item->id == 0);
 
 		JToolBarHelper::title($isNew ? JText::_('COM_JGALLERY_CREATE_NEW_GROUP')
-		                             : JText::_('COM_JCOACHING_MANAGER_JCOACHING_EDIT'), 'FolderGroup');
+		                             : JText::_('COM_JGALLERY_GROUP_EDIT'), 'FolderGroup');
 		// Build the actions for new and existing records.
 		if ($isNew)
 		{

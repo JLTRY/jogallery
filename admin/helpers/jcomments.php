@@ -43,7 +43,7 @@ abstract class JCommentsHelper
 
 			$scriptDeclarations = array();
 			$scripts = array();
-			JDirectoryHelper::findDirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, 'selectcomments');
+			JDirectoryHelper::outputdirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, 'selectcomments');
 			$document = JFactory::getDocument();
 			foreach ($scripts as $script) {
 				 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);

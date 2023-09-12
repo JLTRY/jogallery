@@ -8,13 +8,13 @@
  */
 
 // No direct access to this file
-defined('_JEXEC') or die('Restricted access');
 
 /**
  * JGallery Model
  *
  * @since  0.0.1
  */
+
 class JGalleryModelFolderGroup extends JModelItem
 {
 	/**
