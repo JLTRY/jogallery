@@ -9,9 +9,16 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
+
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Factory\MVCFactory;
+use Joomla\CMS\MVC\View\HtmlView as JViewLegacy;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Toolbar\ToolbarHelper as JToolbarHelper;
+use Joomla\CMS\Uri\Uri as JUri;
+
+JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 /**
  * JGallery View
  *
@@ -109,7 +116,7 @@ class JGalleryViewJGallery extends JViewLegacy
 		parent::display($tpl);
 
 		// Set the document
-		$this->setDocument();
+		$this->setDocument(JFactory::getDocument());
 	}
 
 	/**
@@ -184,14 +191,14 @@ class JGalleryViewJGallery extends JViewLegacy
 	 *
 	 * @return void
 	 */
-	protected function setDocument() 
+	public function setDocument(Joomla\CMS\Document\Document $document): void
 	{
 		$isNew = ($this->item->id == 0);
-		$document = JFactory::getDocument();
+		
 		$document->setTitle($isNew ? JText::_('COM_JGALLERY_JGALLERY_CREATING')
 		                           : JText::_('COM_JGALLERY_JGALLERY_EDITING'));
-		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "/administrator/components/com_jgallery"
+		$document->addScript(JUri::root() . $this->script);
+		$document->addScript(JUri::root() . "/administrator/components/com_jgallery"
 		                                  . "/views/jgallery/submitbutton.js");
 		JText::script('COM_JGALLERY_JGALLERY_ERROR_UNACCEPTABLE');
 	}

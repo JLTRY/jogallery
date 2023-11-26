@@ -9,6 +9,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\MVC\View\HtmlView as JViewLegacy;
+use Joomla\CMS\Factory as JFactory;
+
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 /**
  * HTML View class for the JGalleryComponent

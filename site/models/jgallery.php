@@ -9,7 +9,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+use Joomla\CMS\MVC\Model\ItemModel as JModelItem;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\Registry\Registry as JRegistry;
 /**
  * JGallery Model
  *

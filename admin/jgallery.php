@@ -9,7 +9,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\Log\Log;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Log\Log as JLog;
+use Joomla\CMS\MVC\Controller\BaseController as JControllerLegacy;
 
 // Set some global property
 $document = JFactory::getDocument();

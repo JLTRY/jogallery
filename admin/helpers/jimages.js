@@ -74,7 +74,7 @@ function imagesretriever($, id, urlroot, dir, values) {
 function jimages_getimages($, id, urlroot, directory, listfiles)
 {
 	var thmb = new imagesretriever($, id, urlroot, directory, listfiles);
-	thmb.show($, 0, 500);					
+	thmb.show($, 0, 1500);					
 }
 
 function initfancybox($, page=null) {

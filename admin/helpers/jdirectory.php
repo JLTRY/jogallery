@@ -9,7 +9,15 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Uri\Uri as JUri;
+use Joomla\CMS\Image\Image as JImage;
+use Joomla\CMS\Object\CMSObject as JObject;
+use Joomla\CMS\Access\Access as JAccess;
+
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 
@@ -92,7 +100,7 @@ class JDirectory
 	{
 		$sid = 'jgalleryselect' . $id;
         $divid = "float" . $id;
-		$urlroot = JURI::root(true);
+		$urlroot = JUri::root(true);
 		if (($this->parent == null) && (count($this->children)))		
 		{
 			$content .= '<select class="form-select" style="max-width:500px;margin-left:10px" id="' . $sid . '" >
@@ -114,7 +122,7 @@ class JDirectory
 			array_push($scripts, "jimages.js");
 			array_push($scripts, 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
 			array_push($css, 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
-			array_push($css, JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
+			array_push($css, JUri::root(true) . '/plugins/content/jgallery/jgallery.css');
 		}
 		if (($this->parent == null) && (count($this->children))) {
 			array_push($scriptsdecl, '(function($) {
@@ -135,7 +143,7 @@ class JDirectory
 	
 	public function outputselectcomments($id, &$content, &$scriptsdecl, &$scripts )
 	{
-		$urlroot = JURI::root(true);
+		$urlroot = JUri::root(true);
 		$app = JFactory::getApplication();
 		if ($app->isClient('administrator'))
 		{
@@ -164,7 +172,7 @@ class JDirectory
 			$document = JFactory::getDocument();
 			$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
 			$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
-			$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');			
+			$document->addStyleSheet(JUri::root(true) . '/plugins/content/jgallery/jgallery.css');			
 		}
 		if (($this->parent == null) && (count($this->children)))
 		{
@@ -216,7 +224,7 @@ class JDirectory
 		$sidg = "jgallery" . $id;
 		$content = '<div class="form-floating" id="'. $sid .'"></div>';
 		array_push($scriptsdecl, '$(document).ready(function() {
-                initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JURI::root() .'"]);
+                initradiobox($, "#' . $sid .'" ,'. $json.',  fillgallery, [ "#' . $sidg .'", "' . JUri::root() .'"]);
             });'
         );
 		array_push($scripts, "radiobox.js");
@@ -241,7 +249,7 @@ class JDirectory
         array_push($scripts, "jgallery.js");		
         array_push($scripts, "jrecthumbs.js");	                    
 		array_push($scriptsdecl, '$(document).ready(function() {
-                jrecthumbs_getdirectories($, "#' . $sid .'" , ' . $id .' , "' . JURI::root() .'",' . $json .' );
+                jrecthumbs_getdirectories($, "#' . $sid .'" , ' . $id .' , "' . JUri::root() .'",' . $json .' );
                 $("#toolbar").append($("#'. $sid .'").detach());
                 $("#toolbar").append($("#jgallery'. $id .'").detach());                
             });'
@@ -336,7 +344,7 @@ abstract class JDirectoryHelper
                 if (preg_match('/http/', $script)) {
                     $document->addScript($script);
                 } else {
-                    $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+                    $document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
                 }
 			}
 			foreach ($scriptDeclarations as $scriptDeclaration) {

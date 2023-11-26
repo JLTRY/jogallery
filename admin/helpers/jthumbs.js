@@ -24,7 +24,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 			async: 'false',
 			context: this,
 			success: function(tvalue) {
-				//console.log(this);
+				console.log(this);
 				txt = "";
 				$.each(tvalue[2], function(index, item) {
 					txt += item +"<br/>";
@@ -99,9 +99,9 @@ function thumbretriever($, id, urlroot, directory, values) {
 				console.log("success");
 				txt = "";
 				$.each(tvalue, function(index, item) {
-					txt += item +"<br/>";
-				});
-				$("#jgallerylog"+this._id).html(txt);
+					txt = item +"<br/>";
+                    $("#jgallerylog"+this._id).html(txt);
+				});				
 				$.each(this._listimages, 
 					$.proxy(function(index, value) {
 						var imge = $("img[id='"+ value + "']");

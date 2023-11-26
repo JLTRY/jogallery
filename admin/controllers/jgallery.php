@@ -8,6 +8,9 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\MVC\Controller\FormController as JControllerForm;
+use Joomla\CMS\Factory as JFactory;
+
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 
 /**

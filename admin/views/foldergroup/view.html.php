@@ -92,7 +92,7 @@ class JGalleryViewFolderGroup extends JViewLegacy
 		parent::display($tpl);
 
 		// Set the document
-		$this->setDocument();
+		$this->setDocument(JFactory::getDocument());
 	}
 
 	/**
@@ -155,10 +155,9 @@ class JGalleryViewFolderGroup extends JViewLegacy
 	 *
 	 * @return void
 	 */
-	protected function setDocument() 
+	public function setDocument(Joomla\CMS\Document\Document  $document):void
 	{
 		$isNew = ($this->item->id == 0);
-		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_JGALLERY_FOLDERGROUP_CREATING')
 		                           : JText::_('COM_JGALLERY_FOLDERGROUP_EDITING'));
 		$document->addScript(JURI::root() . $this->script);

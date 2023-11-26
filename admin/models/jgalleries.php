@@ -8,6 +8,8 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\MVC\Model\ListModel as JModelList;
+use Joomla\CMS\Factory as JFactory;
 
 /**
  * HelloWorldList Model

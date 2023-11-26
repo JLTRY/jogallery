@@ -9,6 +9,10 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Router\Route as JRoute;
+
 JHtml::_('jquery.framework');
 JHtml::_('formbehavior.chosen', 'select');
 

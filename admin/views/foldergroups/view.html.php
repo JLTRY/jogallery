@@ -67,7 +67,8 @@ class JGalleryViewfoldergroups extends JViewLegacy
 		parent::display($tpl);
 
 		// Set the document
-		$this->setDocument();
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_('COM_JGALLERY_ADMINISTRATION'));;
 	}
 
 	/**
@@ -106,14 +107,5 @@ class JGalleryViewfoldergroups extends JViewLegacy
 			JToolBarHelper::preferences('com_jcoaching');
 		}
 	}
-	/**
-	 * Method to set up the document properties
-	 *
-	 * @return void
-	 */
-	protected function setDocument() 
-	{
-		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_JGALLERY_ADMINISTRATION'));
-	}
+
 }

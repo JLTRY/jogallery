@@ -9,6 +9,10 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\MVC\View\HtmlView as JViewLegacy;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Toolbar\ToolbarHelper as JToolbarHelper;
 
 /**
  * JGallerys View
@@ -60,7 +64,8 @@ class JGalleryViewJGalleries extends JViewLegacy
 		parent::display($tpl);
 
 		// Set the document
-		$this->setDocument();
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_('COM_JGALLERY_ADMINISTRATION'));
 	}
 
 	/**
@@ -110,15 +115,5 @@ class JGalleryViewJGalleries extends JViewLegacy
 			JToolBarHelper::divider();
 			JToolBarHelper::preferences('com_jgallery');
 		}
-	}
-	/**
-	 * Method to set up the document properties
-	 *
-	 * @return void
-	 */
-	protected function setDocument() 
-	{
-		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_JGALLERY_ADMINISTRATION'));
 	}
 }

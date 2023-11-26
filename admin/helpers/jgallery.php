@@ -9,11 +9,19 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+
 JLoader::import('components.com_jgallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
 
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Uri\Uri as JUri;
+use Joomla\CMS\Image\Image as JImage;
+use Joomla\CMS\Object\CMSObject as JObject;
+use Joomla\CMS\Access\Access as JAccess;
 
 class JGalleryImage
 {
@@ -193,7 +201,7 @@ class JGalleryHelper
 	
 	
 	public static function getRoute($parentdir, $directory, $parent) {
-		return JURI::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode("${parentdir}/${directory}") ."&parent=" .$parent . "&Itemid=0";
+		return JUri::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode("${parentdir}/${directory}") ."&parent=" .$parent . "&Itemid=0";
 	}
 	
 	public static function sortFile($a, $b) {
@@ -279,7 +287,7 @@ class JGalleryHelper
 		array_push($scripts, "jimages.js");
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
-							jimages_getimages($, "' . $sid .'", "' . JURI::root(true) .'","' . base64_encode($directory) .'",' . json_encode($listfiles) .');							
+							jimages_getimages($, "' . $sid .'", "' . JUri::root(true) .'","' . base64_encode($directory) .'",' . json_encode($listfiles) .');							
 						})})(jQuery);');
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
@@ -431,9 +439,9 @@ class JGalleryHelper
 
 		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
-		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
-		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
-		$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
+		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js');
+		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css');
+		$document->addStyleSheet(JUri::root(true) . '/plugins/content/jgallery/jgallery.css');
 		$scriptDeclarations = array();
 		$scripts = array('jgallery.js');		
 		if ( array_key_exists('img', $_params)) {
@@ -461,7 +469,7 @@ class JGalleryHelper
 		}
 		$document = JFactory::getDocument();
 		foreach ($scripts as $script) {
-			 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+			 $document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
 		}
 
 		foreach ($scriptDeclarations as $scriptDeclaration) {

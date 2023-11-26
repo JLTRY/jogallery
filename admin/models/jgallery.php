@@ -9,6 +9,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\MVC\Model\AdminModel as JModelAdmin;
+use Joomla\CMS\Table\Table as JTable;
+use Joomla\CMS\Factory as JFactory;
 
 /**
  * JGalleryModel

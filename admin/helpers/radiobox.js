@@ -22,7 +22,7 @@ function radiobox($, idp, values, callback, params) {
 						'<input name="' + this._idp +
 						        '" type="radio" '+
 								" id=\""+ item.name + '"' +
-								'style="dsplay:none;" value="'+ item.value + '" />' +
+								'style="display:none;" value="'+ item.value + '" />' +
 						"<label class=\"" + btclass + "\"" +
 									" for=\""+  item.name  + "\" >" +
 						item.relative +

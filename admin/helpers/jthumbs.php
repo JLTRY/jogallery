@@ -13,6 +13,11 @@ JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRAT
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
 
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Uri\Uri as JUri;
+
+
 abstract class JThumbsHelper
 {
 	static $_formats = array("small" , "large");
@@ -36,7 +41,7 @@ abstract class JThumbsHelper
 	}
 
 	static function getthumbURL($rootdir , $directory, $mode, $img) {
-		return JURI::root(true) .  DIRECTORY_SEPARATOR . JThumbsHelper::getthumb( $rootdir . DIRECTORY_SEPARATOR . $directory, $mode, basename($img));
+		return JUri::root(true) .  DIRECTORY_SEPARATOR . JThumbsHelper::getthumb( $rootdir . DIRECTORY_SEPARATOR . $directory, $mode, basename($img));
 	}
 
 	static function read_image($original_file)
@@ -324,7 +329,7 @@ abstract class JThumbsHelper
             
 			$document = JFactory::getDocument();
 			foreach ($scripts as $script) {
-				 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+				 $document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
 			}
 			foreach ($scriptDeclarations as $scriptDeclaration) {
 				 $document->addScriptDeclaration($scriptDeclaration);
