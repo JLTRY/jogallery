@@ -17,13 +17,12 @@ abstract class JParametersHelper
 		array('rootdir' => 'phocagallery',
 			 'thumb_small_format' => '/thumbs/phoca_thumb_s_%s',
 			 'thumb_large_format' => '/thumbs/phoca_thumb_l_%s',
-			 'thumb_small_width' => 80,			  
+			 'thumb_small_width' => 80,
 			 'thumb_small_height' => 80,
 			 'thumb_large_width' => 2560,
 			 'thumb_large_height' => 1920,
 			 'thumb_quality' => 90
 		);
-	
 
 	static function get($parameter) {
 	  $value = JComponentHelper::getParams('com_jgallery')->get($parameter);
@@ -42,10 +41,8 @@ abstract class JParametersHelper
 	  }
 	  return $value;
 	}
-	
+
 	static function getrootdir() {
 		return "images/" . self::get('rootdir');
 	}
-
-	
-}	
+}

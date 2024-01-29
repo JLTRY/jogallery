@@ -2,12 +2,12 @@ function fillgallery($, value, params)
 {
 	id = params[0];
 	rootdir = params[1];
+	url =  rootdir + "index.php?option=com_jgallery&view=jgallery&tmpl=component&directory64=" + value;
 	$.ajax({
-		url:  rootdir + "index.php?option=com_jgallery&view=jgallery&tmpl=component&directory64="
-			 + value,
+		url: url,
 		type: "POST",
 		success: function(rdata) {
-				$(id).html(rdata);					
+				$(id).html(rdata);
 		},
 		error: function(xhr, status, text) {
 			var response = $.parseJSON(xhr.responseText);
@@ -16,7 +16,7 @@ function fillgallery($, value, params)
 				console.log(response['data']['error']);
 			} else {
 				// This would mean an invalid response from the server - maybe the site went down or whatever...
-			}			
+			}
 		}
 	});
 }

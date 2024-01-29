@@ -1,10 +1,10 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package	 Joomla.Administrator
  * @subpackage  com_jgallery
  *
  * @copyright   Copyright (C) 2005 - 2015 JL TRYOEN All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license	 GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // No direct access to this file
@@ -22,6 +22,8 @@ use Joomla\CMS\Uri\Uri as JUri;
 use Joomla\CMS\Image\Image as JImage;
 use Joomla\CMS\Object\CMSObject as JObject;
 use Joomla\CMS\Access\Access as JAccess;
+
+
 
 class JGalleryImage
 {
@@ -41,8 +43,7 @@ class JGalleryImage
 		$this->comment = $comment;
 	}
 
-	
-	
+
 	static function savecsv($file, $results)
 	{
 		$fp = fopen($file, 'w');
@@ -83,8 +84,10 @@ class JGalleryImage
 		return $results;
 	}
 	
-
 }
+
+
+
 
 /**
  * JGallery component helper.
@@ -93,11 +96,12 @@ class JGalleryImage
  *
  * @return  void
  *
- * @since   1.6
+ * @since
  */
 class JGalleryHelper
 {
-	static function json_answer($data) {
+	static function json_answer($data)
+	{
 		$Jsession = JFactory::getSession();
 		if ($Jsession != NULL)
 		{
@@ -122,7 +126,7 @@ class JGalleryHelper
 		// set some global property
 		$document = JFactory::getDocument();
 		$document->addStyleDeclaration('.icon-48-jgallery ' .
-		                               '{background-image: url(../media/com_jgallery/images/tux-48x48.png);}');
+									   '{background-image: url(../media/com_jgallery/images/tux-48x48.png);}');
 		if ($submenu == 'categories') 
 		{
 			$document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION_CATEGORIES'));
@@ -153,7 +157,8 @@ class JGalleryHelper
 		return $result;
 	}
 	
-	public static function join_paths(...$spaths) {
+	public static function join_paths(...$spaths)
+	{
 		$arpath = array();
 		$prefix = ($spaths[0][0] == DIRECTORY_SEPARATOR)? DIRECTORY_SEPARATOR : "";
 		foreach($spaths as $spath) {
@@ -184,11 +189,13 @@ class JGalleryHelper
 		return $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath));
 	}
 	
-	public static function getrootdir() {
+	public static function getrootdir()
+	{
 		return self::join_paths(JPATH_SITE, JParametersHelper::getrootdir());
 	}
 
-	public static function guessDate($filename, &$date) {
+	public static function guessDate($filename, &$date)
+	{
 		if(preg_match('/IMG[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re))
 		{
 			$date = strtotime($re[1] . "-" . $re[2] . "-" . $re[3] . " " . $re[4] . ":" . $re[5] . ":" . $re[6] . " UCT");
@@ -200,14 +207,23 @@ class JGalleryHelper
 	}
 	
 	
-	public static function getRoute($parentdir, $directory, $parent) {
-		return JUri::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode("${parentdir}/${directory}") ."&parent=" .$parent . "&Itemid=0";
-	}
+
 	
-	public static function sortFile($a, $b) {
+	public static function sortFile($a, $b)
+	{
 		return strcasecmp($a->filename, $b->filename);
 	}
-	public static function getFiles($rootdir, $directory,  $icon=true, $startdate=-1, $enddate=-1) {
+
+	public static function addFancybox($document)
+	{
+		JHtml::_('jquery.framework');
+		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
+		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
+		$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
+	}
+
+	public static function getFiles($rootdir, $directory,  $icon=true, $startdate=-1, $enddate=-1)
+	{
 		$jgallerydir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
 		$jgalleryfile = JGalleryHelper::join_paths($jgallerydir, "gallery.csv");
 		$exist = $modified = false;
@@ -218,9 +234,9 @@ class JGalleryHelper
 		else {
 			$listfiles = array();
 		}
-		foreach (array("jpg", "JPG", "jpeg", "JPEG", "png") as $ext) {			
+		foreach (array("jpg", "JPG", "jpeg", "JPEG", "png") as $ext) {
 			foreach (glob($jgallerydir . "/*.$ext") as $filename) {
-				$pathinfo = pathinfo($filename);				
+				$pathinfo = pathinfo($filename);
 				$moddate = filemtime($filename);
 				$exist = false;
 				foreach ($listfiles as $file) {
@@ -252,23 +268,23 @@ class JGalleryHelper
 		if (!$exist || $modified)
 		{
 			JGalleryImage::savecsv($jgalleryfile, $listfiles);
-        }
-        $listfilteredfiles = array();
-        foreach ($listfiles as $file) {
-            $moddate = $file->moddate;
-            if (($startdate == -1) || (($moddate - $startdate) >= 0)){
-                if (($enddate == -1 ) ||  (($moddate != -1) && ($enddate - $moddate) >= 0)) {
-                    array_push($listfilteredfiles, $file);
-                }
-            }
-        }
-        usort($listfilteredfiles, array('JGalleryHelper', 'sortFile'));
+		}
+		$listfilteredfiles = array();
+		foreach ($listfiles as $file) {
+			$moddate = $file->moddate;
+			if (($startdate == -1) || (($moddate - $startdate) >= 0)){
+				if (($enddate == -1 ) ||  (($moddate != -1) && ($enddate - $moddate) >= 0)) {
+					array_push($listfilteredfiles, $file);
+				}
+			}
+		}
+		usort($listfilteredfiles, array('JGalleryHelper', 'sortFile'));
 		return $listfilteredfiles;
 	}
-	
-	public static function ouputsync($directory, $listfiles, &$content, &$scriptDeclarations, &$scripts)
+
+	public static function outputsync($directory, $listfiles, &$content, &$scriptDeclarations, &$scripts)
 	{
-		foreach ($listfiles  as $file) {			
+		foreach ($listfiles  as $file) {
 			$urlfilename = $file['urlfilename'];
 			$urlshortfilename = $file['urlshortfilename'];
 			$content .= "<a data-fancybox=\"gallery\"  href=\"$urlfilename\"><img src=\"$urlshortfilename\"/></a>";
@@ -279,27 +295,27 @@ class JGalleryHelper
 						})})(jQuery);');
 	}
 
-	public static function ouputasync($directory, $listfiles, $page, &$content, &$scriptDeclarations, &$scripts)
+	public static function outputasync($id, $directory, $listfiles, $page, &$content, &$scriptDeclarations, &$scripts)
 	{
-		$sid = "jgallery" . rand(1, 1024);
+		$sid = "jgallery" . $id;
 		$content .= '<div id="' . $sid . '">';
 		$content .= '</div>';
 		array_push($scripts, "jimages.js");
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
-							jimages_getimages($, "' . $sid .'", "' . JUri::root(true) .'","' . base64_encode($directory) .'",' . json_encode($listfiles) .');							
+							jimages_getimages($, "' . $sid .'", "' . JUri::root(true) .'","' . base64_encode($directory) .'",' . json_encode($listfiles) .');
 						})})(jQuery);');
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
 						setTimeout(function() {	initfancybox($, ' . $page .');},500);
-						})})(jQuery);');						
+						})})(jQuery);');
 	}
-	
-	public static function ouputimg($rootdir, $directory, $file, $name, $icon,$width, &$content, &$scriptDeclarations, &$scripts)
+
+	public static function outputimg($rootdir, $directory, $file, $name, $icon,$width, &$content, &$scriptDeclarations, &$scripts)
 	{
 		$urlfilename = $file->urlfilename;
 		if ($icon == 'small') {
-			$urlshortfilename = $file->urlshortfilename;			
+			$urlshortfilename = $file->urlshortfilename;
 		} else {
 			$urlshortfilename = JThumbsHelper::getthumb( JGalleryHelper::join_paths($rootdir, $directory), $icon, $file->basename);
 		}
@@ -312,54 +328,37 @@ class JGalleryHelper
 						setTimeout(function() {	initfancybox($);},500);
 						})})(jQuery);');
 	}
-    
-    
-    public static function ouputdirs($title, $directories, &$content, &$scriptDeclarations, &$scripts)
-	{    
-        $nbcar = 0;
-        $maxcar = 40;
-        $i = 0;
-        $maxitem = 8;
-        $sid = "jgallerydir"  . rand(1, 1024);
-        $icon = "/media/com_phocagallery/images/icon-folder-medium.png";
-        $json = json_encode($directories);
-        if ($title) {
-			$content .= "<h2>$directory</h2>";
-		}
-        $content .= '<div id="' . $sid . '"></div>';
-        array_push($scripts, "jdirectories.js");
-        array_push($scriptDeclarations, '(function($) {
-                                $(document).ready(function() {
-                                    jdirectories_show($, "' . $sid . '","' . $icon .'",' . $json . ');
-                                })
-                                })(jQuery);');
-        
-    }
-	
-	public static function getDirectories($rootdir, $directory,  $parent=0) {
-		$listdirs = array();
-		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
-		if ($parent > 0 ) {
-			array_push($listdirs, array("name" => "..", 
-									"parent" => $parent -1,
-									"url" => self::getRoute($directory, "..", $parent-1)));
-		}
-		foreach (glob(JGalleryHelper::join_paths($dir , "*")) as $dirname) {
-			if (is_dir($dirname) && !(in_array(basename($dirname), JDirectoryHelper::$_excludes))) {
-				array_push($listdirs,  array("name" => basename($dirname),
-										"parent" => $parent,
-										"url" => self::getRoute($directory, basename($dirname), $parent + 1)));
+
+
+// $dir is the full path sdir is the directory as parameter
+	public static function outputdirs($id, $dir, $directory, $parentlevel, &$content, $type='radio') {
+		$document = JFactory::getDocument();
+		$scriptsdeclarations = array();
+		$scripts = array('jgallery.js');
+		$css = array();
+		$jroot = new JRootDirectory($dir, $directory, $parentlevel);
+		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, $root, true);
+		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css);
+		foreach ($scripts as $script) {
+			if (preg_match('/http/', $script)) {
+				$document->addScript($script);
+			} else {
+				$document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
 			}
 		}
-		return $listdirs;
+		foreach ($scriptsdeclarations as $scriptDeclaration) {
+			 $document->addScriptDeclaration($scriptDeclaration);
+		}
+		foreach ($css as $cssi) {
+			 $document->addStyleSheet($cssi);
+		}
 	}
+
 	/**
-	* Function to insert JGallery introduction
+	* Function to display JGallery
 	*
-	* Method is called by the onContentPrepare or onPrepareContent
-	*
-	* @param string The text string to find and replace
-	*/       
+	* @param $_params parameters
+	*/	   
 	public static function display( $_params)
 	{
 		$content = "";
@@ -369,21 +368,21 @@ class JGalleryHelper
 			return  "errorf:" . print_r($_params, true);
 		}
 		if (! array_key_exists('directory', $_params) && 
-            ! array_key_exists('dir', $_params))
+			! array_key_exists('dir', $_params))
 		{
 			return  "errorf: missing dir/directory param" . print_r($_params, true);
 		}
-        $directory = $null;
-        $keys= array('dir', 'directory');
-        foreach ($keys as $key) {
-            if (array_key_exists($key, $_params)) {
-                $directory = $_params[$key];
-                break;
-            }
-        }
-        if ($directory == null) {
-            return  "errorf: missing dir/directory param" . print_r($_params, true);
-        }
+		$directory = $null;
+		$keys= array('dir', 'directory');
+		foreach ($keys as $key) {
+			if (array_key_exists($key, $_params)) {
+				$directory = $_params[$key];
+				break;
+			}
+		}
+		if ($directory == null) {
+			return  "errorf: missing dir/directory param" . print_r($_params, true);
+		}
 		if ( array_key_exists('start', $_params))
 		{
 			$start = new Date($_params['start']);
@@ -437,19 +436,17 @@ class JGalleryHelper
 			$page = -1;
 		}
 
-		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
-		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js');
-		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css');
-		$document->addStyleSheet(JUri::root(true) . '/plugins/content/jgallery/jgallery.css');
-		$scriptDeclarations = array();
-		$scripts = array('jgallery.js');		
+		self::addFancybox($document);
+
+		$scriptsdeclarations = array();
+		$scripts = array('jgallery.js');
 		if ( array_key_exists('img', $_params)) {
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 			$found = False;
 			foreach ($listfiles as $file) {
 				if ($file->basename == $_params['img']) {
-					self::ouputimg($rootdir, $directory, $file, $name, $icon, $width, $content, $scriptDeclarations, $scripts);
+					self::outputimg($rootdir, $directory, $file, $name, $icon, $width, $content, $scriptsdeclarations, $scripts);
 					$found = true;
 					break;
 				}
@@ -459,28 +456,31 @@ class JGalleryHelper
 			}
 		}else {
 			//sub directories
-			$listdirs = self::getDirectories($rootdir, $directory, $parent);
-			if (count($listdirs)) {
-                self::ouputdirs($title, $listdirs, $content, $scriptDeclarations, $scripts);				
-			}
+			$sdir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
+			$id = rand(1,1024);
+			self::outputdirs($id, $sdir, $directory, $parent, $content, "directories");
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
+			$scriptsdeclarations = array();
+			$scripts = array();
+			if ($parent != 0 && count($listfiles)) {
+				$content .= "<hr/>";
+			}
+			self::outputasync($id, $directory, $listfiles, $page, $content, $scriptsdeclarations, $scripts);
+			foreach ($scripts as $script) {
+				$document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+			}
+			foreach ($scriptsdeclarations as $scriptDeclaration) {
+				$document->addScriptDeclaration($scriptDeclaration);
+			}
+		}
 
-			self::ouputasync($directory, $listfiles, $page, $content, $scriptDeclarations, $scripts);
-		}
-		$document = JFactory::getDocument();
-		foreach ($scripts as $script) {
-			 $document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
-		}
+		
 
-		foreach ($scriptDeclarations as $scriptDeclaration) {
-			 $document->addScriptDeclaration($scriptDeclaration);
-		}
-		
-		
 		return $content;
 	}
 
-	static function gallery($id, &$content){
+	static function gallery($id, &$content)
+	{
 		$content .= '<div  id="jgallery'. $id .'" style="min-heigth:400px;height:400px"></div>';
 	}
 
@@ -498,7 +498,7 @@ class JGalleryHelper
 						$file->comment = $comment;
 					}
 					break;
-				}					
+				}
 			}
 		}
 		if ($modif)
@@ -507,57 +507,59 @@ class JGalleryHelper
 			$jgalleryfile = JGalleryHelper::join_paths($jgallerydir, "gallery.csv");
 			JGalleryImage::savecsv($jgalleryfile, $jgalleryfiles);
 			return "savecsv ok";
-		}		
+		}
 		else 
 		{
 			return "no modifications";
 		}
 	}
-	
-	static function deleteimage($rootdirectory, $directory, $jimage, $keep, &$errors) {
-		$filename = self::join_paths(JPATH_ROOT, $rootdirectory, $directory, $jimage);        
-        JLog::add("deleteimage:" . $filename, JLog::WARNING, 'com_jgallery');
+
+	static function deleteimage($rootdirectory, $directory, $jimage, $keep, &$errors)
+	{
+		$filename = self::join_paths(JPATH_ROOT, $rootdirectory, $directory, $jimage);
+		JLog::add("deleteimage:" . $filename, JLog::WARNING, 'com_jgallery');
 		if (file_exists($filename)){
 			if ($keep) {
 				array_push($errors, "keep " . $filename);
-                JLog::add("deleteimage:keep:" . $filename, JLog::WARNING, 'com_jgallery');
+				JLog::add("deleteimage:keep:" . $filename, JLog::WARNING, 'com_jgallery');
 			}
 			else {
 				unlink($filename);
-                JLog::add("deleteimage:delete:" . $filename, JLog::WARNING, 'com_jgallery');
+				JLog::add("deleteimage:delete:" . $filename, JLog::WARNING, 'com_jgallery');
 				array_push($errors, "success deleting " . $filename);
 			}
 		}
 		else {
 			array_push($errors, "file does not exist " . $filename);
-            JLog::add("deleteimage:dose not exist:" . $filename, JLog::WARNING, 'com_jgallery');
+			JLog::add("deleteimage:dose not exist:" . $filename, JLog::WARNING, 'com_jgallery');
 		}
 	}
-	
-	static function deleteimages($directory, $jimages, $keep, &$errors) {
+
+	static function deleteimages($directory, $jimages, $keep, &$errors)
+	{
 		$rootdir = JParametersHelper::getrootdir();
 		$jgalleryfiles = JGalleryHelper::getFiles($rootdir , $directory, true);
 		$modif = false;
 		foreach ($jimages as $jimage)
 		{
-            JLog::add("delete" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
+			JLog::add("delete" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
 			self::deleteimage($rootdir, $directory, $jimage, $keep, $errors);
-            JLog::add("delete end:" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
+			JLog::add("delete end:" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
 			JThumbsHelper::deletethumbs($rootdir, $directory, $jimage, $errors);
-            JLog::add("delete end thumbs:" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
+			JLog::add("delete end thumbs:" . $rootdir . "/" . $directory . "/" . $jimage, JLog::WARNING, 'com_jgallery'); 
 			$i = 0;
 			$found = false;
 			foreach($jgalleryfiles as $file)
 			{
 				if ($file->basename == $jimage) {
 					$found = true;
-					break;			
+					break;
 				}
 				$i++;
 			}
 			if ($found) {
 				array_splice($jgalleryfiles, $i, 1);
-				$modif = true;				
+				$modif = true;
 			}
 		}
 		if ($modif) {
@@ -565,7 +567,13 @@ class JGalleryHelper
 			$jgalleryfile = JGalleryHelper::join_paths($jgallerydir, "gallery.csv");
 			JGalleryImage::savecsv($jgalleryfile, $jgalleryfiles);
 			array_push($errors, "file saved");
-		}		
+		}
 		return $errors;
 	}
 }
+
+
+
+
+
+

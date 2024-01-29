@@ -52,7 +52,7 @@ class JGalleryViewJGallery extends JViewLegacy
 			if (!$this->getparam('directory', 'directory'))
 			{
 				if ($this->getparam('directory64', 'directory64')) {
-					$this->directory = base64_decode($this->directory64);
+					$this->directory = utf8_decode(base64_decode($this->directory64));
 				}
 			}
 		}
@@ -60,18 +60,17 @@ class JGalleryViewJGallery extends JViewLegacy
 		if (!is_string($this->directory))
 		{
 			$errors = array("directory not defined");
-		} else
-		{
+		} else {
 			$errors = $this->get('Errors');
 		}
 		$this->getparam('image', 'image');
 		$this->page= -1;
 		$this->getparam('page', 'page');
 		if ($this->getparam('image64', 'image64')){
-			$this->image = base64_decode($this->image64);
+			$this->image = utf8_decode(base64_decode($this->image64));
 		}
 		$this->parent = false;
-		$this->getparam('parent', 'parent');	
+		$this->getparam('parent', 'parent');
 		// Check for errors.
 		if (count($errors))
 		{

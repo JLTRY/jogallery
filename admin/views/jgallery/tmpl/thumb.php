@@ -9,6 +9,8 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+
 JHtml::_('jquery.framework');
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jthumbs', JPATH_ADMINISTRATOR);

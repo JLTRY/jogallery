@@ -18,7 +18,5 @@ use Joomla\CMS\Factory as JFactory;
  */
 class JGalleryController extends JControllerLegacy
 {
-	
-	
 }
 

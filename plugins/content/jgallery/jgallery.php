@@ -38,7 +38,7 @@ class plgContentJGallery extends JPlugin
 	
 	function getparam($name, $param) {
 		$found = false;
-		$app     = JFactory::getApplication();
+		$app	 = JFactory::getApplication();
 		$input   = $app->getInput();
 		if ($input->get($param) !== null) {
 			$this->{$name} = $input->get($param);
@@ -48,7 +48,7 @@ class plgContentJGallery extends JPlugin
 	}
 
 
- 	/**
+	 /**
 	* Example prepare content method in Joomla 1.6/1.7/2.5
 	*
 	* Method is called by the view
@@ -61,35 +61,35 @@ class plgContentJGallery extends JPlugin
 		return $this->OnPrepareRow($row);
 	}
 	
-    function getfolders($id, &$folders, &$name) {
-        JLoader::import('components.com_jgallery.models.foldergroup', JPATH_SITE);
-        $model = new JGalleryModelFolderGroup;
-        $model->setstate('folder.id', $id);
-        $model = $model->getItem();
-        if ($model !== null) {
-            $folders = $model->folders;
-            $name = $model->name;
-            return true;
-        }else {
-            return false;
-        }
-    }
-    
+	function getfolders($id, &$folders, &$name) {
+		JLoader::import('components.com_jgallery.models.foldergroup', JPATH_SITE);
+		$model = new JGalleryModelFolderGroup;
+		$model->setstate('folder.id', $id);
+		$model = $model->getItem();
+		if ($model !== null) {
+			$folders = $model->folders;
+			$name = $model->name;
+			return true;
+		}else {
+			return false;
+		}
+	}
+
 	function onPrepareRow(&$row) 
 	{  
 		//Escape fast
-        if (!$this->params->get('enabled', 1)) {
-            return true;
-        }
+		if (!$this->params->get('enabled', 1)) {
+			return true;
+		}
 		
- 		if ( strpos( $row->text, '{jgallery' ) === false ) {
-            return true;
+		 if ( strpos( $row->text, '{jgallery' ) === false ) {
+			return true;
 		}
 		preg_match_all(PF_REGEX_JGALLERYI_PATTERN, $row->text, $matches);
 		// Number of plugins
 		$count = count($matches[0]);
 		 // plugin only processes if there are any instances of the plugin in the text
-		if ($count) {			
+		if ($count) {
 			for ($i = 0; $i < $count; $i++)
 			{
 				$_params = array();
@@ -107,28 +107,28 @@ class plgContentJGallery extends JPlugin
 					}
 					$_params['rootdir'] = JParametersHelper::getrootdir();
 					if (array_key_exists('img', $_params)) {
-						$p_content = JGalleryHelper::display($_params);								
+						$p_content = JGalleryHelper::display($_params);
 					}elseif (array_key_exists('browse', $_params)) {
 						$p_content = JDirectoryHelper::display(1, $_params);
 					} elseif (array_key_exists('group', $_params)){
-                        $folders = array();
-                        $id = $_params['group'];
-                        if ($this->getfolders($id, $folders, $name))
-                        {
-                            $_params['folders'] = $folders;
-                            $_params['id'] = $id;
-                            $_params['name'] = $name;
-                            $p_content = FolderGroupHelper::display($_params);
-                        }
-                    }
-                    else {    
-						$p_content = JGalleryHelper::display($_params);								
-					}					
+						$folders = array();
+						$id = $_params['group'];
+						if ($this->getfolders($id, $folders, $name))
+						{
+							$_params['folders'] = $folders;
+							$_params['id'] = $id;
+							$_params['name'] = $name;
+							$p_content = FolderGroupHelper::display($_params);
+						}
+					}
+					else {
+						$p_content = JGalleryHelper::display($_params);
+					}
 					$row->text = str_replace("{jgallery " . $matches[1][$i] . "}", $p_content, $row->text);
 				}
 			}
 		}
 		return true; 
 	}
-    
+	
 }

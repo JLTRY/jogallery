@@ -15,6 +15,67 @@ use Joomla\CMS\Log\Log;
 
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 
+
+class JFolderGroup extends JDirectory
+{
+	private $_folders;
+
+	function __construct($name, $dirname, $folders, $parent, $id, $tmpl)
+	{
+		parent::__construct(null, $dirname, $dirname, $parent);
+		$this->_folders = $folders;
+		$this->tmpl = $tmpl;
+		$this->id= $id;
+		$this->name = $name;
+	}
+
+	function findDirs($sdir, $sdir1, $excludes, $root=False, $recurse = False)
+	{
+		foreach ($this->_folders as $folder) {
+			$this->insertDir(new JDirectory($this, $sdir, $folder));
+		}
+	}
+	
+	public function getRoute($parentdir, $dir, $parent, $id =0, $tmpl=null, $name="") {
+		$route = JURI::root(true) . "/index.php?option=com_jgallery&view=foldergroup&parent=" .$parent . "&Itemid=0&id=" . $id . "&header=1";
+		if ($dir !== null) {
+			$route .= "&directory64=". base64_encode(utf8_encode(JGalleryHelper::join_paths($parentdir,$dir)));
+		}
+		if ($tmpl != null) {
+			$route .= "&tmpl=" . $tmpl;
+		}
+		if ($name != "") {
+			$route .= "&name=" . $name;
+		}
+		return $route;
+	}
+	
+	public function getjsondirectories() {
+		$listdirs = array();
+		$dir = $this->dirname;
+		if ($this->parentlevel > 0 ) {
+			array_push($listdirs, array("name" => ($this->parentlevel == 1)? $this->name : basename(dirname($dir)), 
+									"parent" => $this->parentlevel - 1,
+									"url" => self::getRoute(basename(dirname($dir)), ".", $this->parentlevel-1, $this->id, $this->tmpl, $this->name)));
+			foreach (glob(JGalleryHelper::join_paths($dir , "*")) as $dirname) {
+				if (is_dir($dirname) && !(in_array(basename($dirname), JDirectory::$_excludes))) {
+					array_push($listdirs,  array("name" => basename($dirname),
+											"parent" => $this->parentlevel,
+											"url" => self::getRoute(basename($dir), basename($dirname), $this->parentlevel + 1, $this->id, $this->tmpl, $this->name)));
+				}
+			}
+		} else  {
+			foreach ($this->_folders as $folder) {
+				array_push($listdirs,  array("name" => basename($folder),
+											"parent" => $this->parentlevel,
+											"url" => self::getRoute(dirname($folder), ($this->parentlevel == -1)? null: basename($folder), $this->parentlevel + 1, $this->id, $this->tmpl)));
+			}
+		} 
+		return json_encode($listdirs);
+	}
+
+}
+
 /**
  * FolderGroup component helper.
  *
@@ -24,17 +85,15 @@ JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR)
  *
  * @since   1.6
  */
-class FolderGroupHelper
+abstract class FolderGroupHelper
 {
-	
-		
 	public static function getcategoryaccess($catID) {
 		$db = JFactory::getDBO();
 		$db->setQuery("SELECT access FROM #__categories WHERE id = ".$catID." LIMIT 1;");
 		$access = $db->loadResult();
 		return $access;
 	}
-	
+
 	public static function usercanviewcategory($user, $catid)
 	{
 		$levels = $user->getAuthorisedViewLevels();
@@ -42,41 +101,7 @@ class FolderGroupHelper
 		$ok = in_array($access, $levels);
 		return $ok;
 	}
-	
-	public static function getRoute($parentdir, $directory, $parent, $id, $tmpl) {
-		$route = JURI::root(true) . "/index.php?option=com_jgallery&view=foldergroup&parent=" .$parent . "&Itemid=0&id=" . $id . "&header=1";
-		if ($directory !== null) {
-			$route .= "&directory64=". base64_encode(JGalleryHelper::join_paths($parentdir,$directory));
-		}
-		if ($tmpl != null) {
-			$route .= "&tmpl=" . $tmpl;
-		}
-		return $route;
-	}
-	
-	public static function getDirectories($name, $rootdir, $directory,  $parent, $folders, $id, $tmpl) {
-		$listdirs = array();
-		$dir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
-		if ($parent > 0 ) {
-			array_push($listdirs, array("name" => ($parent == 1)?$name : dirname($directory), 
-									"parent" => $parent - 1,
-									"url" => self::getRoute($directory, "..", $parent-1, $id, $tmpl)));
-			foreach (glob(JGalleryHelper::join_paths($dir , "*")) as $dirname) {
-				if (is_dir($dirname) && !(in_array(basename($dirname), JDirectoryHelper::$_excludes))) {
-					array_push($listdirs,  array("name" => basename($dirname),
-											"parent" => $parent,
-											"url" => self::getRoute($directory, basename($dirname), $parent + 1, $id, $tmpl)));
-				}
-			}
-		} else  {
-			foreach ($folders as $folder) {
-				array_push($listdirs,  array("name" => basename($folder),
-											"parent" => $parent,
-											"url" => self::getRoute(dirname($folder), basename($folder), $parent + 1, $id, $tmpl)));
-			}
-		} 
-		return $listdirs;
-	}
+
 	/**
 	**
 	* @param 
@@ -84,8 +109,7 @@ class FolderGroupHelper
 	public static function display( $_params)
 	{
 		$content = "";
-		$startdate = $enddate = -1;
-		if (is_array( $_params )== false)
+		if (is_array($_params )== false)
 		{
 			return  "errorf:" . print_r($_params, true);
 		}
@@ -106,7 +130,7 @@ class FolderGroupHelper
 			$rootdir = $_params['rootdir'];
 		} else {
 			$rootdir = ".";
-		}		
+		}
 		if ( array_key_exists('name', $_params))
 		{
 			$name = $_params['name'];
@@ -134,36 +158,51 @@ class FolderGroupHelper
 		} else {
 			$tmpl = null;
 		}
-		JHtml::_('jquery.framework');
-		$document = JFactory::getDocument();
-		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js');
-		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css');
-		$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
-		$scriptDeclarations = array();
-		$scripts = array('jgallery.js');
+		if ( array_key_exists('type', $_params))
+		{
+			$type = $_params['type'];
+		} else {
+			$type = 'directories';
+		}
 		if ($parent == 0) {
 			$content .= "<h2>". $name . "</h2>";
 		}
-		$listdirs = self::getDirectories($name, $rootdir, $directory, $parent, $folders, $id, $tmpl);
-		if ($directory != null) {
-			$listfiles = JGalleryHelper::getFiles($rootdir, $directory, false, -1, -1);
-		}
-		if ($listdirs) {
-			JGalleryHelper::ouputdirs($title, $listdirs, $content, $scriptDeclarations, $scripts);
-		}
-		if ($directory !== null) {
-			JGalleryHelper::ouputasync($directory, $listfiles, -1, $content, $scriptDeclarations, $scripts);
-		}
+		$scriptsdeclarations = array();
+		$scripts = array('jgallery.js');
+		$css = array();
 		$document = JFactory::getDocument();
-		foreach ($scripts as $script) {
-			 $document->addScript(JURI::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+		JGalleryHelper::addFancybox($document);
+		$scriptDeclarations = array();
+		$scripts = array('jgallery.js');
+		$document = JFactory::getDocument();
+		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
+		if (0) {
+			$jroot = new JRootDirectory($dir, $directory, $parent, $id, $tmpl);
+			$jroot->findDirs($dir, $directory, JDirectory::$_excludes, $root, true);
+			$jroot->outputdirs("directories", $id, $content, $scriptsdeclarations, $scripts, $css, $type);
+		} else {
+			$jroot = new JFolderGroup($name, $dir, $folders, $parent, $id, $tmpl);
+			$jroot->outputdirs("directories", $id, $content, $scriptsdeclarations, $scripts, $css, $type);
 		}
-		foreach ($scriptDeclarations as $scriptDeclaration) {
+		if ($directory != null && $parent != 0 ) {
+			$content .= "<hr/>";
+			$listfiles = JGalleryHelper::getFiles($rootdir, $directory, false, -1, -1);
+			JGalleryHelper::outputasync(rand(1,1024), $directory, $listfiles, -1, $content, $scriptsdeclarations, $scripts);
+		}
+		foreach ($scripts as $script) {
+			if (preg_match('/http/', $script)) {
+				$document->addScript($script);
+			} else {
+				$document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+			}
+		}
+		foreach ($scriptsdeclarations as $scriptDeclaration) {
 			 $document->addScriptDeclaration($scriptDeclaration);
 		}
-		
+		foreach ($css as $cssi) {
+			 $document->addStyleSheet($cssi);
+		}
+
 		return $content;
 	}
-
-	
-}
+};

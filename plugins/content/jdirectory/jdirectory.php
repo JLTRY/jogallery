@@ -94,7 +94,7 @@ class plgContentJDirectory extends JPlugin
 						$_result[$key] = $value;
 					}
 					$_result['rootdir'] = JParametersHelper::getrootdir();
-					$p_content = JDirectoryHelper::display(plgContentJDirectory::$_ID, $_result);	
+					$p_content = JDirectoryHelper::display(plgContentJDirectory::$_ID, $_result);
 					$row->text = str_replace("{jdirectory " . $matches[1][$i] . "}", $p_content, $row->text);
 				}
 			}

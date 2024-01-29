@@ -316,26 +316,12 @@ abstract class JThumbsHelper
 		if (!is_dir($dir)) {
 			$content .= "Directory does not exists :". $dir;
 		} else {
-
-			$scriptDeclarations = array();
-			$css = array();
-            if ($recurse) {
-                $scripts = array();
-                JDirectoryHelper::outputdirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'recthumbs');
-            } else {
-                $scripts = array('jgallery.js');
-                JDirectoryHelper::outputdirs($id, $dir, $directory, $content,  $scriptDeclarations, $scripts, $css, 'selectthumbs');
-            }
-            
-			$document = JFactory::getDocument();
-			foreach ($scripts as $script) {
-				 $document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
-			}
-			foreach ($scriptDeclarations as $scriptDeclaration) {
-				 $document->addScriptDeclaration($scriptDeclaration);
-			}
-            foreach ($css as $cssi) {
-				 $document->addStyleSheet($cssi);
+			if ($recurse) {
+				$scripts = array();
+				JDirectoryHelper::outputdirs($id, $dir, $directory, $content, 'recthumbs');
+			} else {
+				$scripts = array('jgallery.js');
+				JDirectoryHelper::outputdirs($id, $dir, $directory, $content, 'selectthumbs');
 			}
 		}
 		

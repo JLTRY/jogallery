@@ -9,9 +9,13 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\HTML\HTMLHelper;
-HTMLHelper::_('behavior.formvalidator');
-HTMLHelper::_('jquery.framework');
+use Joomla\CMS\HTML\HTMLHelper as JHTml;
+use Joomla\CMS\Router\Route as JRoute;
+use Joomla\CMS\Language\Text as JText;
+
+JHtml::_('behavior.formvalidator');
+JHtml::_('jquery.framework');
+
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_jgallery&layout=edit&id=' . (int) $this->item->id); ?>"
     method="post" name="adminForm" id="adminForm" class="form-validate">

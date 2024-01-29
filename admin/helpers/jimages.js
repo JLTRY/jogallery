@@ -7,7 +7,7 @@ function imagesretriever($, id, urlroot, dir, values) {
 	this._directory = dir;
 	this._modulo = 50;
 	this._start = 0;
-	
+
 	this.getthumbs = function(index, nb) {
 		var url = this._urlroot + "/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=ping&directory64="
 				 + this._directory;
@@ -38,14 +38,15 @@ function imagesretriever($, id, urlroot, dir, values) {
 					console.log(response);
 				} else {
 					// This would mean an invalid response from the server - maybe the site went down or whatever...
-				}			
+				}
 			}
 		}
 		)
 	};
-	
+
 	this.show = function($, start, modulo) {
 		var divid = $('#' + this._id);
+		divid.html("");
 		for (let i=start; i < start + modulo; i++)
 		{
 			var content = ""
@@ -54,7 +55,7 @@ function imagesretriever($, id, urlroot, dir, values) {
 				var value = this._values[i];
 				sid = value['filename'];
 				urlfilename = value['urlfilename'];
-				urlshortfilename = value['urlshortfilename'];				
+				urlshortfilename = value['urlshortfilename'];
 				moddate = value['moddate'];
 				if (moddate != -1) {
 					date = new Date(moddate* 1000);
@@ -69,12 +70,12 @@ function imagesretriever($, id, urlroot, dir, values) {
 		}
 	};
 	return this;
-}		
+}
 
 function jimages_getimages($, id, urlroot, directory, listfiles)
 {
 	var thmb = new imagesretriever($, id, urlroot, directory, listfiles);
-	thmb.show($, 0, 1500);					
+	thmb.show($, 0, 1500);
 }
 
 function initfancybox($, page=null) {
@@ -114,6 +115,6 @@ function initfancybox($, page=null) {
 					$(value)[0].click();
 				}
 			});
-			
-	}		
+
+	}
 }

@@ -9,7 +9,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Table\Table as JTable;
-use Joomla\Registry\Registry as JRegistry; 	 
+use Joomla\Registry\Registry as JRegistry;
+use Joomla\CMS\Access\Rules as JAccessRules;
 /**
  * Hello Table class
  *
