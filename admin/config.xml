@@ -20,7 +20,7 @@
 				directory="images" 
 				filter="" 
 				exclude=""
-                recursive="true"				
+                recursive="true"
 				stripext="" />
 		<field name="thumb_small_format" 
 				type="text" 

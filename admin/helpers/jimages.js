@@ -10,7 +10,7 @@ function imagesretriever($, id, urlroot, dir, values) {
 
 	this.getthumbs = function(index, nb) {
 		var url = this._urlroot + "/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=ping&directory64="
-				 + this._directory;
+				 + this._directory + "&XDEBUG_SESSION_START=test";
 		$.ajax({url: url ,
 			type: "POST",
 			dataType: "json",

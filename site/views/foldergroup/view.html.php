@@ -10,7 +10,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
-JLoader::import('components.com_jgallery.helpers.foldergroup', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.helpers.jfoldergroup', JPATH_ADMINISTRATOR);
 /**
  * HTML View class for the JGalleryComponent
  *

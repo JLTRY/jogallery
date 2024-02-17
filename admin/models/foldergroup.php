@@ -47,7 +47,7 @@ class JGalleryModelFolderGroup extends AdminModel
 	{
 		// Get the form.
 		$form = $this->loadForm(
-			'com_jgallery.foldergroup',
+			'com_jgallery.jfoldergroup',
 			'foldergroup',
 			array(
 				'control' => 'jform',

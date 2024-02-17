@@ -33,14 +33,48 @@ class JGalleryImage
 	public $urlfilename;
 	public $urlshortfilename;
 	public $comment;
-	
-	public function __construct($filename, $basename, $moddate, $urlfilename, $urlshortfilename, $comment="") {
+	public $dirname;
+	public $relative;
+
+	public function __construct($dirname, $filename, $basename, $moddate, $comment="", $urlfilename ="", $urlshortfilename="",$relative = false) {
+		$this->dirname = $dirname;
 		$this->filename = $filename;
 		$this->basename = $basename;
 		$this->moddate = $moddate;
+		$this->comment = $comment;
+		$this->relative = $relative;
 		$this->urlfilename = $urlfilename;
 		$this->urlshortfilename = $urlshortfilename;
-		$this->comment = $comment;
+	}
+
+
+	public static function createfrom($object, $dirname) {
+		if ($object->relative) {
+			$relative = true;
+		}
+		else {
+			$relative = false;
+		}
+		return new JGalleryImage($dirname, $object->filename, $object->basename, $object->moddate, $object->comment, $object->urlfilename, $object->urlshortfilename,$relative);
+	}
+
+	public static function geturlfilename($dirname, $url, $relative)
+	{
+		if ($relative == false)
+		{
+			return $url;
+		}
+		else
+		{
+			return JUri::root(true) . "/" . str_replace(DIRECTORY_SEPARATOR, "/" , $dirname . "/" . $url);
+		}
+	}
+
+	public static function toArray($object) {
+		$ar = get_object_vars($object);
+		$ar["urlfilename"] = self::geturlfilename($object->dirname, $object->urlfilename, $object->relative);
+		$ar["urlshortfilename"] = self::geturlfilename($object->dirname, $object->urlshortfilename, $object->relative);
+		return $ar;
 	}
 
 
@@ -71,19 +105,20 @@ class JGalleryImage
 			while (!feof($fp) ) {
 				$array = fgetcsv($fp, 1024, ";");
 				if (is_array($array)) {
-					$obj = new JImage(); 
+					$obj = new \stdClass;
 					foreach($header as $field) {
 						if (is_array($array) && count($array))
 							$obj->$field = array_shift($array);
 					}
-					array_push($results, $obj);
+					array_push($results, self::createfrom($obj, str_replace(JPATH_BASE, "", dirname($file))));
 				}
 			}
 			fclose($fp);
 		}
 		return $results;
 	}
-	
+
+
 }
 
 
@@ -96,7 +131,6 @@ class JGalleryImage
  *
  * @return  void
  *
- * @since
  */
 class JGalleryHelper
 {
@@ -253,16 +287,18 @@ class JGalleryHelper
 				if (($exif !== false)&& array_key_exists('DateTimeOriginal', $exif)) {
 					$moddate = strtotime($exif['DateTimeOriginal'] . " UCT");
 				} else {
-					JGalleryHelper::guessDate(basename($filename), $moddate);
+					self::guessDate(basename($filename), $moddate);
 				}
-
-				$urlfilename = JThumbsHelper::getthumbURL($rootdir, $directory,"large", $filename );
-				$urlshortfilename = JThumbsHelper::getthumbURL($rootdir, $directory, "small", $filename );
-				array_push($listfiles, new JGalleryImage($pathinfo['filename'],
+				$urlfilename = JThumbsHelper::getthumbformat("large", basename($filename));
+				$urlshortfilename = JThumbsHelper::getthumbformat("small", basename($filename));
+				array_push($listfiles, new JGalleryImage(JGalleryHelper::join_paths($rootdir, $directory),
+											$pathinfo['filename'],
 											basename($filename),
 											$moddate,
+											"",
 											$urlfilename,
-											$urlshortfilename));
+											$urlshortfilename,
+											true));
 			}
 		}
 		if (!$exist || $modified)
@@ -274,7 +310,7 @@ class JGalleryHelper
 			$moddate = $file->moddate;
 			if (($startdate == -1) || (($moddate - $startdate) >= 0)){
 				if (($enddate == -1 ) ||  (($moddate != -1) && ($enddate - $moddate) >= 0)) {
-					array_push($listfilteredfiles, $file);
+					array_push($listfilteredfiles, JGalleryImage::toArray($file));
 				}
 			}
 		}

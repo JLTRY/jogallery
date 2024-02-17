@@ -21,7 +21,8 @@ use Joomla\CMS\Uri\Uri as JUri;
 abstract class JThumbsHelper
 {
 	static $_formats = array("small" , "large");
-	static function getthumb($directory, $mode, $img) {
+	
+	static function getthumbformat($mode, $img) {
 		$format = False;
 		switch ($mode) {
 			case "small":
@@ -33,15 +34,18 @@ abstract class JThumbsHelper
 				break;
 		}
 		if ($format === False) {
-			$thumbs == False;
+			return False;
 		} else {
-			$thumbs = $directory . DIRECTORY_SEPARATOR . sprintf($format, $img);
+			return sprintf($format, $img);
 		}
-		return $thumbs;
 	}
 
-	static function getthumbURL($rootdir , $directory, $mode, $img) {
-		return JUri::root(true) .  DIRECTORY_SEPARATOR . JThumbsHelper::getthumb( $rootdir . DIRECTORY_SEPARATOR . $directory, $mode, basename($img));
+	static function getthumb($directory, $mode, $img) {
+		return  $directory . DIRECTORY_SEPARATOR . self::getthumbformat($mode, $img);
+	}
+
+	static function getthumbURL($rootdir, $mode, $img) {
+		return JUri::root(true) . "/" . str_replace(DIRECTORY_SEPARATOR, "/" ,  JThumbsHelper::getthumb($rootdir, $mode, basename($img)));
 	}
 
 	static function read_image($original_file)
@@ -59,7 +63,7 @@ abstract class JThumbsHelper
 		if($original_extension == "png"){
 			$original_image = imagecreatefrompng($original_file);
 		}
-		 if($exif_orientation=='3'  or $exif_orientation=='6' or $exif_orientation=='8'){		   
+		 if($exif_orientation=='3'  or $exif_orientation=='6' or $exif_orientation=='8'){
 			$new_angle[3] = 180;
 			$new_angle[6] = -90;
 			$new_angle[8] = 90;

@@ -17,7 +17,7 @@ define('PF_REGEX_JGALLERYI_PATTERN', "#{jgallery (.*?)}#s");
 
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
-JLoader::import('components.com_jgallery.helpers.foldergroup', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.helpers.jfoldergroup', JPATH_ADMINISTRATOR);
 
 /**
 * WikipediaArticle Content Plugin

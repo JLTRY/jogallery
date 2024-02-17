@@ -10,7 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\Controller\AdminController as JControllerAdmin;
 /**
- * JGalleryes Controller
+ * JGalleries Controller
  *
  * @since  0.0.1
  */
