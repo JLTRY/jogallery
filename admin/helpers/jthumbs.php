@@ -277,14 +277,14 @@ abstract class JThumbsHelper
 			$thumb = self::getthumb($dir, $format, basename($filename));
 			$width = JParametersHelper::get('thumb_' . $format .'_width');
 			$height = JParametersHelper::get('thumb_' . $format . '_height');
-            if ($format == "small" && $small_width != 0) {
-                $height = $height * $small_width/ $width;
-                $width = $small_width;
-            }
-            if ($format == "large" && $large_width != 0) {
-                $height = $height * $large_width/ $width;
-                $width = $large_width;
-            }
+			if ($format == "small" && $small_width != 0) {
+				$height = $height * $small_width/ $width;
+				$width = $small_width;
+			}
+			if ($format == "large" && $large_width != 0) {
+				$height = $height * $large_width/ $width;
+				$width = $large_width;
+			}
 			$quality = JParametersHelper::get('thumb_quality');
 			if (!self::generatethumb(JGalleryHelper::join_paths($dir, $filename), $thumb, $width, $height, $quality, $forced, $errors)) {
 				array_push($errors , "Error in generation of $filename => $thumb");

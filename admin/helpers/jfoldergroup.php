@@ -176,14 +176,9 @@ abstract class FolderGroupHelper
 		$scripts = array('jgallery.js');
 		$document = JFactory::getDocument();
 		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
-		if (0) {
-			$jroot = new JRootDirectory($dir, $directory, $parent, $id, $tmpl);
-			$jroot->findDirs($dir, $directory, JDirectory::$_excludes, $root, true);
-			$jroot->outputdirs("directories", $id, $content, $scriptsdeclarations, $scripts, $css, $type);
-		} else {
-			$jroot = new JFolderGroup($name, $dir, $folders, $parent, $id, $tmpl);
-			$jroot->outputdirs("directories", $id, $content, $scriptsdeclarations, $scripts, $css, $type);
-		}
+		$jroot = new JFolderGroup($name, $dir, $folders, $parent, $id, $tmpl);
+		$jroot->findDirs($directory, $directory, JDirectory::$_excludes, $root, true);
+		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css, $type);
 		if ($directory != null && $parent != 0 ) {
 			$content .= "<hr/>";
 			$listfiles = JGalleryHelper::getFiles($rootdir, $directory, false, -1, -1);

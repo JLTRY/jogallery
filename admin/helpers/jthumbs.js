@@ -1,4 +1,10 @@
+function encode_utf8(s) {
+  return unescape(encodeURIComponent(s));
+}
 
+function decode_utf8(s) {
+  return decodeURIComponent(escape(s));
+}
 
 function thumbretriever($, id, urlroot, directory, values) {
 	this._values = values;
@@ -11,7 +17,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 
 	this.getthumb = function(imgname, params) {
 		url = this._urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
-				 + this._directory +"&image64=" + btoa(imgname) +"&force=" + Number(this._forced);
+				 + this._directory +"&image64=" + btoa(encode_utf8(imgname)) +"&force=" + Number(this._forced);
 		$.map(params, function(value, key) {
 				url += "&" + key + "=" + value;
 			}
@@ -129,7 +135,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 			+ '</tr>'
 			+ '<tr><td><label>small_width<input type="text" name="small_width" id="small_width' + id +'" value="256" size="5"></label></td>'
 			+ '<td><label>large_width<input type="text" name="small_width" id="large_width' + id +'" value="1024" size="5"></label></td>'
-			+'</tr></table>'	;
+			+'</tr></table>';
 		var onchange = this.onchange.bind(this);
 		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true}, onchange, []);
 		$("#jgallery"+this._id).html(html);

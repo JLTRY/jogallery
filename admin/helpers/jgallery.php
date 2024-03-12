@@ -37,7 +37,7 @@ class JGalleryImage
 	public $relative;
 
 	public function __construct($dirname, $filename, $basename, $moddate, $comment="", $urlfilename ="", $urlshortfilename="",$relative = false) {
-		$this->dirname = $dirname;
+		$this->dirname =  str_replace(JPATH_SITE, "", $dirname);
 		$this->filename = $filename;
 		$this->basename = $basename;
 		$this->moddate = $moddate;
@@ -66,7 +66,7 @@ class JGalleryImage
 		}
 		else
 		{
-			return JUri::root(true) . "/" . str_replace(DIRECTORY_SEPARATOR, "/" , $dirname . "/" . $url);
+			return JUri::root(true) . str_replace(DIRECTORY_SEPARATOR, "/", $dirname . "/" . $url);
 		}
 	}
 
@@ -110,7 +110,7 @@ class JGalleryImage
 						if (is_array($array) && count($array))
 							$obj->$field = array_shift($array);
 					}
-					array_push($results, self::createfrom($obj, str_replace(JPATH_BASE, "", dirname($file))));
+					array_push($results, self::createfrom($obj, dirname($file)));
 				}
 			}
 			fclose($fp);
@@ -492,7 +492,7 @@ class JGalleryHelper
 			}
 		}else {
 			//sub directories
-			$sdir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
+			$sdir = html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory));
 			$id = rand(1,1024);
 			self::outputdirs($id, $sdir, $directory, $parent, $content, "directories");
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);

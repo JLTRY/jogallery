@@ -4,13 +4,7 @@ function sleep(ms) {
 }
 
 
-function encode_utf8(s) {
-  return unescape(encodeURIComponent(s));
-}
 
-function decode_utf8(s) {
-  return decodeURIComponent(escape(s));
-}
 
 function recthumbretriever($, sid, id, urlroot, json) {
     this._sid = sid;
