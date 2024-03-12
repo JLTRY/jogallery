@@ -1,0 +1,42 @@
+{
+	"name": "JGallery",
+	"version": "1.0",
+	"author": [
+		"JEan-Luc Tryoen"
+	],
+	"url": "https://wiki.jltryoen.fr",
+	"license-name": "GPL-2.0-or-later",
+	"type": "parserhook",
+	"requires": {
+		"MediaWiki": ">= 1.33"
+	},
+	"MessagesDirs": {
+		"JGallery": [
+			"i18n"
+		]
+	},
+	"AutoloadClasses": {
+		"JGallery": "jgallery.php"
+	},
+	"ResourceModules": {
+		"ext.jgallery.jgallery": {
+			"styles": ["fancybox.css"],
+			"scripts": [],
+			"dependencies": [
+			]
+		}
+	},
+	"ExtensionMessagesFiles": {
+		"jgallery": "jgalleryparser.i18n.php"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "JGallery/resources"
+	},
+
+	"Hooks": {
+		"ParserFirstCallInit": ["JGallery::Setup"],
+		"BeforePageDisplay": "JGallery::onBeforePageDisplay"
+	},
+	"manifest_version": 1
+}
