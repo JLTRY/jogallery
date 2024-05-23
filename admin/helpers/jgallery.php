@@ -27,6 +27,8 @@ use Joomla\CMS\Access\Access as JAccess;
 
 class JGalleryImage
 {
+	public static $IMG_EXTENSIONS = array("jpg", "JPG", "jpeg", "JPEG", "png");
+	public static $VIDEO_EXTENSIONS = array("mp4");
 	public $filename;
 	public $basename;
 	public $moddate;
@@ -117,10 +119,7 @@ class JGalleryImage
 		}
 		return $results;
 	}
-
-
-}
-
+};
 
 
 
@@ -132,9 +131,8 @@ class JGalleryImage
  * @return  void
  *
  */
-class JGalleryHelper
-{
-	static function json_answer($data)
+class JGalleryHelper {
+	public static function json_answer($data)
 	{
 		$Jsession = JFactory::getSession();
 		if ($Jsession != NULL)
@@ -171,7 +169,7 @@ class JGalleryHelper
 	 * Get the actions
 	 */
 	public static function getActions($messageId = 0)
-	{	
+	{
 		$result	= new JObject;
 
 		if (empty($messageId)) {
@@ -239,10 +237,8 @@ class JGalleryHelper
 			$date = -1;
 		}
 	}
-	
-	
 
-	
+
 	public static function sortFile($a, $b)
 	{
 		return strcasecmp($a->filename, $b->filename);
@@ -268,7 +264,7 @@ class JGalleryHelper
 		else {
 			$listfiles = array();
 		}
-		foreach (array("jpg", "JPG", "jpeg", "JPEG", "png") as $ext) {
+		foreach (JGalleryImage::$IMG_EXTENSIONS as $ext) {
 			foreach (glob($jgallerydir . "/*.$ext") as $filename) {
 				$pathinfo = pathinfo($filename);
 				$moddate = filemtime($filename);
@@ -291,6 +287,34 @@ class JGalleryHelper
 				}
 				$urlfilename = JThumbsHelper::getthumbformat("large", basename($filename));
 				$urlshortfilename = JThumbsHelper::getthumbformat("small", basename($filename));
+				array_push($listfiles, new JGalleryImage(JGalleryHelper::join_paths($rootdir, $directory),
+											$pathinfo['filename'],
+											basename($filename),
+											$moddate,
+											"",
+											$urlfilename,
+											$urlshortfilename,
+											true));
+			}
+		}
+		foreach (JGalleryImage::$VIDEO_EXTENSIONS as $ext) {
+			foreach (glob($jgallerydir . "/*.$ext") as $filename) {
+				$pathinfo = pathinfo($filename);
+				$moddate = filemtime($filename);
+				$exist = false;
+				foreach ($listfiles as $file) {
+					if ($file->filename == $pathinfo['filename']) {
+						$exist = true;
+						break;
+					}
+				}
+				if ($exist) {
+					continue;
+				}
+				$modified = true;
+				self::guessDate(basename($filename), $moddate);
+				$urlfilename = "";
+				$urlshortfilename = "";
 				array_push($listfiles, new JGalleryImage(JGalleryHelper::join_paths($rootdir, $directory),
 											$pathinfo['filename'],
 											basename($filename),
@@ -327,7 +351,9 @@ class JGalleryHelper
 		}
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
-						setTimeout(function() {	initfancybox($);},500);
+						setTimeout(function() { 
+							initfancybox($);
+						},500);
 						})})(jQuery);');
 	}
 
@@ -336,14 +362,18 @@ class JGalleryHelper
 		$sid = "jgallery" . $id;
 		$content .= '<div id="' . $sid . '">';
 		$content .= '</div>';
+
 		array_push($scripts, "jimages.js");
+		//array_push($scripts, "https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.js");
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
 							jimages_getimages($, "' . $sid .'", "' . JUri::root(true) .'","' . base64_encode($directory) .'",' . json_encode($listfiles) .');
 						})})(jQuery);');
+		
 		array_push($scriptDeclarations, '(function($) {
-					$(document).ready(function() {
-						setTimeout(function() {	initfancybox($, ' . $page .');},500);
+
+						$(document).ready(function() {
+							setTimeout(function() { initfancybox($, ' . $page .');},500);
 						})})(jQuery);');
 	}
 
@@ -373,7 +403,7 @@ class JGalleryHelper
 		$scripts = array('jgallery.js');
 		$css = array();
 		$jroot = new JRootDirectory($dir, $directory, $parentlevel);
-		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, $root, true);
+		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
 		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css);
 		foreach ($scripts as $script) {
 			if (preg_match('/http/', $script)) {
@@ -502,12 +532,17 @@ class JGalleryHelper
 				$content .= "<hr/>";
 			}
 			self::outputasync($id, $directory, $listfiles, $page, $content, $scriptsdeclarations, $scripts);
-			foreach ($scripts as $script) {
-				$document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
-			}
 			foreach ($scriptsdeclarations as $scriptDeclaration) {
 				$document->addScriptDeclaration($scriptDeclaration);
 			}
+			foreach ($scripts as $script) {
+				if (preg_match('/http/', $script)) {
+					$document->addScript($script);
+				} else {
+					$document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
+				}
+			}
+
 		}
 
 		

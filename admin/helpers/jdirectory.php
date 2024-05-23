@@ -81,7 +81,7 @@ class JDirectory
 	}
 
 	/* https://rosettacode.org/wiki/Walk_a_directory/Recursively#PHP */	
-	public function findDirs($sdir, $sdir1, $excludes, $root=False, $recurse = False)
+	public function findDirs($sdir, $sdir1, $excludes, $recurse = False)
 	{
 		$subdirs = array();
 		$dirs = array();
@@ -93,13 +93,14 @@ class JDirectory
 				$this->insertDir(new JDirectory($this, $sdir1, $filename));
 			}
 		}
-        if ($recurse) {
-            foreach ($this->children as $subdir) {
-                $subdir->findDirs(JGalleryHelper::join_paths($sdir, $subdir->getbasename()),
-                                    JGalleryHelper::join_paths($sdir1, $subdir->getbasename()),
-                                    $excludes);	
-            }
-        }
+		if ($recurse) {
+			foreach ($this->children as $subdir) {
+				$subdir->findDirs(JGalleryHelper::join_paths($sdir, $subdir->getbasename()),
+									JGalleryHelper::join_paths($sdir1, $subdir->getbasename()),
+									$excludes,
+									$recurse);
+			}
+		}
 	}
 	
 	public function getRoute($parentdir, $directory, $parentlevel, $id =0, $tmpl=null)
@@ -166,7 +167,7 @@ class JDirectory
 	public function outputselectthumbs($id, &$content, &$scriptsdecl, &$scripts, &$css)
 	{
 		$sid = 'jgalleryselect' . $id;
-        $divid = "float" . $id;
+		$divid = "float" . $id;
 		$urlroot = JUri::root(true);
 		if (($this->parent == null))// && (count($this->children)))
 		{
@@ -400,7 +401,7 @@ abstract class JDirectoryHelper
 		$scripts = array('jgallery.js');
 		$css = array();
 		$jroot = new JRootDirectory($dir, $directory);
-		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, $root, true);
+		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
 		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css);
 		foreach ($scripts as $script) {
 			if (preg_match('/http/', $script)) {

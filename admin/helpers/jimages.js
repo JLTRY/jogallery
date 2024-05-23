@@ -1,4 +1,19 @@
+function loadscript(url, callback)
+{
+    // adding the script element to the head as suggested before
+   var head = document.getElementsByTagName('head')[0];
+   var script = document.createElement('script');
+   script.type = 'text/javascript';
+   script.src = url;
 
+   // then bind the event to the callback function 
+   // there are several events for cross browser compatibility
+   //script.onreadystatechange = callback;
+   //script.onload = callback;
+
+   // fire the loading
+   head.appendChild(script);
+}
 
 function imagesretriever($, id, urlroot, dir, values) {
 	this._values = values;
@@ -46,28 +61,39 @@ function imagesretriever($, id, urlroot, dir, values) {
 
 	this.show = function($, start, modulo) {
 		var divid = $('#' + this._id);
+
 		divid.html("");
 		for (let i=start; i < start + modulo; i++)
 		{
 			var content = ""
 			if (i < this._values.length)
 			{
-				var value = this._values[i];
-				sid = value['filename'];
-				urlfilename = value['urlfilename'];
-				urlshortfilename = value['urlshortfilename'];
-				moddate = value['moddate'];
+				var tvalue = this._values[i];
+				var sid = tvalue['filename'];
+				var urlfilename = tvalue['urlfilename'];
+				var urlshortfilename = tvalue['urlshortfilename'];
+				var basename = tvalue['basename'];
+				var moddate = tvalue['moddate'];
 				if (moddate != -1) {
 					date = new Date(moddate* 1000);
 					sdate =  "<b>" + date.getDate()+ "/"+(date.getMonth()+1)+ "/"+date.getFullYear() + " </b>";
 				} else {
 					sdate = "";
 				}
-				comment = sdate + value['comment'];
-				content = "<a data-fancybox=\"gallery\"  href=\"" + urlfilename +"\"  data-caption=\"" + comment + "\"><img id=\""+ sid + "\" src=\"" + urlshortfilename +"\" /></a>";
+				if (basename.includes('mp4') && (basename.includes('VID') || !navigator.userAgent.includes('Firefox')))
+				{
+					content = '<video class="lazy" controls="controls" width="auto" height="240" ><source src="'+ urlfilename + basename + '" type="video/mp4"> Sorry, your browser doesnt support embedded videos</video>';
+				}
+				else {
+					content = "<a data-fancybox=\"gallery\"  href=\"" + urlfilename +"\"  data-caption=\"" +  sdate + tvalue['comment'] + "\"><img id=\""+ sid + "\" src=\"" + urlshortfilename +"\" /></a>";
+				}
 				divid.append(content);
 			}
 		}
+		window.lazyLoadOptions = {
+				elements_selector: ".lazy"
+		};
+		loadscript("https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.js");
 	};
 	return this;
 }

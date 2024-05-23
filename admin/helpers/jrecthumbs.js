@@ -29,7 +29,7 @@ function recthumbretriever($, sid, id, urlroot, json) {
 			dataType: "json",
 			async: 'false',
 			context: context,
-			success: function(tvalue) {				
+			success: function(tvalue) {
 				txt = context.directory + " " + context.index + "/" + context.length + " " + tvalue[0] + "=>" + tvalue[1] + "<br/>";
 				$("#jgallerylog"+ context.id).html(txt);
 			},

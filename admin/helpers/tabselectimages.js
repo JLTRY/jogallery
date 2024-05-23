@@ -34,13 +34,17 @@ function _tabselectimages($, idp, values, options, callback, params) {
 		$(this._idp).html('');
 		var text = '<table>';
 		var that = this;
+		var vid = 0;
+		window.lazyLoadOptions = {
+			elements_selector: ".lazy"
+		};
 		$.each(this._values,function(index, tvalue) {
 			var simage = tvalue['urlshortfilename'];
 			var limage = tvalue['urlfilename'];
 			var name = tvalue['filename'];
-			var basename = tvalue['basename'];			
+			var basename = tvalue['basename'];
 			var comment = tvalue['comment'];
-			var checked = 0;			
+			var checked = 0;
 			var btclass = (checked)?"btn btn-sm btn-info":"btn btn-sm btn-light";
 			var checkedattr = (checked)?"checked":"";
 			var id = "checked_" + name;
@@ -58,22 +62,31 @@ function _tabselectimages($, idp, values, options, callback, params) {
 					+ name + 
 					"</td>";
 			}
-			text += '<td>'+
-            '<a class="fancybox-thumbs" data-fancybox="'+ name +'" href="' + limage +'">'
-            +' <img src="' + simage +'" id="' + basename + '" ' + 'alt="">'+
-            '</a></td>';
-            								
+			text += '<td>';
+			if (basename.includes('mp4'))
+			{
+				text += '<video class="lazy" controls="controls" width="auto" height="240"><source src="'+ limage + basename + '" type="video/mp4"> </video>';
+				vid = 1;
+			}
+			else
+			{
+				text += '<a class="fancybox-thumbs" data-fancybox="'+ idp +'" href="' + limage +'">'
+					+'    <img src="' + simage +'" id="' + basename + '" ' + 'alt="">'
+					+'</a>';
+			}
+			text += '</td>';
 			if (that._options['comments']) {
 				text += '<td><input type="textbox" size="80" name="comments['+ name +']" value="'+comment +'"></td>';
-			}	
-			text = text + '</tr>';			
+			}
+			text = text + '</tr>';
 		});
 		text += "</table>";
 		$(this._idp).html(text);
 		$("input[class='tabselectimages']").data('tabselectimages', this);
 		$("input[class='tabselectimages']").change(function() {
-			$(this).data('tabselectimages').callback();			
+			$(this).data('tabselectimages').callback();
 		});
+		
 	};
 	this.init($);
 	return this;

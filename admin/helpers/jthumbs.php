@@ -292,7 +292,7 @@ abstract class JThumbsHelper
 			}
 		}
 		if ($error == false) {
-			return array($filename, "OK", ["Generation of thumb for <img src=\"". self::getthumbURL($rootdir, $directory,"small", $filename ) ."\"></img> is OK"]);
+			return array($filename, "OK", ["Generation of thumb for <img src=\"". self::getthumbURL(JGalleryHelper::join_paths($rootdir, $directory),"small", $filename ) ."\"></img> is OK"]);
 		}else {
 			return array($filename, "ERR",$errors);
 		}

@@ -29,7 +29,7 @@ class JFolderGroup extends JDirectory
 		$this->name = $name;
 	}
 
-	function findDirs($sdir, $sdir1, $excludes, $root=False, $recurse = False)
+	function findDirs($sdir, $sdir1, $excludes, $recurse= false)
 	{
 		foreach ($this->_folders as $folder) {
 			$this->insertDir(new JDirectory($this, $sdir, $folder));
@@ -177,7 +177,7 @@ abstract class FolderGroupHelper
 		$document = JFactory::getDocument();
 		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
 		$jroot = new JFolderGroup($name, $dir, $folders, $parent, $id, $tmpl);
-		$jroot->findDirs($directory, $directory, JDirectory::$_excludes, $root, true);
+		$jroot->findDirs($directory, $directory, JDirectory::$_excludes, true);
 		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css, $type);
 		if ($directory != null && $parent != 0 ) {
 			$content .= "<hr/>";
