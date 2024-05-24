@@ -137,7 +137,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 			+ '<td><label>large_width<input type="text" name="small_width" id="large_width' + id +'" value="1024" size="5"></label></td>'
 			+'</tr></table>';
 		var onchange = this.onchange.bind(this);
-		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true}, onchange, []);
+		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true, 'moddate': true}, onchange, []);
 		$("#jgallery"+this._id).html(html);
 		$('#thumbs'+this._id).data('thumbretriever', this);
 		$('#delete'+this._id).data('delete', this);

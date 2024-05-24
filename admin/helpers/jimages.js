@@ -80,9 +80,13 @@ function imagesretriever($, id, urlroot, dir, values) {
 				} else {
 					sdate = "";
 				}
-				if (basename.includes('mp4') && (basename.includes('VID') || !navigator.userAgent.includes('Firefox')))
+				if (basename.includes('mp4') && (!basename.includes('VID') && navigator.userAgent.includes('Firefox')))
 				{
-					content = '<video class="lazy" controls="controls" width="auto" height="240" ><source src="'+ urlfilename + basename + '" type="video/mp4"> Sorry, your browser doesnt support embedded videos</video>';
+					continue;
+				}
+				if (basename.includes('mp4')) 
+				{
+					content = '<video class="lazy" controls="controls" width="auto" height="240" ><source src="'+ urlfilename + basename + '" type="video/mp4"> Sorry, your browser doesnt support 	embedded videos</video>';
 				}
 				else {
 					content = "<a data-fancybox=\"gallery\"  href=\"" + urlfilename +"\"  data-caption=\"" +  sdate + tvalue['comment'] + "\"><img id=\""+ sid + "\" src=\"" + urlshortfilename +"\" /></a>";

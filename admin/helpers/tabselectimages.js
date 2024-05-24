@@ -44,6 +44,7 @@ function _tabselectimages($, idp, values, options, callback, params) {
 			var name = tvalue['filename'];
 			var basename = tvalue['basename'];
 			var comment = tvalue['comment'];
+			var moddate = tvalue['moddate'];
 			var checked = 0;
 			var btclass = (checked)?"btn btn-sm btn-info":"btn btn-sm btn-light";
 			var checkedattr = (checked)?"checked":"";
@@ -60,6 +61,11 @@ function _tabselectimages($, idp, values, options, callback, params) {
 			if (that._options['name']) {
 				text += "<td>" 
 					+ name + 
+					"</td>";
+			}
+			if (that._options['moddate']) {
+				text += "<td>" 
+					+ moddate + 
 					"</td>";
 			}
 			text += '<td>';

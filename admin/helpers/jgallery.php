@@ -228,7 +228,8 @@ class JGalleryHelper {
 
 	public static function guessDate($filename, &$date)
 	{
-		if(preg_match('/IMG[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re))
+		if(preg_match('/IMG[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re) ||
+		   preg_match('/PXL[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re))
 		{
 			$date = strtotime($re[1] . "-" . $re[2] . "-" . $re[3] . " " . $re[4] . ":" . $re[5] . ":" . $re[6] . " UCT");
 		} elseif (preg_match('/IMG[-_](\d{4})(\d{2})(\d{2}).*/', $filename, $re)) {
@@ -241,7 +242,7 @@ class JGalleryHelper {
 
 	public static function sortFile($a, $b)
 	{
-		return strcasecmp($a->filename, $b->filename);
+		return $a->moddate > $b->moddate ;//strcasecmp($a->filename, $b->filename);
 	}
 
 	public static function addFancybox($document)
@@ -327,6 +328,7 @@ class JGalleryHelper {
 		}
 		if (!$exist || $modified)
 		{
+			usort($listfiles, array('JGalleryHelper', 'sortFile'));
 			JGalleryImage::savecsv($jgalleryfile, $listfiles);
 		}
 		$listfilteredfiles = array();
@@ -371,7 +373,6 @@ class JGalleryHelper {
 						})})(jQuery);');
 		
 		array_push($scriptDeclarations, '(function($) {
-
 						$(document).ready(function() {
 							setTimeout(function() { initfancybox($, ' . $page .');},500);
 						})})(jQuery);');
