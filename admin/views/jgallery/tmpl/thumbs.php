@@ -20,7 +20,7 @@ echo JThumbsHelper::display(1, array("dir" => JGalleryHelper::join_paths($this->
 ?>
 
 
-<form action="<?php echo JRoute::_('index.php?option=com_jgallery&layout=thumbs&id=' . (int) $this->item->id); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_jgallery&layout=thumbs&id=' . (int)$this->item->id); ?>"
     method="post" name="adminForm" id="adminForm" class="form-validate">
 	<input type="hidden" name="task" value="jgallery.thumbs" />
 	<?php echo JHtml::_('form.token'); ?>

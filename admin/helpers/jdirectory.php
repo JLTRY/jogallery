@@ -76,7 +76,11 @@ class JDirectory
 				$startIndex = $middle;
 			}
 		}
-		$offset = $elem->basename <= $this->children[$startIndex]->basename ? $startIndex : $startIndex + 1; 
+		if (!count($this->children)) {
+			$offset = 0;
+		} else {
+			$offset = $elem->basename <= $this->children[$startIndex]->basename ? $startIndex : $startIndex + 1; 
+		}
 		array_splice($this->children, $offset, 0, array($elem));
 	}
 

@@ -110,7 +110,7 @@ class JGalleryControllerJGallery extends JControllerForm
 		$keep = $input->getVar('keep', 1);
 		$errors = array();
         JLog::add("delete" . utf8_decode(base64_decode($directory64)), JLog::WARNING, 'com_jgallery');
-        JLog::add("delete" . print_r($post_data, true), JLog::WARNING, 'com_jgallery');        
+        JLog::add("delete" . print_r($post_data, true), JLog::WARNING, 'com_jgallery');
 		$ret = JGalleryHelper::deleteimages(utf8_decode(base64_decode($directory64)), $post_data, $keep, $errors);
         JLog::add("delete=>:" . print_r($ret, true), JLog::WARNING, 'com_jgallery');
 		JGalleryHelper::json_answer($errors);

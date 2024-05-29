@@ -30,7 +30,8 @@ class JGalleryViewJGallery extends JViewLegacy
 	protected $item;
 	protected $script;
 	protected $canDo;
-	
+	protected $id;
+
 	function getparam($name, $param) {
 		$found = false;
 		$app     = JFactory::getApplication();
@@ -57,7 +58,7 @@ class JGalleryViewJGallery extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		// Get the Data		
+		// Get the Data
 		$this->getparam('id', 'id');
 		if (!$this->id) {
 			$this->getparam('cid', 'cid');
@@ -99,7 +100,7 @@ class JGalleryViewJGallery extends JViewLegacy
 			$form->setFieldAttribute("directory", "directory", $this->rootdir);
 		}
 		// What Access Permissions does this user have? What can (s)he do?
-		$this->canDo = JGalleryHelper::getActions($this->item->id);
+		$this->canDo = $this->item && JGalleryHelper::getActions($this->item->id);
 		
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -132,7 +133,7 @@ class JGalleryViewJGallery extends JViewLegacy
 
 		// Hide Joomla Administrator Main menu
 		$input->set('hidemainmenu', true);
-		$isNew = ($this->item->id == 0);
+		$isNew = (($this->item) && ($this->item->id == 0));
         switch ($this->getLayout())
         {
             case "thumbs":
@@ -163,7 +164,7 @@ class JGalleryViewJGallery extends JViewLegacy
 		}
 		else
 		{
-			if ($this->getLayout() && $this->canDo->get('core.edit'))
+			if ($this->getLayout() && $this->get('core.edit'))
 			{
 				// We can save the new record
 				JToolBarHelper::apply('jgallery.apply', 'JTOOLBAR_APPLY');
@@ -171,13 +172,13 @@ class JGalleryViewJGallery extends JViewLegacy
  
 				// We can save this record, but check the create permission to see
 				// if we can return to make a new one.
-				if ($this->canDo->get('core.create')) 
+				if ($this->get('core.create')) 
 				{
 					JToolBarHelper::custom('jgallery.save2new', 'save-new.png', 'save-new_f2.png',
 					                       'JTOOLBAR_SAVE_AND_NEW', false);
 				}
 			}
-			if ($this->layout == "default" && $this->canDo->get('core.create')) 
+			if ($this->getLayout() == "default" && $this->get('core.create')) 
 			{
 				JToolBarHelper::custom('jgallery.save2copy', 'save-copy.png', 'save-copy_f2.png',
 				                       'JTOOLBAR_SAVE_AS_COPY', false);
@@ -193,7 +194,7 @@ class JGalleryViewJGallery extends JViewLegacy
 	 */
 	public function setDocument(Joomla\CMS\Document\Document $document): void
 	{
-		$isNew = ($this->item->id == 0);
+		$isNew = ($this->item) && ($this->item->id == 0);
 		
 		$document->setTitle($isNew ? JText::_('COM_JGALLERY_JGALLERY_CREATING')
 		                           : JText::_('COM_JGALLERY_JGALLERY_EDITING'));

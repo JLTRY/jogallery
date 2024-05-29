@@ -51,7 +51,7 @@ class JGalleryImage
 
 
 	public static function createfrom($object, $dirname) {
-		if ($object->relative) {
+		if (isset($object->relative) && $object->relative) {
 			$relative = true;
 		}
 		else {
@@ -68,7 +68,7 @@ class JGalleryImage
 		}
 		else
 		{
-			return JUri::root(true) . str_replace(DIRECTORY_SEPARATOR, "/", $dirname . "/" . $url);
+			return str_replace("//", "/", JUri::root(true) . "/" . str_replace(DIRECTORY_SEPARATOR, "/", $dirname . "/" . $url));
 		}
 	}
 
@@ -80,15 +80,15 @@ class JGalleryImage
 	}
 
 
-	static function savecsv($file, $results)
+	static function savecsv($file, $results, $isarray = false)
 	{
 		$fp = fopen($file, 'w');
 		if ($fp) {
 			if (count ($results)) {
-				fputcsv($fp, array_keys(get_object_vars($results[0])), ";");
+				fputcsv($fp, array_keys(get_object_vars((object)$results[0])), ";");
 			}
 			foreach ($results as $fields) {
-				fputcsv($fp, get_object_vars($fields), ";");
+				fputcsv($fp, get_object_vars((object)$fields), ";");
 			}
 			fflush($fp);
 			fclose($fp);
@@ -131,7 +131,8 @@ class JGalleryImage
  * @return  void
  *
  */
-class JGalleryHelper {
+class JGalleryHelper
+{
 	public static function json_answer($data)
 	{
 		$Jsession = JFactory::getSession();
@@ -242,7 +243,7 @@ class JGalleryHelper {
 
 	public static function sortFile($a, $b)
 	{
-		return $a->moddate > $b->moddate ;//strcasecmp($a->filename, $b->filename);
+		return (int)($a['moddate'] > $b['moddate']) ;//strcasecmp($a->filename, $b->filename);
 	}
 
 	public static function addFancybox($document)
@@ -328,7 +329,6 @@ class JGalleryHelper {
 		}
 		if (!$exist || $modified)
 		{
-			usort($listfiles, array('JGalleryHelper', 'sortFile'));
 			JGalleryImage::savecsv($jgalleryfile, $listfiles);
 		}
 		$listfilteredfiles = array();
@@ -380,9 +380,9 @@ class JGalleryHelper {
 
 	public static function outputimg($rootdir, $directory, $file, $name, $icon,$width, &$content, &$scriptDeclarations, &$scripts)
 	{
-		$urlfilename = $file->urlfilename;
+		$urlfilename = $file['urlfilename'];
 		if ($icon == 'small') {
-			$urlshortfilename = $file->urlshortfilename;
+			$urlshortfilename = $file['urlshortfilename'];
 		} else {
 			$urlshortfilename = JThumbsHelper::getthumb( JGalleryHelper::join_paths($rootdir, $directory), $icon, $file->basename);
 		}
@@ -439,7 +439,7 @@ class JGalleryHelper {
 		{
 			return  "errorf: missing dir/directory param" . print_r($_params, true);
 		}
-		$directory = $null;
+		$directory = null;
 		$keys= array('dir', 'directory');
 		foreach ($keys as $key) {
 			if (array_key_exists($key, $_params)) {
@@ -512,7 +512,7 @@ class JGalleryHelper {
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 			$found = False;
 			foreach ($listfiles as $file) {
-				if ($file->basename == $_params['img']) {
+				if ($file['basename'] == $_params['img']) {
 					self::outputimg($rootdir, $directory, $file, $name, $icon, $width, $content, $scriptsdeclarations, $scripts);
 					$found = true;
 					break;
@@ -623,7 +623,7 @@ class JGalleryHelper {
 			$found = false;
 			foreach($jgalleryfiles as $file)
 			{
-				if ($file->basename == $jimage) {
+				if ($file['basename'] == $jimage) {
 					$found = true;
 					break;
 				}
@@ -643,6 +643,7 @@ class JGalleryHelper {
 		return $errors;
 	}
 }
+
 
 
 

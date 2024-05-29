@@ -181,7 +181,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 function jthumbs_ajax($, id, urlroot, value) {
 	var dir = value;
 	var url = urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=json&directory64="
-			 + value;
+			 + value + "&XDEBUG_SESSION_START=test";
 	console.log(url);
 	$.ajax({
 		url:  url,

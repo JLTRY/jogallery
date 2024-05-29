@@ -48,10 +48,10 @@ function _tabselectimages($, idp, values, options, callback, params) {
 			var checked = 0;
 			var btclass = (checked)?"btn btn-sm btn-info":"btn btn-sm btn-light";
 			var checkedattr = (checked)?"checked":"";
-			var id = "checked_" + name;
+			var id = name;
 			text += "<tr>";
 			if (that._options['checked']) {
-				text += "<td ><input style=\"float:left;font-size:50%;\" class=\"tabselectimages\" type=\"checkbox\" " +  checkedattr +" id=\"" + id  +
+				text += "<td ><input style=\"float:left;font-size:50%;\" class=\"tabselectimages\" type=\"checkbox\" " +  checkedattr +" id=\"" + name  +
 										"\" value=\""+index + "\" "
 										+ " for=\"" + basename + "\""
 										+ " idp=\"" + that._idp + "\""
@@ -65,7 +65,7 @@ function _tabselectimages($, idp, values, options, callback, params) {
 			}
 			if (that._options['moddate']) {
 				text += "<td>" 
-					+ moddate + 
+					+ new Date(moddate * 1000).toISOString() + 
 					"</td>";
 			}
 			text += '<td>';
