@@ -10,9 +10,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
-echo JGalleryHelper::display(array("dir" => JGalleryHelper::join_paths($this->directory),
-								   "rootdir" => JGalleryHelper::join_paths($this->rootdir),
-								   "parent" => $this->parent,
-								   "page" => $this->page));
+echo JGalleryHelper::display(array(	"dir" => JGalleryHelper::join_paths($this->directory),
+									"rootdir" => JGalleryHelper::join_paths($this->rootdir),
+									"id" => $this->id,
+									"parent" => $this->parent,
+									"page" => $this->page));
 
 

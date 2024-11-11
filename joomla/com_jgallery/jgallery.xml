@@ -3,13 +3,13 @@
 	<name>com_jgallery</name>
 	<!-- The following elements are optional and free of formatting constraints -->
 	<creationDate>February 2021</creationDate>
-	<author>Jl Tryoen</author>
+	<author>Jean-Luc TRYOEN</author>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<authorUrl>http://www.jltryoen.fr</authorUrl>
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>1.0.0</version>
+	<version>1.0.2</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_JGALLERY_DESCRIPTION</description>
 
@@ -41,10 +41,6 @@
 		<folder>models</folder>
 		<folder>controllers</folder>
 	</files>
-		<languages folder="site/language">
-		</languages>
-	<media destination="com_jgallery" folder="media">
-	</media>
 
 	<administration>
 		<!-- Administration Menu Section -->

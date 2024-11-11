@@ -17,6 +17,7 @@ echo FolderGroupHelper::display(array("folders" => $this->folders,
                                    "directory" => $this->directory,
                                    "id" => $this->id,
                                    "name" => $this->name,
-                                   "tmpl" => $this->tmpl));
+                                   "tmpl" => $this->tmpl,
+								   "type" => $this->type));
 
 

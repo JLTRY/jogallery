@@ -49,30 +49,34 @@ class JGalleryViewJGallery extends JViewLegacy
 	function display($tpl = null)
 	{
 		$canview = false;
-		$this->item = $this->get('Item');
+		//$this->item = $this->get('Item');
+		$catid = -1;
+		$this->id = -1;
 		if ($this->item == null) {
+			$app     = JFactory::getApplication();
 			$jinput   = $app->getInput();
 			$id = $jinput->getString('id', null);
-			$model = new JGalleryModelJGallery;
-			$model->setState('jgallery.id', (int)$id);
-			$model->getState();
-			$this->setModel($model);
-			$this->item = $model->getItem();
-		}
-		if ($this->item){
-			$this->directory = $this->item->directory;
-			$catid = $this->item->catid;
-		}
-		else {
-			if (!$this->getparam('directory', 'directory'))
-			{
-				if ($this->getparam('directory64', 'directory64')) {
-					$this->directory = utf8_decode(base64_decode($this->directory64));
-				}
+			if ($id !== null) {
+				$model = new JGalleryModelJGallery;
+				$model->setState('jgallery.id', (int)$id);
+				$model->getState();
+				$this->setModel($model);
+				$this->item = $model->getItem();
+				$catid = $this->item->catid;
+				$this->id = $id;
 			}
 		}
-		$user = JFactory::getUser();
-		if (($user != 0) && $catid && JGalleryCategoryHelper::usercanviewcategory($user, $catid))
+		if (!$this->getparam('directory', 'directory'))
+		{
+			if ($this->getparam('directory64', 'directory64')) {
+				$this->directory = utf8_decode(base64_decode($this->directory64));
+			}
+		}
+		if ($this->item && !$this->directory) {
+			$this->directory = $this->item->directory;
+		}
+		$user = JFactory::getApplication()->getSession()->get('user');
+		if (($user->id != 0) && (($catid == -1) || JGalleryCategoryHelper::usercanviewcategory($user, $catid)))
 		{
 			$canview = true;
 		}else {

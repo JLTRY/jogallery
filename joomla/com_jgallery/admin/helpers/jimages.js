@@ -22,7 +22,7 @@ function imagesretriever($, id, urlroot, dir, values) {
 	this._directory = dir;
 	this._modulo = 50;
 	this._start = 0;
-	this._extensions = ["mp4", "m2ts"];
+	this._extensions = ["mp4", "m2ts", "mov", "MOV"];
 
 	this.getthumbs = function(index, nb) {
 		var url = this._urlroot + "/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=ping&directory64="

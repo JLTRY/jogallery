@@ -47,11 +47,13 @@ class JGalleryViewFolderGroup extends JViewLegacy
 	function display($tpl = null)
 	{
 		// Assign data to the view
+		$this->id = -1;
 		$this->getparam('parent', 'parent');
-		$this->getparam('id', 'id');
-		$model = new JGalleryModelFolderGroup;
-		$model->setstate('folder.id', $this->id);
-		$this->item = $model->getItem();
+		if ($this->getparam('id', 'id')) {
+			$model = new JGalleryModelFolderGroup;
+			$model->setstate('folder.id', $this->id);
+			$this->item = $model->getItem();
+		}
 		$this->getparam('tmpl', 'tmpl');
 		$this->directory = null;
 		if (!$this->getparam('directory', 'directory'))
@@ -60,13 +62,15 @@ class JGalleryViewFolderGroup extends JViewLegacy
 				$this->directory = utf8_decode(base64_decode($this->directory64));
 			}
 		}
-		if ($this->item){
+		$this->type = "directories";
+		$this->getparam('type', 'type');
+		if ($this->item != null){
 			$this->folders = $this->item->folders;
 			$this->name = $this->item->name;
 			$this->id = $this->item->id;
 			$catid = $this->item->catid;
 		}
-		$user = JFactory::getUser();
+		$user = JFactory::getApplication()->getSession()->get('user');
 		if (($user->id != 0) && $catid && JGalleryCategoryHelper::usercanviewcategory($user, $catid))
 		{
 			$canview = true;

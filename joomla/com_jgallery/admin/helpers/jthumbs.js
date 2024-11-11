@@ -141,7 +141,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 		$("#jgallery"+this._id).html(html);
 		$('#thumbs'+this._id).data('thumbretriever', this);
 		$('#delete'+this._id).data('delete', this);
-		$( '#thumbs'+this._id).click($.proxy(function() {
+		$('#thumbs'+this._id).click($.proxy(function() {
 			var dataretriever = $('#thumbs'+this._id).data('thumbretriever');
 			if (dataretriever.isstarted()) {
 				dataretriever.stopthumbs();
@@ -172,7 +172,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 		$('input[type="checkbox"][name="keep"]').data('thumbretriever', this);
 		$('input[type="checkbox"][name="keep"]').change(function() {
 			 $(this).data('thumbretriever').setkeep(this.checked);
-		 });		 
+		 });
 	}
 	this.show($);
 	return this;

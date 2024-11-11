@@ -27,6 +27,8 @@ class JDirectory
 	protected $basename;
 	protected $dirname;
 	protected $children;
+	protected $id;
+	protected $tmpl;
 
 	static $_excludes =array("thumbs", "jw_sig", "th");
 	//dirname is the full path basename is the name
@@ -94,7 +96,7 @@ class JDirectory
 			$filename = $fileInfo->getFileName();
 			$dir1 = JGalleryHelper::join_paths($sdir, $filename);
 			if (is_dir($dir1) && !(in_array($filename, $excludes))) {
-				$this->insertDir(new JDirectory($this, $sdir1, $filename));
+				$this->insertDir(new JDirectory($this, $sdir1, $filename, 0, $this->id));
 			}
 		}
 		if ($recurse) {
@@ -107,9 +109,9 @@ class JDirectory
 		}
 	}
 	
-	public function getRoute($parentdir, $directory, $parentlevel, $id =0, $tmpl=null)
+	public function getRoute($parentdir, $directory, $parentlevel, $id=0, $tmpl=null)
 	{
-		return JUri::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode(utf8_encode("${parentdir}/${directory}")) ."&parent=" .$parentlevel . "&Itemid=0";
+		return JUri::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode(utf8_encode("${parentdir}/${directory}")) ."&parent=" .$parentlevel . "&Itemid=0" . "&id=" . $id;
 	}
 
 	public function getjsondirectories()
@@ -118,12 +120,12 @@ class JDirectory
 		if ($this->parentlevel > 0) {
 			array_push($directories, array("name" => "..", 
 										"parent" => $this->parentlevel -1,
-										"url" => self::getRoute($this->basename, "..", $this->parentlevel-1)));
+										"url" => self::getRoute($this->basename, "..", $this->parentlevel-1, $this->id)));
 		}
 		foreach ($this->children as $directory) {
 			array_push($directories,  array("name" => $directory->basename,
 										"parent" => $this->parentlevel,
-										"url" => self::getRoute($directory->dirname, $directory->basename, $this->parentlevel + 1)));
+										"url" => self::getRoute($directory->dirname, $directory->basename, $this->parentlevel + 1, $this->id)));
 		}
 		return json_encode($directories);
 	}

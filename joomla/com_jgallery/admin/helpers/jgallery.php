@@ -28,7 +28,7 @@ use Joomla\CMS\Access\Access as JAccess;
 class JGalleryImage
 {
 	public static $IMG_EXTENSIONS = array("jpg", "JPG", "jpeg", "JPEG", "png");
-	public static $VIDEO_EXTENSIONS = array("mp4", "m2ts");
+	public static $VIDEO_EXTENSIONS = array("mp4", "m2ts", "MOV", "mov");
 	public $filename;
 	public $basename;
 	public $moddate;
@@ -272,10 +272,12 @@ class JGalleryHelper
 
 	public static function addFancybox($document)
 	{
-		JHtml::_('jquery.framework');
-		$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.17/dist/fancybox/fancybox.umd.js');
-		$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.17/dist/fancybox/fancybox.css');
-		$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
+		if (method_exists(JFactory::getApplication(), 'getDocument')) {
+			JHtml::_('jquery.framework');
+			$document->addScript('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.17/dist/fancybox/fancybox.umd.js');
+			$document->addStyleSheet('https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.17/dist/fancybox/fancybox.css');
+			$document->addStyleSheet(JURI::root(true) . '/plugins/content/jgallery/jgallery.css');
+		}
 	}
 
 	public static function getFiles($rootdir, $directory,  $icon=true, $startdate=-1, $enddate=-1)
@@ -432,12 +434,12 @@ class JGalleryHelper
 
 
 // $dir is the full path sdir is the directory as parameter
-	public static function outputdirs($id, $dir, $directory, $parentlevel, &$content, $type='radio') {
+	public static function outputdirs($galid, $id, $dir, $directory, $parentlevel, &$content, $type='radio') {
 		$document = JFactory::getDocument();
 		$scriptsdeclarations = array();
 		$scripts = array('jgallery.js');
 		$css = array();
-		$jroot = new JRootDirectory($dir, $directory, $parentlevel);
+		$jroot = new JRootDirectory($dir, $directory, $parentlevel, $galid);
 		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
 		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css);
 		foreach ($scripts as $script) {
@@ -536,7 +538,12 @@ class JGalleryHelper
 		} else {
 			$page = -1;
 		}
-
+		if ( array_key_exists('id', $_params))
+		{
+			$galid = $_params['id'];
+		} else {
+			$galid = -1;
+		}
 		$document = JFactory::getDocument();
 		self::addFancybox($document);
 
@@ -559,7 +566,7 @@ class JGalleryHelper
 			//sub directories
 			$sdir = html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory));
 			$id = rand(1,1024);
-			self::outputdirs($id, $sdir, $directory, $parent, $content, "directories");
+			self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, "directories");
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 			$scriptsdeclarations = array();
 			$scripts = array();
