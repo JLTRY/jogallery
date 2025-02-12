@@ -10,7 +10,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\Uri\Uri; 
+use Joomla\CMS\Uri\Uri;
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jfoldergroup', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jgallerycategory', JPATH_ADMINISTRATOR);
@@ -71,7 +71,7 @@ class JGalleryViewFolderGroup extends JViewLegacy
 			$catid = $this->item->catid;
 		}
 		$user = JFactory::getApplication()->getSession()->get('user');
-		if (($user->id != 0) && $catid && JGalleryCategoryHelper::usercanviewcategory($user, $catid))
+		if (($catid == -1) || JGalleryCategoryHelper::usercanviewcategory($user, $catid))
 		{
 			$canview = true;
 		} else {

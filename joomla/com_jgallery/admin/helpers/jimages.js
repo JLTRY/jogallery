@@ -138,7 +138,7 @@ function initfancybox($, page=null) {
 						//const autoplay = fancybox.Carousel.plugins.Autoplay;
 						//** Step 3: Use any Carousel Autoplay API method, for example:
 						// Start autoplay
-						autoplay.start();
+						//autoplay.start();
 						},
 					},
 					template : {  // Close button icon  
@@ -149,7 +149,7 @@ function initfancybox($, page=null) {
 					main: '<div  class="fancybox__container"  role="dialog"  aria-modal="true"  aria-hidden="true"  aria-label="{{MODAL}}"  tabindex="-1">  <div class="fancybox__backdrop"></div><input type="text" id="comment" name="lname">  <div class="fancybox__carousel"></div></div>'
 					},
 					Slideshow: {
-						playOnStart: true,
+						playOnStart: false,
 					},
 	});
 	if (page != -1) {

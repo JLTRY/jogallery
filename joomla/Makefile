@@ -1,4 +1,4 @@
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 VERSION2 = $(shell echo $(VERSION)|sed 's/ /-/g')
 ZIPFILE = pkg_jgallery-$(VERSION2).zip
 
@@ -32,3 +32,8 @@ $(ZIPFILE): $(ZIPS)
 	@echo "-------------------------------------------------------"
 	@echo "Finished creating package $(ZIPFILE)."
 
+
+
+fixversions:
+	@echo "Updating all install xml files to version $(VERSION)"
+	@export ATVERS=$(VERSION); export ATDATE=$(DATE); find . \( -name '*.xml' ! -name 'default.xml' ! -name 'metadata.xml' ! -name 'config.xml' \) -exec  ./fixvd {} \;

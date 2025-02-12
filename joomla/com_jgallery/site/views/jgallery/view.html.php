@@ -13,6 +13,8 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Uri\Uri; 
 use Joomla\CMS\MVC\View\HtmlView as JViewLegacy;
 use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Helper\ModuleHelper;
 
 JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jgallery.helpers.jgallerycategory', JPATH_ADMINISTRATOR);
@@ -76,7 +78,7 @@ class JGalleryViewJGallery extends JViewLegacy
 			$this->directory = $this->item->directory;
 		}
 		$user = JFactory::getApplication()->getSession()->get('user');
-		if (($user->id != 0) && (($catid == -1) || JGalleryCategoryHelper::usercanviewcategory($user, $catid)))
+		if (($catid == -1) || JGalleryCategoryHelper::usercanviewcategory($user, $catid))
 		{
 			$canview = true;
 		}else {
@@ -85,7 +87,7 @@ class JGalleryViewJGallery extends JViewLegacy
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_CONTENT_ERROR_LOGIN_TO_VIEW_ARTICLE'), 'error');
 			$document = JFactory::getDocument();
 			$renderer = $document->loadRenderer('module');
-			$Module = JModuleHelper::getModule('mod_login');
+			$Module = ModuleHelper::getModule('mod_login');
 			$uri = Uri::getInstance();
 			$Module->params = "return=" . base64_encode($uri->toString()); 
 			echo $renderer->render($Module);
