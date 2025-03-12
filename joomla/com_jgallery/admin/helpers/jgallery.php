@@ -405,7 +405,7 @@ class JGalleryHelper
 		//array_push($scripts, "https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.js");
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
-							jimages_getimages($, "' . $sid .'", "' . JUri::root(true) .'","' . base64_encode($directory) .'",' . json_encode($listfiles) .');
+							jimages_getimages($, "' . $sid .'", ' . json_encode($listfiles) .');
 						})})(jQuery);');
 		
 		array_push($scriptDeclarations, '(function($) {
@@ -549,6 +549,7 @@ class JGalleryHelper
 
 		$scriptsdeclarations = array();
 		$scripts = array('jgallery.js');
+		JHtml::_('bootstrap.tooltip');
 		if ( array_key_exists('img', $_params)) {
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 			$found = False;

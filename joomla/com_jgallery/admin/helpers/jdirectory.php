@@ -111,7 +111,7 @@ class JDirectory
 	
 	public function getRoute($parentdir, $directory, $parentlevel, $id=0, $tmpl=null)
 	{
-		return JUri::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode(utf8_encode("${parentdir}/${directory}")) ."&parent=" .$parentlevel . "&Itemid=0" . "&id=" . $id;
+		return JUri::root(true) . "/index.php?option=com_jgallery&view=jgallery&directory64=". base64_encode(utf8_encode("{$parentdir}/{$directory}")) ."&parent=" .$parentlevel . "&Itemid=0" . "&id=" . $id;
 	}
 
 	public function getjsondirectories()

@@ -8,7 +8,7 @@ function directoriesdisplay($, sid, icon, directories) {
 	this.show = function($) {
 		var content = '<table><tr>';
 		var i = 0;
-		var maxitem = 8;
+		var maxitem = 7;
 		var window_width = $(window).width();
 		if( window_width <= 1280 ) {
 			maxitem = 3;
@@ -22,7 +22,7 @@ function directoriesdisplay($, sid, icon, directories) {
 				var nbcar = dirname.len;
 				content += '<td><a href="' + urlfilename + '" data-placement="left" data-bs-toggle="tooltip" title="' + dirname +'">';
 				content +=	'<img src="' + this._icon +'">'+
-								'<input style="border: 0; text-overflow:ellipsis;" size="10" type="text" name="' + dirname +'" value=" ' + dirname +'" readonly >';
+								'<input style="border: 0; text-overflow:ellipsis;" size="15" type="text" name="' + dirname +'" value=" ' + dirname +'" readonly >';
 				content +=	'</a></td>';
 				i = i + 1;
 				if (i >= maxitem){

@@ -9,56 +9,18 @@ function loadscript(url, callback)
    // then bind the event to the callback function 
    // there are several events for cross browser compatibility
    //script.onreadystatechange = callback;
-   //script.onload = callback;
+   script.onload = callback;
 
    // fire the loading
    head.appendChild(script);
 }
 
-function imagesretriever($, id, urlroot, dir, values) {
+function imagesviewer($, id, values) {
 	this._values = values;
 	this._id = id;
-	this._urlroot = urlroot;
-	this._directory = dir;
 	this._modulo = 50;
 	this._start = 0;
 	this._extensions = ["mp4", "m2ts", "mov", "MOV"];
-
-	this.getthumbs = function(index, nb) {
-		var url = this._urlroot + "/index.php?option=com_jgallery&view=jgallery&tmpl=component&layout=ping&directory64="
-				 + this._directory + "&XDEBUG_SESSION_START=test";
-		$.ajax({url: url ,
-			type: "POST",
-			dataType: "json",
-			async: 'false',
-			context: this,
-			success: function(tvalue) {
-				for (let i= index ; i < index + this._modulo; i++) 
-				{
-					if (i < this._values.length)
-					{
-						var value = this._values[i];
-						sid = value['filename'];
-						urlfilename = value['urlfilename'];
-						urlshortfilename = value['urlshortfilename'];
-						img = $('#'+sid);
-						$('#'+sid).attr('src' ,urlshortfilename);
-						$('#'+sid).removeAttr('width');
-					}
-				}
-			},
-			error: function(xhr, status, text) {
-				var response = xhr.responseText;
-				console.log('Failure!');
-				if (response) {
-					console.log(response);
-				} else {
-					// This would mean an invalid response from the server - maybe the site went down or whatever...
-				}
-			}
-		}
-		)
-	};
 
 	this.show = function($, start, modulo) {
 		var divid = $('#' + this._id);
@@ -105,9 +67,9 @@ function imagesretriever($, id, urlroot, dir, values) {
 	return this;
 }
 
-function jimages_getimages($, id, urlroot, directory, listfiles)
+function jimages_getimages($, id, listfiles)
 {
-	var thmb = new imagesretriever($, id, urlroot, directory, listfiles);
+	var thmb = new imagesviewer($, id, listfiles);
 	thmb.show($, 0, 1500);
 }
 
@@ -133,7 +95,7 @@ function initfancybox($, page=null) {
 						//console.log(`${slide.caption}`);
 						//** Step 1: Get a reference to a Fancybox instance
 						//** Step 2: Get a reference to a Carousel Autoplay plugin
-						const autoplay = fancybox.plugins.Slideshow.ref;
+						//const autoplay = fancybox.plugins.Slideshow.ref;
 						// or
 						//const autoplay = fancybox.Carousel.plugins.Autoplay;
 						//** Step 3: Use any Carousel Autoplay API method, for example:

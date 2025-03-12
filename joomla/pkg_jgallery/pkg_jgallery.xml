@@ -2,8 +2,8 @@
 <extension type="package" version="4.0" method="upgrade">
 	<name>pkg_jgallery</name>
 	<packagename>jgallery</packagename>
-	<version>1.0.3</version>
-	<creationDate>February 12, 2025</creationDate>
+	<version>1.0.5</version>
+	<creationDate>March 12, 2025</creationDate>
 	<copyright>(C) 2007-2024 JL Tryoen. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<author>J.L. Tryoen</author>

@@ -21,8 +21,8 @@
 	"ResourceModules": {
 		"ext.jgallery.jgallery": {
 			"styles": ["fancybox.css"],
-			"scripts": [],
-			"dependencies": [
+			"scripts": ["jgallery.js"],
+			"dependencies": ["jquery"
 			]
 		}
 	},

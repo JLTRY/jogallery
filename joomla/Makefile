@@ -1,4 +1,4 @@
-VERSION = "1.0.3"
+VERSION = "1.0.5"
 VERSION2 = $(shell echo $(VERSION)|sed 's/ /-/g')
 ZIPFILE = pkg_jgallery-$(VERSION2).zip
 

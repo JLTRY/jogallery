@@ -9,7 +9,7 @@ function jselectdirs_ajax($, id, urlroot, value) {
 		type: "POST",
 		dataType: "json",
 		success: function(rdata) {
-			var thmb = new imagesretriever($, id, urlroot, dir, rdata);
+			var thmb = new imagesviewer($, id, rdata);
 			thmb.show($, 0, 1500);
 		},
 		error: function(xhr, status, text) {

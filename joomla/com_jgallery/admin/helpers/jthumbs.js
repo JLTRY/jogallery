@@ -30,11 +30,7 @@ function thumbretriever($, id, urlroot, directory, values) {
 			async: 'false',
 			context: this,
 			success: function(tvalue) {
-				console.log(this);
-				txt = "";
-				$.each(tvalue[2], function(index, item) {
-					txt += item +"<br/>";
-				});
+				txt = decode_utf8(atob(this._directory)) + " " + tvalue[0] + "=>" + tvalue[1] + ":" + tvalue[2][0] + "<br/>";
 				$("#jgallerylog"+this._id).html(txt);
 				var imge = $("img[id='"+ imgname + "']");
 				imge.attr('src', imge.attr('src')+"?timestamp=" + new Date().getTime());

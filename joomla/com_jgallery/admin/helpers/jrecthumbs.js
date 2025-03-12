@@ -20,8 +20,8 @@ function recthumbretriever($, sid, id, urlroot, json) {
 	this._urlroot = urlroot;
 	this._forced = false;
 	this._keep = false;
-	
-	this.getthumb = function(directory, index, length, imgname, params) {	
+
+	this.getthumb = function(directory, index, length, imgname, params) {
 		url = this._urlroot + "/administrator/index.php?option=com_jgallery&view=jgallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
 				 + directory +"&image64=" + btoa(imgname) +"&force=" + Number(this._forced);
         $.map(params, function(value, key) {
@@ -46,7 +46,7 @@ function recthumbretriever($, sid, id, urlroot, json) {
 					console.log(response);
 				} else {
 					// This would mean an invalid response from the server - maybe the site went down or whatever...
-				}			
+				}
 			}
 		});
 	};
@@ -77,11 +77,11 @@ function recthumbretriever($, sid, id, urlroot, json) {
         });
     };
 	this.checkall = function(checked) {
-		this._tabselectdirectories.checkall(checked);	
+		this._tabselectdirectories.checkall(checked);
 	};
-	
+
 	this.setforced = function(forced) {
-		this._forced = forced;	
+		this._forced = forced;
 	};
 
 	this.onchange = function($, listvalues) {
@@ -112,13 +112,13 @@ function recthumbretriever($, sid, id, urlroot, json) {
 
 	this.show = function($) {
 		var html = '<table><tr><td><button type="button" id="thumbs' + id + '" class="btn btn-primary">Thumbs</button></td>'
-        	+ '<td><label><input type="checkbox" name="checkall" value="checkall">checkall</label></td>'	
+        	+ '<td><label><input type="checkbox" name="checkall" value="checkall">checkall</label></td>'
 			+ '<td><label><input type="checkbox" name="force" value="force">force</label></td>'
 			+ '</tr>'
-            + '<tr><td><label>small_width<input type="text" name="small_width" id="small_width' + id +'" value="256" size="5"></label></td>'	
+            + '<tr><td><label>small_width<input type="text" name="small_width" id="small_width' + id +'" value="256" size="5"></label></td>'
             + '<td><label>large_width<input type="text" name="small_width" id="large_width' + id +'" value="1024" size="5"></label></td>'
             +'</tr></table>';
-		var onchange = this.onchange.bind(this);				
+		var onchange = this.onchange.bind(this);
 		this._tabselectdirectories = initmulticheckboxjson($, '#jimages' + this._id , this._json,  onchange, [ this._sidg]);
 		$("#jgallery"+this._id).html(html);
 		$('#thumbs'+this._id).data('recthumbretriever', this);
@@ -157,6 +157,6 @@ function recthumbretriever($, sid, id, urlroot, json) {
 function jrecthumbs_getdirectories($, sid, id, urlroot, json)
 {
 	var thmb = new recthumbretriever($, sid, id, urlroot, json);
-	thmb.show($);	
+	thmb.show($);
 }
 
