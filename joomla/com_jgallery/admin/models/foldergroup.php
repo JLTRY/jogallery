@@ -10,6 +10,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table as JTable;
 /**
  * JGallery FolderGroup Model
  *
@@ -29,7 +30,7 @@ class JGalleryModelFolderGroup extends AdminModel
 	 * @since   1.6
 	 */
 	public function getTable($type = 'FolderGroups', $prefix = 'JGalleryTable', $config = array())
-	{		
+	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
@@ -94,12 +95,5 @@ class JGalleryModelFolderGroup extends AdminModel
 			return JFactory::getUser()->authorise( "core.delete", "com_jgallery");
 		}
 	}
-    
-    public function save($data)
-    {
-        return parent::save($data);
-    }
-    
-    
-    
+
 }

@@ -30,7 +30,7 @@ class JDirectory
 	protected $id;
 	protected $tmpl;
 
-	static $_excludes =array("thumbs", "jw_sig", "th");
+	static $_excludes = array("thumbs", "jw_sig", "th");
 	//dirname is the full path basename is the name
 	function __construct($parent, $dirname, $basename, $parentlevel =0, $id = 0, $tmpl= "")
 	{

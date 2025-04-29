@@ -14,32 +14,41 @@ use Joomla\CMS\Date\Date;
 use Joomla\CMS\Log\Log;
 
 JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
-
+JLoader::import('components.com_jgallery.models.foldergroup', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_jgallery.tables.foldergroups', JPATH_ADMINISTRATOR);
 
 class JFolderGroup extends JDirectory
 {
 	private $_folders;
 
-	function __construct($name, $dirname, $folders, $parent, $id, $tmpl)
+	function __construct($dirname, $basename, $parent, $id, $tmpl)
 	{
-		parent::__construct(null, $dirname, $dirname, $parent);
-		$this->_folders = $folders;
+		parent::__construct(null, $dirname, $basename, $parent);
 		$this->tmpl = $tmpl;
 		$this->id= $id;
-		$this->name = $name;
+		$model = new JGalleryModelFolderGroup;
+		//$model->setstate($model->getName() . '.id', $id);
+		$mod = $model->getItem($id);
+		if ($mod !== null) {
+			$this->_folders = json_decode($mod->folders);
+			$this->name = $mod->name;
+		}
 	}
 
-	function findDirs($sdir, $sdir1, $excludes, $recurse= false)
+	function findDirs($sdir, $sdir1, $excludes, $recurse = false)
 	{
+		if ($this->parentlevel > 0) {
+			return parent::findDirs($sdir, $sdir1, $excludes, false);
+		}
 		foreach ($this->_folders as $folder) {
 			$this->insertDir(new JDirectory($this, $sdir, $folder));
 		}
 	}
 	
-	public function getRoute($parentdir, $dir, $parent, $id =0, $tmpl=null, $name="") {
-		$route = JURI::root(true) . "/index.php?option=com_jgallery&view=foldergroup&parent=" .$parent . "&Itemid=0&id=" . $id . "&header=1";
+	public function getRoute($parentdir, $dir, $parent, $id =0, $tmpl=null) {
+		$route = JURI::root(true) . "/index.php?option=com_jgallery&view=foldergroup&parent=" .$parent . "&Itemid=0&id=" . $id . "&header=1&XDEBUG_SESSION_START=test";
 		if ($dir !== null) {
-			$route .= "&directory64=". base64_encode(utf8_encode(JGalleryHelper::join_paths($parentdir,$dir)));
+			$route .= "&directory64=". base64_encode(utf8_encode(JGalleryHelper::join_paths($parentdir, $dir)));
 		}
 		if ($tmpl != null) {
 			$route .= "&tmpl=" . $tmpl;
@@ -52,17 +61,14 @@ class JFolderGroup extends JDirectory
 	
 	public function getjsondirectories() {
 		$listdirs = array();
-		$dir = $this->dirname;
 		if ($this->parentlevel > 0 ) {
-			array_push($listdirs, array("name" => ($this->parentlevel == 1)? $this->name : basename(dirname($dir)), 
+			array_push($listdirs, array("name" => ($this->parentlevel == 1)? $this->name : basename(dirname($this->basename)), 
 									"parent" => $this->parentlevel - 1,
-									"url" => self::getRoute(basename(dirname($dir)), ".", $this->parentlevel-1, $this->id, $this->tmpl, $this->name)));
-			foreach (glob(JGalleryHelper::join_paths($dir , "*")) as $dirname) {
-				if (is_dir($dirname) && !(in_array(basename($dirname), JDirectory::$_excludes))) {
-					array_push($listdirs,  array("name" => basename($dirname),
-											"parent" => $this->parentlevel,
-											"url" => self::getRoute(basename($dir), basename($dirname), $this->parentlevel + 1, $this->id, $this->tmpl, $this->name)));
-				}
+									"url" => self::getRoute($this->basename, ($this->parentlevel == 1)?".": "..", $this->parentlevel-1, $this->id, $this->tmpl)));
+			foreach ($this->children as $directory) {
+				array_push($listdirs,  array("name" => $directory->basename,
+										"parent" => $this->parentlevel,
+										"url" => self::getRoute($directory->dirname, $directory->basename, $this->parentlevel + 1, $this->id, $this->tmpl)));
 			}
 		} else  {
 			foreach ($this->_folders as $folder) {
@@ -113,12 +119,6 @@ abstract class FolderGroupHelper
 		{
 			return  "errorf:" . print_r($_params, true);
 		}
-		if (! array_key_exists('folders', $_params))
-		{
-			return  "errorf: missing folders param" . print_r($_params, true);
-		} else {
-			$folders = $_params['folders'];
-		}
 		if ( array_key_exists('parent', $_params))
 		{
 			$parent = $_params['parent'];
@@ -130,12 +130,6 @@ abstract class FolderGroupHelper
 			$rootdir = $_params['rootdir'];
 		} else {
 			$rootdir = ".";
-		}
-		if ( array_key_exists('name', $_params))
-		{
-			$name = $_params['name'];
-		} else {
-			$name = "Gallery";
 		}
 		if ( array_key_exists('directory', $_params))
 		{
@@ -176,8 +170,8 @@ abstract class FolderGroupHelper
 		$scripts = array('jgallery.js');
 		$document = JFactory::getDocument();
 		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
-		$jroot = new JFolderGroup($name, $dir, $folders, $parent, $id, $tmpl);
-		$jroot->findDirs($directory, $directory, JDirectory::$_excludes, true);
+		$jroot = new JFolderGroup($dir, $directory, $parent, $id, $tmpl);
+		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
 		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css, $type);
 		if ($directory != null && $parent != 0 ) {
 			$content .= "<hr/>";

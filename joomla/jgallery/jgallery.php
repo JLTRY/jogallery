@@ -61,20 +61,6 @@ class plgContentJGallery extends JPlugin
 		return $this->OnPrepareRow($row);
 	}
 	
-	function getfolders($id, &$folders, &$name) {
-		JLoader::import('components.com_jgallery.models.foldergroup', JPATH_SITE);
-		$model = new JGalleryModelFolderGroup;
-		$model->setstate('folder.id', $id);
-		$model = $model->getItem();
-		if ($model !== null) {
-			$folders = $model->folders;
-			$name = $model->name;
-			return true;
-		}else {
-			return false;
-		}
-	}
-
 	function onPrepareRow(&$row) 
 	{  
 		//Escape fast
@@ -111,15 +97,9 @@ class plgContentJGallery extends JPlugin
 					}elseif (array_key_exists('browse', $_params)) {
 						$p_content = JDirectoryHelper::display(1, $_params);
 					} elseif (array_key_exists('group', $_params)){
-						$folders = array();
 						$id = $_params['group'];
-						if ($this->getfolders($id, $folders, $name))
-						{
-							$_params['folders'] = $folders;
-							$_params['id'] = $id;
-							$_params['name'] = $name;
-							$p_content = FolderGroupHelper::display($_params);
-						}
+						$_params['id'] = $id;
+						$p_content = FolderGroupHelper::display($_params);
 					}
 					else {
 						$p_content = JGalleryHelper::display($_params);

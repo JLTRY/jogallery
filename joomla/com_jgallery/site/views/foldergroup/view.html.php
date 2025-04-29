@@ -71,7 +71,7 @@ class JGalleryViewFolderGroup extends JViewLegacy
 			$catid = $this->item->catid;
 		}
 		$user = JFactory::getApplication()->getSession()->get('user');
-		if (($catid == -1) || JGalleryCategoryHelper::usercanviewcategory($user, $catid))
+		if (($catid == -1) || (($user!= null) && JGalleryCategoryHelper::usercanviewcategory($user, $catid)))
 		{
 			$canview = true;
 		} else {
