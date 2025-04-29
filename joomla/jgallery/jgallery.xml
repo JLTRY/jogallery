@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="1.0" type="plugin" group="content">
+<extension version="1.0" type="plugin" group="content" method="upgrade">
 	<name>Content - JGallery</name>
 	<author>Jean-Luc TRYOEN</author>
-	<creationDate>March 12, 2025</creationDate>
+	<creationDate>April 29, 2025</creationDate>
 	<copyright>Copyright (C) 2021 Jean-Luc TRYOEN. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<authorUrl>www.jltryoen.fr</authorUrl>
-	<version>1.0.5</version>
+	<version>1.0.6</version>
 	<description>JGallery plugin, use it with {jgallery directory=dir}</description>
 	<files>
 		<filename plugin="jgallery">jgallery.php</filename>

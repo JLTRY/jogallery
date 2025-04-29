@@ -38,7 +38,7 @@ class JGalleryModelFolderGroup extends JModelItem
 			$query = $db->getQuery(true);
 			$query->select('name, h.published, folders, h.id, catid')->from('#__jgallery_foldergroups as h')
 				  ->leftJoin('#__categories as c ON h.catid=c.id')
-				  ->where('h.id=' . (int)$id);		  
+				  ->where('h.id=' . (int)$id);
 			$db->setQuery((string)$query);
 		
 			if ($this->item = $db->loadObject()) 
