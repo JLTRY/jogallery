@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_FOLDERGROUP_VIEW_DEFAULT_TITLE">
+		<message>COM_FOLDERGROUP_DEFAULT_DESC</message>
+	</layout>
+	<fields name="params">
+		<fieldset name="request">
+			<field
+				type="sql"
+				name="id"
+				label="COM_JGALLERY_FIELD_FOLDERGROUP"
+				query="SELECT `name`,`id`  FROM #__jgallery_foldergroups"
+				default="1"
+				key_field="id"
+				value_field="name"
+				header="COM_JGALLERY_JOPTION_SELECT_FOLDERGROUP"
+			/>
+			<field name="type" type="radio" default="directories">
+				<option value="directories">directories</option>
+				<option value="selectdirs">selectdirs</option>
+			</field>
+		</fieldset>
+	</fields>
+</metadata>

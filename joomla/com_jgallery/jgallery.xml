@@ -28,6 +28,7 @@
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 		</schemas>
 	</update>
+	<namespace path="src/">JLTRY\Component\JGallery</namespace>
 
 	<!-- Site Main File Copy Section -->
 	<!-- Note the folder attribute: This attribute describes the folder
@@ -44,11 +45,11 @@
 
 	<administration>
 		<!-- Administration Menu Section -->
-		<menu link='index.php?option=com_jgallery' img="../media/com_jgallery/images/tux-16x16.png">COM_JGALLERY_MENU</menu>
+		<menu link='index.php?option=com_jgallery' img="./media/com_jgallery/images/tux-16x16.png">COM_JGALLERY_MENU</menu>
         <submenu>
-            <menu view="categories" link="option=com_categories&amp;view=categories&amp;extension=com_jgallery">Categories</menu>
-            <menu view="galleries" link='option=com_jgallery' img="../media/com_jgallery/images/tux-16x16.png">Galleries</menu>
-            <menu view="foldergroups" link='option=com_jgallery&amp;view=foldergroups'>Groupes</menu>
+            <menu view="categories" link="option=com_categories&amp;view=categories&amp;extension=com_jgallery">COM_CATEGORIES</menu>
+            <menu view="galleries" link='option=com_jgallery' img="../media/com_jgallery/images/tux-16x16.png">COM_JGALLERY_GALLERIES</menu>
+            <menu view="foldergroups" link='option=com_jgallery&amp;view=foldergroups'>COM_JGALLERY_GROUPS</menu>
         </submenu>
 		<!-- Administration Main File Copy Section -->
 		<!-- Note the folder attribute: This attribute describes the folder
@@ -59,7 +60,6 @@
 			<filename>index.html</filename>
 			<filename>config.xml</filename>
 			<filename>jgallery.php</filename>
-			<filename>controller.php</filename>
 			<filename>access.xml</filename>
 			<!-- SQL files section -->
 			<folder>sql</folder>
@@ -73,6 +73,8 @@
 			<folder>controllers</folder>
 			<!-- helpers files section -->
 			<folder>helpers</folder>
+			<folder>src</folder>
+			<folder>services</folder>
 		</files>
 		<languages folder="admin/language">
         	<language tag="en-GB">en-GB/en-GB.com_jgallery.ini</language>
@@ -81,5 +83,11 @@
             <language tag="fr-FR">fr-FR/fr-FR.com_jgallery.sys.ini</language>
 		</languages>
 	</administration>
-
+    <media destination="com_jgallery" folder="media">
+		<folder>images</folder>
+		<folder>css</folder>
+		<folder>js</folder>
+		<filename>index.html</filename>
+		<filename>joomla.asset.json</filename>
+    </media>
 </extension>

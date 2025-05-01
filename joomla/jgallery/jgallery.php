@@ -8,37 +8,46 @@
 *
 */
 
+use JLTRY\Component\JGallery\Administrator\Model\JGalleryModel;
+use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JGalleryCategoryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\FolderGroupHelper;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Factory;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
+
 // Check to ensure this file is included in Joomla!
 defined( '_JEXEC' ) or die( 'Restricted access' );
-use Joomla\CMS\Plugin\CMSPlugin as JPlugin;
-use Joomla\CMS\Factory as JFactory;
 
 define('PF_REGEX_JGALLERYI_PATTERN', "#{jgallery (.*?)}#s");
 
-JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
-JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
-JLoader::import('components.com_jgallery.helpers.jfoldergroup', JPATH_ADMINISTRATOR);
+
 
 /**
-* WikipediaArticle Content Plugin
+* JGallery Content Plugin
 *
 */
-class plgContentJGallery extends JPlugin
+class plgContentJGallery extends CMSPlugin  implements SubscriberInterface
 {
+
 	/**
-	* Constructor
-	*
-	* @param object $subject The object to observe
-	* @param object $params The object that holds the plugin parameters
-	*/
-	function __construct( &$subject, $params )
+	 * Returns an array of events this subscriber will listen to.
+	 *
+	 * @return  array
+	 */
+	public static function getSubscribedEvents(): array
 	{
-		parent::__construct( $subject, $params );
+		return [
+			'onContentPrepare' => 'onContentPrepare'
+		];
 	}
-	
+
 	function getparam($name, $param) {
 		$found = false;
-		$app	 = JFactory::getApplication();
+		$app	 = Factory::getApplication();
 		$input   = $app->getInput();
 		if ($input->get($param) !== null) {
 			$this->{$name} = $input->get($param);
@@ -48,27 +57,32 @@ class plgContentJGallery extends JPlugin
 	}
 
 
-	 /**
-	* Example prepare content method in Joomla 1.6/1.7/2.5
-	*
-	* Method is called by the view
-	*
-	* @param object The article object. Note $article->text is also available
-	* @param object The article params
-	*/   
-	function onContentPrepare($context, &$row, &$params, $page = 0)
+	/**
+	 * The content plugin that inserts the galleries into content items
+	 *
+	 * @param	Event $event The event object
+	 *
+	 * @return true if anything has been inserted into the content object
+	 */
+	public function onContentPrepare(Event $event)
 	{
-		return $this->OnPrepareRow($row);
-	}
-	
-	function onPrepareRow(&$row) 
-	{  
+		if (version_compare(JVERSION, '5', 'lt')) {
+			[$context, $row, $params, $page] = $event->getArguments();
+		} 
+		 else {
+			$context = $event['context'];
+			$row = $event['subject'];
+			$params = $event['params'];
+		}
 		//Escape fast
 		if (!$this->params->get('enabled', 1)) {
 			return true;
 		}
-		
 		 if ( strpos( $row->text, '{jgallery' ) === false ) {
+			return true;
+		}
+		$app = Factory::getApplication();
+		if ( $app->isClient('administrator') ) {
 			return true;
 		}
 		preg_match_all(PF_REGEX_JGALLERYI_PATTERN, $row->text, $matches);
@@ -102,7 +116,9 @@ class plgContentJGallery extends JPlugin
 						$p_content = FolderGroupHelper::display($_params);
 					}
 					else {
-						$p_content = JGalleryHelper::display($_params);
+						$p_content = "<!-- display -->".
+									JGalleryHelper::display($_params) .
+									"<!-- display end -->";
 					}
 					$row->text = str_replace("{jgallery " . $matches[1][$i] . "}", $p_content, $row->text);
 				}
@@ -110,5 +126,4 @@ class plgContentJGallery extends JPlugin
 		}
 		return true; 
 	}
-	
 }

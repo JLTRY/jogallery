@@ -1,0 +1,105 @@
+{
+    "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+    "name": "com_jgallery",
+    "version": "1.0.6",
+    "description": "Joomla CMS",
+    "license": "GPL-2.0-or-later",
+    "assets": [
+        {
+            "name": "fancybox",
+            "type": "script",
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"
+        },
+        {
+            "name": "fancybox",
+            "type": "style",
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+        },
+        {
+            "name": "com_jgallery.jimages",
+            "type": "script",
+            "uri": "com_jgallery/jimages.js",
+            "dependencies": [
+                "jquery"]
+        },
+        {
+            "name": "com_jgallery.jselectdirs",
+            "type": "script",
+            "uri": "com_jgallery/jselectdirs.js",
+            "dependencies": [
+                "jquery"]
+        },
+        {
+            "name": "com_jgallery.tabselectimages",
+            "type": "script",
+            "uri": "com_jgallery/tabselectimages.js",
+            "dependencies": [
+                "jquery"]
+        },
+        {
+            "name": "com_jgallery.jdirectories",
+            "type": "script",
+            "uri": "com_jgallery/jdirectories.js",
+            "dependencies": [
+                "jquery"]
+        },
+        {
+            "name": "com_jgallery.jgallery",
+            "type": "script",
+            "uri": "com_jgallery/jgallery.js"
+        },
+        {
+            "name": "com_jgallery.jgallery",
+            "type": "style",
+            "uri": "com_jgallery/jgallery.css"
+        },
+        {
+            "name": "com_jgallery.radiobox",
+            "type": "script",
+            "uri": "com_jgallery/radiobox.js"
+        },
+        {
+            "name": "com_jgallery.multicheckbox",
+            "type": "script",
+            "uri": "com_jgallery/multicheckbox.js"
+        },
+        {
+            "name": "com_jgallery.multicheckbox",
+            "type": "style",
+            "uri": "com_jgallery/multicheckbox.css"
+        },
+        {
+            "name": "com_jgallery.jthumbs",
+            "type": "script",
+            "uri": "com_jgallery/jthumbs.js",
+            "dependencies": [
+                "com_jgallery.jselectdirs",
+                "com_jgallery.jimages",
+                "com_jgallery.tabselectimages"
+            ]
+        },
+        {
+            "name": "com_jgallery.jrecthumbs",
+            "type": "script",
+            "uri": "com_jgallery/jrecthumbs.js",
+            "dependencies": [
+                "com_jgallery.jdirectories",
+                "com_jgallery.jimages",
+                "com_jgallery.jdirectories",
+                "com_jgallery.radiobox",
+                "com_jgallery.jgallery",
+                "com_jgallery.tabselectimages"
+            ]
+        },
+        {
+            "name": "com_jgallery.jcomments",
+            "type": "script",
+            "uri": "com_jgallery/jcomments.js",
+            "dependencies": [
+                "com_jgallery.jselectdirs",
+                "com_jgallery.jimages",
+                "com_jgallery.tabselectimages"
+            ]
+        }
+    ]
+}
