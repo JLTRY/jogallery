@@ -395,17 +395,25 @@ class JGalleryHelper
 						})})(jQuery);');
 	}
 
-	public static function outputasync($id, $directory, $listfiles, $page, &$content, &$scriptDeclarations, &$scripts)
+	public static function outputasync($id, $directory, $media, $listfiles, $page, &$content, &$scriptDeclarations, &$scripts)
 	{
 		$sid = "jgallery" . $id;
 		$content .= '<div id="' . $sid . '">';
 		$content .= '</div>';
-
+		$listfilteredfiles = array();
+		foreach($listfiles as $file) {
+			$ok = (($media == "ALL") || ($file["video"] && ($media == "VIDEOS")) || (!$file["video"] && ($media == "IMAGES")));
+			if ($ok) {
+				array_push($listfilteredfiles, $file);
+			}
+		}
+		$count = count($listfiles);
+		$filteredcount = count($listfilteredfiles);
 		array_push($scripts, "jimages.js");
 		//array_push($scripts, "https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.js");
 		array_push($scriptDeclarations, '(function($) {
 					$(document).ready(function() {
-							jimages_getimages($, "' . $sid .'", ' . json_encode($listfiles) .');
+							jimages_getimages($, "' . $sid .'", ' . json_encode($listfilteredfiles) .');
 						})})(jQuery);');
 		
 		array_push($scriptDeclarations, '(function($) {
@@ -544,6 +552,12 @@ class JGalleryHelper
 		} else {
 			$galid = -1;
 		}
+		if ( array_key_exists('media', $_params))
+		{
+			$media = $_params['media'];
+		} else {
+			$media = "IMAGES";
+		}
 		$document = JFactory::getDocument();
 		self::addFancybox($document);
 
@@ -569,12 +583,13 @@ class JGalleryHelper
 			$id = rand(1,1024);
 			self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, "directories");
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
+			$count = count($listfiles);
 			$scriptsdeclarations = array();
 			$scripts = array();
 			if ($parent != 0 && count($listfiles)) {
 				$content .= "<hr/>";
 			}
-			self::outputasync($id, $directory, $listfiles, $page, $content, $scriptsdeclarations, $scripts);
+			self::outputasync($id, $directory, $media, $listfiles, $page, $content, $scriptsdeclarations, $scripts);
 			foreach ($scriptsdeclarations as $scriptDeclaration) {
 				$document->addScriptDeclaration($scriptDeclaration);
 			}
@@ -585,11 +600,7 @@ class JGalleryHelper
 					$document->addScript(JUri::root(true) . '/administrator/components/com_jgallery/helpers/' . $script);
 				}
 			}
-
 		}
-
-		
-
 		return $content;
 	}
 
@@ -607,7 +618,7 @@ class JGalleryHelper
 			foreach($jgalleryfiles as $file)
 			{
 				if (($file['filename'] == $array_key)) {
-				if ($file['comment'] != $comment) {
+					if ($file['comment'] != $comment) {
 						$modif = true;
 						$file['comment'] = $comment;
 					}

@@ -172,11 +172,11 @@ abstract class FolderGroupHelper
 		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
 		$jroot = new JFolderGroup($dir, $directory, $parent, $id, $tmpl);
 		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
-		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css, $type);
+		$jroot->outputdirs($type, $id, $content, $scriptsdeclarations, $scripts, $css);
 		if ($directory != null && $parent != 0 ) {
 			$content .= "<hr/>";
 			$listfiles = JGalleryHelper::getFiles($rootdir, $directory, false, -1, -1);
-			JGalleryHelper::outputasync(rand(1,1024), $directory, $listfiles, -1, $content, $scriptsdeclarations, $scripts);
+			JGalleryHelper::outputasync(rand(1,1024), $directory, $media, $listfiles, -1, $content, $scriptsdeclarations, $scripts);
 		}
 		foreach ($scripts as $script) {
 			if (preg_match('/http/', $script)) {

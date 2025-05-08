@@ -454,7 +454,7 @@ abstract class JDirectoryHelper
 		} else {
 			$document = JFactory::getDocument();
 			JGalleryHelper::addFancybox($document);
-			self::outputDirs($id, $dir, $directory, $content,$type);
+			self::outputDirs($id, $dir, $directory, $content, $type);
 			JGalleryHelper::gallery($id, $content);
 		}
 		return $content;
