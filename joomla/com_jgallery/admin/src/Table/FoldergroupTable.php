@@ -18,11 +18,11 @@ defined('_JEXEC') or die('Restricted access');
 
 
 /**
- * FolderGroupTable class
+ * FoldergroupTable class
  *
  * @since  0.0.1
  */
-class FolderGroupTable extends Table
+class FoldergroupTable extends Table
 {
 	/**
 	 * Constructor
@@ -30,7 +30,7 @@ class FolderGroupTable extends Table
 	 * @param   JDatabaseDriver  &$db  A database connector object
 	 */
 	function __construct(&$db)
-	{		
+	{
 		parent::__construct('#__jgallery_foldergroups', 'id', $db);
 	}
     
@@ -55,4 +55,3 @@ class FolderGroupTable extends Table
 	}
 }
 
-	

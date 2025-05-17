@@ -4,15 +4,17 @@
  * @subpackage  com_jgallery
  *
  * @copyright   Copyright (C) 2015 - 2025 JLTRYOEN. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license	 GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace JLTRY\Component\JGallery\Site\View\JGallery;
+namespace JLTRY\Component\JGallery\Site\View\Foldergroup;
 
 use JLTRY\Component\JGallery\Administrator\Model\JGalleryModel;
 use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryCategoryHelper;
+use JLTRY\Component\JGallery\Site\Model\FoldergroupModel;
+
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Factory\MVCFactory;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
@@ -20,7 +22,6 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory as Factory;
 use Joomla\CMS\Language\Text as Text;
 use Joomla\CMS\Helper\ModuleHelper;
-
 
 
 /**
@@ -33,7 +34,7 @@ class HtmlView extends BaseHtmlView
 	static $_id;
 	function getparam($name, $param) {
 		$found = false;
-		$app     = Factory::getApplication();
+		$app	 = Factory::getApplication();
 		$input   = $app->getInput();
 		$params  = $app->getParams();
 		if ($params->get($param) !== null) {
@@ -54,33 +55,35 @@ class HtmlView extends BaseHtmlView
 	 */
 	function display($tpl = null)
 	{
-		$canview = false;
-		//$this->item = $this->get('Item');
-		$catid = -1;
+		// Assign data to the view
 		$this->id = -1;
-		$this->getparam('id', 'id');
-		if ($this->item == null) {
-			if ($this->id !== -1) {
-				$model = new JGalleryModel;
-				$this->setModel($model);
-				$this->item = $model->getItem((int)$this->id);
-				$catid = $this->item->catid;
-			}
+		$this->getparam('parent', 'parent');
+		if ($this->getparam('id', 'id')) {
+			$model = new FoldergroupModel;
+			$model->setstate('folder.id', $this->id);
+			$this->item = $model->getItem();
 		}
+		$this->getparam('tmpl', 'tmpl');
+		$this->directory = null;
 		if (!$this->getparam('directory', 'directory'))
 		{
 			if ($this->getparam('directory64', 'directory64')) {
 				$this->directory = utf8_decode(base64_decode($this->directory64));
 			}
 		}
-		if ($this->item && !$this->directory) {
-			$this->directory = $this->item->directory;
+		$this->type = "directories";
+		$this->getparam('type', 'type');
+		if ($this->item != null){
+			$this->folders = $this->item->folders;
+			$this->name = $this->item->name;
+			$this->id = $this->item->id;
+			$catid = $this->item->catid;
 		}
 		$user = Factory::getApplication()->getSession()->get('user');
-		if (($catid == -1) || JGalleryCategoryHelper::usercanviewcategory($user, $catid))
+		if (($catid == -1) || (($user!= null) && JGalleryCategoryHelper::usercanviewcategory($user, $catid)))
 		{
 			$canview = true;
-		}else {
+		} else {
 			Factory::getLanguage()->load('com_content', JPATH_SITE, null ,true);
 			echo "<jdoc:include type=\"message\" />";
 			Factory::getApplication()->enqueueMessage(Text::_('COM_CONTENT_ERROR_LOGIN_TO_VIEW_ARTICLE'), 'error');
@@ -93,26 +96,6 @@ class HtmlView extends BaseHtmlView
 		}
 		if ($canview) {
 			$this->rootdir = JParametersHelper::getrootdir();
-			if (!is_string($this->directory))
-			{
-				$errors = array("directory not defined");
-			} else {
-				$errors = $this->get('Errors');
-			}
-			$this->getparam('image', 'image');
-			$this->page= -1;
-			$this->getparam('page', 'page');
-			if ($this->getparam('image64', 'image64')){
-				$this->image = utf8_decode(base64_decode($this->image64));
-			}
-			$this->parent = false;
-			$this->getparam('parent', 'parent');
-			// Check for errors.
-			if (count($errors))
-			{
-				Log::add(implode('<br />', $errors), Log::WARNING, 'jerror');
-				return false;
-			}
 			// Display the view
 			parent::display($tpl);
 		}

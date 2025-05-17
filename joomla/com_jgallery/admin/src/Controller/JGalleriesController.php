@@ -8,13 +8,13 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\MVC\Controller\AdminController as JControllerAdmin;
+use Joomla\CMS\MVC\Controller\AdminController;
 /**
  * JGalleries Controller
  *
  * @since  0.0.1
  */
-class JGalleryControllerJGalleries extends JControllerAdmin
+class JGalleriesController extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -27,12 +27,9 @@ class JGalleryControllerJGalleries extends JControllerAdmin
 	 *
 	 * @since   1.6
 	 */
-	public function getModel($name = 'JGalleries', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	/* public function getModel($name = 'JGalleries', $prefix = 'Administrator', $config = array('ignore_request' => true))
 	{
-		$model = parent::getModel($name, $prefix, $config);
+		$model = parent::getModel($name, $prefix, array_merge(array('ignore_request' => true), $config));
 		return $model;
-	}
-	
-	
-	
+	} */
 }

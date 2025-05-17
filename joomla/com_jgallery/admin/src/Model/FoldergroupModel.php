@@ -3,7 +3,7 @@
  * @package     Joomla.Site
  * @subpackage  com_jgallery
  *
- * @copyright   Copyright (C) 2005 - 2015 JL Tryoen. All rights reserved.
+ * @copyright   Copyright (C) 2015 - 2025 JL Tryoen. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -19,11 +19,11 @@ use Joomla\CMS\Table\Table;
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * JGallery FolderGroup Model
+ * JGallery Foldergroup Model
  *
  * @since  0.0.1
  */
-class FolderGroupModel extends AdminModel
+class FoldergroupModel extends AdminModel
 {
 	/**
 	 * Method to get a table object, load it if necessary.
@@ -36,7 +36,7 @@ class FolderGroupModel extends AdminModel
 	 *
 	 * @since   1.6
 	 */
-	public function getTable($type = 'FolderGroup', $prefix = 'Administrator', $config = array())
+	public function getTable($type = 'Foldergroup', $prefix = 'Administrator', $config = array())
 	{
 		/** @var \Joomla\CMS\MVC\Factory\MVCFactory $mvc */
 		$mvc = Factory::getApplication()
@@ -59,7 +59,7 @@ class FolderGroupModel extends AdminModel
 	{
 		// Get the form.
 		$form = $this->loadForm(
-			'com_jgallery.jfoldergroup',
+			'com_jgallery.foldergroup',
 			'foldergroup',
 			array(
 				'control' => 'jform',
@@ -103,7 +103,7 @@ class FolderGroupModel extends AdminModel
 	{
 		if( !empty( $record->id ) )
 		{
-			return Factory::getUser()->authorise( "core.delete", "com_jgallery");
+			return Factory::getUser()->authorise( "core.delete", "com_jgallery.message." . $record->id );
 		}
 	}
 

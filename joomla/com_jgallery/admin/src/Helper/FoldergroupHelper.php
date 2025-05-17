@@ -8,12 +8,12 @@
  */
 
 namespace JLTRY\Component\JGallery\Administrator\Helper;
-use JLTRY\Component\JGallery\Administrator\Model\FolderGrouModel;
+use JLTRY\Component\JGallery\Administrator\Model\FoldergroupModel;
 use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
-use JLTRY\Component\JGallery\Administrator\Table\FolderGroup;
-use JLTRY\Component\JGallery\Administrator\Model\FolderGroupModel;
+use JLTRY\Component\JGallery\Administrator\Table\Foldergroup;
+
 
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Log\Log;
@@ -26,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
 
 JDirectoryHelper::loadLibrary();
 
-class JFolderGroup extends JDirectory
+class JFoldergroup extends JDirectory
 {
 	private $_folders;
 
@@ -35,7 +35,7 @@ class JFolderGroup extends JDirectory
 		parent::__construct(null, $dirname, $basename, $parent);
 		$this->tmpl = $tmpl;
 		$this->id= $id;
-		$model = new FolderGroupModel;
+		$model = new FoldergroupModel;
 		//$model->setstate($model->getName() . '.id', $id);
 		$mod = $model->getItem($id);
 		if ($mod !== null) {
@@ -92,7 +92,7 @@ class JFolderGroup extends JDirectory
 }
 
 /**
- * FolderGroup component helper.
+ * Foldergroup component helper.
  *
  * @param   string  $submenu  The name of the active view.
  *
@@ -100,7 +100,7 @@ class JFolderGroup extends JDirectory
  *
  * @since   1.6
  */
-abstract class FolderGroupHelper
+abstract class FoldergroupHelper
 {
 	public static function getcategoryaccess($catID) {
 		$db = Factory::getDBO();
@@ -178,7 +178,7 @@ abstract class FolderGroupHelper
 		}
 		JGalleryHelper::loadLibrary(array("fancybox" => true, "jgallery" => true));
 		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
-		$jroot = new JFolderGroup($dir, $directory, $parent, $id, $tmpl);
+		$jroot = new JFoldergroup($dir, $directory, $parent, $id, $tmpl);
 		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
 		$jroot->outputdirs($type, $id, $content);
 		if ($directory != null && $parent != 0 ) {

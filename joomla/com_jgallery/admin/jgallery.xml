@@ -43,7 +43,7 @@
 
 	<administration>
 		<!-- Administration Menu Section -->
-		<menu link='index.php?option=com_jgallery' img="./media/com_jgallery/images/tux-16x16.png">COM_JGALLERY_MENU</menu>
+		<menu link='index.php?option=com_jgallery' img="../media/com_jgallery/images/tux-16x16.png">COM_JGALLERY_MENU</menu>
         <submenu>
             <menu view="categories" link="option=com_categories&amp;view=categories&amp;extension=com_jgallery">COM_CATEGORIES</menu>
             <menu view="galleries" link='option=com_jgallery' img="../media/com_jgallery/images/tux-16x16.png">COM_JGALLERY_SUBMENU_GALLERIES</menu>

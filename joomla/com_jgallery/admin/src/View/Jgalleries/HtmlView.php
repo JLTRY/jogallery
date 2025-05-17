@@ -3,12 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_jgallery
  *
- * @copyright   Copyright (C) 2005 - 2015 JL Tryoen. All rights reserved.
+ * @copyright   Copyright (C) 2015 - 2025 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
+ */ 
 
-
-namespace JLTRY\Component\JGallery\Administrator\View\FolderGroups;
+namespace JLTRY\Component\JGallery\Administrator\View\JGalleries;
 
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use Joomla\CMS\Component\ComponentHelper;
@@ -21,17 +20,20 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\String\StringHelper;
 
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-/*
- * JFolderGroups View
+
+
+/**
+ * JGalleries View
  *
  * @since  0.0.1
  */
 class HtmlView extends BaseHtmlView
 {
 	/**
-	 * Display the FolderGroups view
+	 * Display the Gelleries view
 	 *
 	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
@@ -39,21 +41,21 @@ class HtmlView extends BaseHtmlView
 	 */
 	function display($tpl = null)
 	{
-		
 		// Get application
 		$app = Factory::getApplication();
-		$context = "jgallery.list.admin.foldergroups";
+		$context = "jgallery.list.admin.jgallery";
 		// Get data from the model
+		$model = $this->getModel();
 		$this->items		= $this->get('Items');
 		$this->pagination	= $this->get('Pagination');
 		$this->state		= $this->get('State');
-		$this->filter_order	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'name', 'cmd');
+		$this->filter_order	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'directory', 'cmd');
 		$this->filter_order_Dir = $app->getUserStateFromRequest($context.'filter_order_Dir', 'filter_order_Dir', 'asc', 'cmd');
 		$this->filterForm    	= $this->get('FilterForm');
 		$this->activeFilters 	= $this->get('ActiveFilters');
 
 		// What Access Permissions does this user have? What can (s)he do?
-		$this->canDo = JGalleryHelper::getActions('foldergroup');
+		$this->canDo = JGalleryHelper::getActions();
 
 		// Check for errors.
 		if (is_array($errors) && count($errors = $this->get('Errors')))
@@ -61,16 +63,9 @@ class HtmlView extends BaseHtmlView
 			Factory::getApplication()->enqueueMessage( implode('<br />', $errors),'error');
 			return false;
 		}
-        $lang = Factory::getLanguage();
-        $extensions = ['com_installer', 'com_media', 'com_menus', 'com_content'];
-        $base_dir =  JPATH_ADMINISTRATOR;
-        $language_tag = $lang->getTag();
-        $reload = true;
-        foreach ($extensions as $extension ) { 
-            $lang->load($extension, $base_dir, $language_tag, $reload);
-        }
+
 		// Set the submenu
-		JGalleryHelper::addSubmenu('foldergroups');
+		JGalleryHelper::addSubmenu('jgalleries');
 
 		// Set the toolbar and number of found items
 		$this->addToolBar();
@@ -80,7 +75,7 @@ class HtmlView extends BaseHtmlView
 
 		// Set the document
 		$document = Factory::getDocument();
-		$document->setTitle(Text::_('COM_JGALLERY_ADMINISTRATION'));;
+		$document->setTitle(Text::_('COM_JGALLERY_ADMINISTRATION'));
 	}
 
 	/**
@@ -92,32 +87,43 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolBar()
 	{
-		$title = Text::_('COM_JGALLERY_MANAGER_GROUPS');
+		$title = Text::_('COM_JGALLERY_MANAGER_JGALLERIES');
 
 		if ($this->pagination->total)
 		{
 			$title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
 		}
 
-		ToolbarHelper::title($title, 'foldergroup');
+		ToolBarHelper::title($title, 'jgallery');
 
 		if ($this->canDo->get('core.create')) 
 		{
-			ToolbarHelper::addNew('foldergroup.add', 'JTOOLBAR_NEW');
+			ToolBarHelper::addNew('jgallery.add', 'JTOOLBAR_NEW');
 		}
 		if ($this->canDo->get('core.edit')) 
 		{
-			ToolbarHelper::editList('foldergroup.edit', 'JTOOLBAR_EDIT');
+			ToolBarHelper::editList('jgallery.edit', 'JTOOLBAR_EDIT');
 		}
 		if ($this->canDo->get('core.delete')) 
 		{
-			ToolbarHelper::deleteList('', 'foldergroups.delete', 'JTOOLBAR_DELETE');
+			ToolBarHelper::deleteList('', 'jgalleries.delete', 'JTOOLBAR_DELETE');
+		}
+		if ($this->canDo->get('core.edit')) 
+		{
+			ToolBarHelper::custom('jgallery.genthumbs', 'publish.png', 'publish_f2.png','JTOOLBAR_THUMBS', true);
+		}
+        if ($this->canDo->get('core.edit')) 
+		{
+			ToolBarHelper::custom('jgallery.genrecthumbs', 'publish.png', 'publish_f2.png','JTOOLBAR_GENRECTHUMBS', true);
+		}
+		if ($this->canDo->get('core.edit')) 
+		{
+			ToolBarHelper::custom('jgallery.comments', 'publish.png', 'publish_f2.png','JTOOLBAR_COMMENTS', true);
 		}
 		if ($this->canDo->get('core.admin')) 
 		{
-			ToolbarHelper::divider();
-			ToolbarHelper::preferences('com_jgallery');
+			ToolBarHelper::divider();
+			ToolBarHelper::preferences('com_jgallery');
 		}
 	}
-
 }

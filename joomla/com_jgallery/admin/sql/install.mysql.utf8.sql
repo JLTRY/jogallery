@@ -12,4 +12,13 @@ CREATE TABLE `#__jgallery` (
 	AUTO_INCREMENT =0
 	DEFAULT CHARSET =utf8;
 
+DROP TABLE IF EXISTS `#__jgallery_foldergroups`;
+CREATE TABLE `#__jgallery_foldergroups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `published` tinyint NOT NULL DEFAULT '1',
+  `name` varchar(25) NOT NULL,
+  `folders` varchar(10000) DEFAULT NULL,
+  `catid` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 

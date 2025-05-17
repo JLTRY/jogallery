@@ -19,11 +19,11 @@ use Joomla\CMS\Table\Table;
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * JGallery FolderGroup Model
+ * JGallery Foldergroup Model
  *
  * @since  0.0.1
  */
-class FolderGroupModel extends BaseDatabaseModel
+class FoldergroupModel extends BaseDatabaseModel
 {
 	/**
 	 * @var object item

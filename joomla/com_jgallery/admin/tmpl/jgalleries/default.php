@@ -24,10 +24,10 @@ $listDirn      = $this->escape($this->filter_order_Dir);
 		<div class="span6">
 			<?php echo Text::_('COM_JGALLERY_JGALLERIE_FILTER'); ?>
 			<?php
-				echo JLayoutHelper::render(
+				/*echo JLayoutHelper::render(
 					'joomla.searchtools.default',
 					array('view' => $this)
-				);
+				);*/
 			?>
 		</div>
 	</div>

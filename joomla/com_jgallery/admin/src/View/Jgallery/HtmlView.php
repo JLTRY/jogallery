@@ -115,10 +115,9 @@ class HtmlView extends BaseHtmlView
 		$this->canDo = $this->item && JGalleryHelper::getActions($this->item->id);
 		
 		// Check for errors.
-		if (count($errors = $this->get('Errors')))
+		if (is_array($errors) && count($errors = $this->get('Errors')))
 		{
 			JError::raiseError(500, implode('<br />', $errors));
-
 			return false;
 		}
 

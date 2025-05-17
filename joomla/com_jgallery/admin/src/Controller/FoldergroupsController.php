@@ -18,7 +18,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  0.0.1
  */
-class FolderGroupsController extends AdminController
+class FoldergroupsController extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -31,7 +31,7 @@ class FolderGroupsController extends AdminController
 	 *
 	 * @since   1.6
 	 */
-	public function getModel($name = 'FolderGroups', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	public function getModel($name = 'Foldergroups', $prefix = 'Administrator', $config = array('ignore_request' => true))
 	{
 		$model = parent::getModel($name, $prefix, $config);
 		return $model;

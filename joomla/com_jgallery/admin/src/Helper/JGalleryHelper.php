@@ -489,7 +489,7 @@ class JGalleryHelper
 		JDirectoryHelper::loadLibrary();
 		$document = Factory::getDocument();
 		$jroot = new JRootDirectory($dir, $directory, $parentlevel, $galid);
-		if ($jroot->findDirs($dir, $directory, JDirectory::$_excludes, true) > 0) {
+		if (($jroot->findDirs($dir, $directory, JDirectory::$_excludes, true) > 0) || ($jroot->parentlevel > 0)) {
 			$jroot->outputdirs($type, $id, $content, $type);
 		}
 	}

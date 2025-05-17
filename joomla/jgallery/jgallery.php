@@ -13,7 +13,7 @@ use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryCategoryHelper;
-use JLTRY\Component\JGallery\Administrator\Helper\FolderGroupHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\FoldergroupHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
 use Joomla\Event\Event;
@@ -109,7 +109,7 @@ class plgContentJGallery extends CMSPlugin  implements SubscriberInterface
 					if (array_key_exists('img', $_params)) {
 						$p_content = JGalleryHelper::display($_params);
 					}elseif (array_key_exists('browse', $_params)) {
-						$p_content = JDirectoryHelper::display(1, $_params);
+						$p_content = JDirectoryHelper::display(rand(1,1024), $_params);
 					} elseif (array_key_exists('group', $_params)){
 						$id = $_params['group'];
 						$_params['id'] = $id;

@@ -21,7 +21,7 @@ defined('_JEXEC') or die('Restricted access');
  * @subpackage  com_jgallery
  * @since       0.0.9
  */
-class FolderGroupController extends FormController
+class FoldergroupController extends FormController
 {
 	/**
 	* Implement to allowAdd or not

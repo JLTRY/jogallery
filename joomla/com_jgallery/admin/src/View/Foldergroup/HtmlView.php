@@ -7,11 +7,11 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace JLTRY\Component\JGallery\Administrator\View\FolderGroup;
+namespace JLTRY\Component\JGallery\Administrator\View\Foldergroup;
 
 use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
-use JLTRY\Component\JGallery\Administrator\Model\FolderGroupModel;
+use JLTRY\Component\JGallery\Administrator\Model\FoldergroupModel;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -70,7 +70,7 @@ class HtmlView extends BaseHtmlView
 		$this->item = $this->get('Item');
 		$this->getparam('id', 'id');
 		if ($this->id) {
-			$modelGallery = new FolderGroupModel;
+			$modelGallery = new FoldergroupModel;
 			$modelGallery->setState("folder.id", $this->id);
 			$this->item = $modelGallery->getItem($this->id);
 		}
@@ -82,7 +82,7 @@ class HtmlView extends BaseHtmlView
 		else	
 			$this->canDo = JGalleryHelper::getActions('foldergroup');
 		// Check for errors.
-		if (count($errors = $this->get('Errors')))
+		if (is_array($errors) && count($errors = $this->get('Errors')))
 		{
 			Factory::getApplication()->enqueueMessage( implode('<br />', $errors),'error');
 			return false;
@@ -99,7 +99,6 @@ class HtmlView extends BaseHtmlView
 		// Set the toolbar
 		$this->addToolBar();
 
-		
 		// Display the template
 		parent::display($tpl);
 
@@ -124,42 +123,42 @@ class HtmlView extends BaseHtmlView
 		$isNew = ($this->item->id == 0);
 
 		ToolbarHelper::title($isNew ? Text::_('COM_JGALLERY_CREATE_NEW_GROUP')
-									 : Text::_('COM_JGALLERY_GROUP_EDIT'), 'FolderGroup');
+									 : Text::_('COM_JGALLERY_GROUP_EDIT'), 'Foldergroup');
 		// Build the actions for new and existing records.
 		if ($isNew)
 		{
 			// For new records, check the create permission.
 			if ($this->canDo->get('core.create')) 
 			{
-				ToolbarHelper::apply('folderGroup.apply', 'Toolbar_APPLY');
-				ToolbarHelper::save('folderGroup.save', 'Toolbar_SAVE');
-				ToolbarHelper::custom('folderGroup.save2new', 'save-new.png', 'save-new_f2.png',
-									   'Toolbar_SAVE_AND_NEW', false);
+				ToolbarHelper::apply('foldergroup.apply', 'JTOOLBAR_APPLY');
+				ToolbarHelper::save('foldergroup.save', 'JTOOLBAR_SAVE');
+				ToolbarHelper::custom('foldergroup.save2new', 'save-new.png', 'save-new_f2.png',
+									   'JTOOLBAR_SAVE_AND_NEW', false);
 			}
-			ToolbarHelper::cancel('folderGroup.cancel', 'Toolbar_CANCEL');
+			ToolbarHelper::cancel('foldergroup.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
 			if ($this->canDo->get('core.edit'))
 			{
 				// We can save the new record
-				ToolbarHelper::apply('foldergroup.apply', 'Toolbar_APPLY');
-				ToolbarHelper::save('foldergroup.save', 'Toolbar_SAVE');
+				ToolbarHelper::apply('foldergroup.apply', 'JTOOLBAR_APPLY');
+				ToolbarHelper::save('foldergroup.save', 'JTOOLBAR_SAVE');
  
 				// We can save this record, but check the create permission to see
 				// if we can return to make a new one.
 				if ($this->canDo->get('core.create')) 
 				{
 					ToolbarHelper::custom('foldergroup.save2new', 'save-new.png', 'save-new_f2.png',
-										   'Toolbar_SAVE_AND_NEW', false);
+										   'JTOOLBAR_SAVE_AND_NEW', false);
 				}
 			}
 			if ($this->canDo->get('core.create')) 
 			{
-				ToolbarHelper::custom('folderGroup.save2copy', 'save-copy.png', 'save-copy_f2.png',
-									   'Toolbar_SAVE_AS_COPY', false);
+				ToolbarHelper::custom('foldergroup.save2copy', 'save-copy.png', 'save-copy_f2.png',
+									   'JTOOLBAR_SAVE_AS_COPY', false);
 			}
-			ToolbarHelper::cancel('foldergroup.cancel', 'Toolbar_CLOSE');
+			ToolbarHelper::cancel('foldergroup.cancel', 'JTOOLBAR_CLOSE');
 		}
 	}
 	/**

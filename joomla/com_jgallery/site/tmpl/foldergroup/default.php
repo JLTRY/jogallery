@@ -11,9 +11,9 @@
 defined('_JEXEC') or die('Restricted access');
 
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
-use JLTRY\Component\JGallery\Administrator\Helper\FolderGroupHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\FoldergroupHelper;
 
-echo FolderGroupHelper::display(array("folders" => $this->folders,
+echo FoldergroupHelper::display(array("folders" => $this->folders,
 								   "rootdir" => JGalleryHelper::join_paths($this->rootdir),
                                    "parent" => $this->parent,
                                    "directory" => $this->directory,

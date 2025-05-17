@@ -64,7 +64,7 @@ class JGalleryModel extends BaseDatabaseModel
 	{
 		if (!isset($this->item)) 
 		{
-			$id    = $this->getState('message.id');
+			$id    = $pk;
 			$db    = Factory::getDbo();
 			$query = $db->getQuery(true);
 			$query->select('h.directory, h.params, c.id as catid')

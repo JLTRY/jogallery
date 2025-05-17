@@ -34,7 +34,7 @@ class JDirectory
 	protected $id;
 	protected $tmpl;
 
-	static $_excludes = array("thumbs", "jw_sig", "th");
+	static $_excludes = array("thumbs", "jw_sig", "th", "selection");
 	//dirname is the full path basename is the name
 	function __construct($parent, $dirname, $basename, $parentlevel =0, $id = 0, $tmpl= "")
 	{
@@ -234,6 +234,7 @@ class JDirectory
 		$sid = "findir" . $id;
 		$sidg = "jgallery" . $id;
 		$content .= LayoutHelper::render('radiobox', array('sid' => $sid), JPATH_LAYOUTS);
+		$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_LAYOUTS);
 		JGalleryHelper::loadLibrary(array("radiobox" => true));
 		JGalleryHelper::loadLibrary(array("inline" => 
 											array('$(document).ready(function() {
@@ -241,7 +242,7 @@ class JDirectory
 													});',
 													['position' => 'after'],
 													[],
-													['radiobox'])));
+													['com_jgallery.radiobox'])));
 	}
 
 
@@ -267,7 +268,7 @@ class JDirectory
 	{
 		$sid = "jgallerydir"  . $id;
 		$json = $this->getjsondirectories();
-		$icon = "/media/com_phocagallery/images/icon-folder-medium.png";
+		$icon = "/media/com_jgallery/images/icon-folder-medium.png";
 		$content .= LayoutHelper::render('directories', array('id' => $id), JPATH_LAYOUTS);
 		JGalleryHelper::loadLibrary(array("jdirectories" => true));
 		JGalleryHelper::loadLibrary(array("inline" =>
@@ -380,7 +381,6 @@ abstract class JDirectoryHelper
 		} else {
 			JGalleryHelper::loadLibrary(array("fancybox" => true));
 			self::outputDirs($id, $dir, $directory, $content,$type);
-			//$content .= LayoutHelper::render('jgallery', array('id' => $id));
 		}
 		return $content;
 	}

@@ -3,9 +3,10 @@
  * @package     Joomla.Administrator
  * @subpackage  com_jgallery
  *
- * @copyright   Copyright (C) 2015 - 2025 Open Source Matters. All rights reserved.
+ * @copyright   Copyright (C) 2015 - 2025 JL Tryoen. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 
 namespace JLTRY\Component\JGallery\Administrator\Model;
 
@@ -19,13 +20,12 @@ use Joomla\Filter\OutputFilter;
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-
 /**
- * HelloWorldList Model
+ * JGalleryModelfoldergroups Model
  *
  * @since  0.0.1
  */
-class JGalleriesModel extends ListModel
+class FoldergroupsModel extends ListModel
 {
 	/**
 	 * Constructor.
@@ -41,13 +41,14 @@ class JGalleriesModel extends ListModel
 		{
 			$config['filter_fields'] = array(
 				'id',
-				'directory',
+				'name',
 				'published'
 			);
 		}
 
 		parent::__construct($config);
 	}
+
 
 	/**
 	 * Method to build an SQL query to load the list data.
@@ -62,7 +63,7 @@ class JGalleriesModel extends ListModel
 
 		// Create the base select statement.
 		$query->select('*')
-			  ->from($db->quoteName('#__jgallery'));
+			  ->from($db->quoteName('#__jgallery_foldergroups'));
 
 		// Filter: like / search
 		$search = $this->getState('filter.search');
@@ -70,7 +71,7 @@ class JGalleriesModel extends ListModel
 		if (!empty($search))
 		{
 			$like = $db->quote('%' . $search . '%');
-			$query->where('directory LIKE ' . $like);
+			$query->where('name LIKE ' . $like);
 		}
 
 		// Filter by published state
@@ -86,7 +87,7 @@ class JGalleriesModel extends ListModel
 		}
 
 		// Add the list ordering clause.
-		$orderCol	= $this->state->get('list.ordering', 'directory');
+		$orderCol	= $this->state->get('list.ordering', 'name');
 		$orderDirn 	= $this->state->get('list.direction', 'asc');
 
 		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));

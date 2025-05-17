@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<form addrulepath="/administrator/components/com_jgallery/models/rules">
+<form>
 	<fieldset
 				name="details"
 				label="COM_JGALLERY_JGALLERY_DETAILS">
