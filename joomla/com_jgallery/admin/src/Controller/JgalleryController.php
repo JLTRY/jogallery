@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_jgallery
  *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters. All rights reserved.
+ * @copyright   Copyright (C) 2015 - 2025 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -12,6 +12,7 @@ use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\Log\Log;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -109,10 +110,10 @@ class JGalleryController extends FormController
 		$post_data = $input->getVar('images', array());
 		$keep = $input->getVar('keep', 1);
 		$errors = array();
-        JLog::add("delete" . utf8_decode(base64_decode($directory64)), JLog::WARNING, 'com_jgallery');
-        JLog::add("delete" . print_r($post_data, true), JLog::WARNING, 'com_jgallery');
+        Log::add("delete" . utf8_decode(base64_decode($directory64)), Log::WARNING, 'com_jgallery');
+        Log::add("delete" . print_r($post_data, true), Log::WARNING, 'com_jgallery');
 		$ret = JGalleryHelper::deleteimages(utf8_decode(base64_decode($directory64)), $post_data, $keep, $errors);
-        JLog::add("delete=>:" . print_r($ret, true), JLog::WARNING, 'com_jgallery');
+        Log::add("delete=>:" . print_r($ret, true), Log::WARNING, 'com_jgallery');
 		JGalleryHelper::json_answer($errors);
 	}
 

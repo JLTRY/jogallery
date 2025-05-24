@@ -1,7 +1,7 @@
 <?php
 /**
  * 
-* @copyright Copyright (C) 2012 Jean-Luc TRYOEN. All rights reserved.
+* @copyright Copyright (C) 2015-2025 Jean-Luc TRYOEN. All rights reserved.
 * @license GNU/GPL
 *
 * Version 1.0

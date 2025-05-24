@@ -16,11 +16,52 @@
             "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
         },
         {
+            "name": "photoswipe",
+            "type": "script",
+            "uri": "https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js",
+            "dependencies": ["jquery"],
+            "attributes": {"type": "module"}
+        },
+        {
+            "name": "photoswipe",
+            "type": "style",
+            "uri": "https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.min.css"
+        },
+        {
+            "name": "fancybox",
+            "type": "style",
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+        },
+        {
+            "name": "lazyload",
+            "type": "script",
+            "uri": "https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.js"
+        },
+        {
             "name": "com_jgallery.jimages",
             "type": "script",
             "uri": "com_jgallery/jimages.js",
             "dependencies": [
                 "jquery"]
+        },
+        {
+            "name": "com_jgallery.jimages",
+            "type": "style",
+            "uri": "com_jgallery/jimages.css"
+        },
+        {
+			"name": "com_jgallery.psw_images",
+            "type": "script",
+            "uri": "com_jgallery/psw_images.js",
+            "dependencies": ["photoswipe"],
+			"attributes": {	"type": "module"}
+        },
+		{
+		    "name": "com_jgallery.psw_images",
+            "type": "style",
+            "uri": "com_jgallery/psw_images.css",
+            "dependencies": [
+                "photoswipe"]
         },
         {
             "name": "com_jgallery.jselectdirs",
@@ -85,7 +126,6 @@
             "dependencies": [
                 "com_jgallery.jdirectories",
                 "com_jgallery.jimages",
-                "com_jgallery.jdirectories",
                 "com_jgallery.radiobox",
                 "com_jgallery.jgallery",
                 "com_jgallery.tabselectimages"

@@ -11,6 +11,7 @@
 use JLTRY\Component\JGallery\Administrator\Helper\JThumbsHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
@@ -32,7 +33,11 @@ $bar->appendButton('Custom',
 										"type" => "selectdirsmenu")),
 					"");
 $bar->appendButton('Custom', 
-					LayoutHelper::render('menuthumbs', array('id' => 1)),
+					LayoutHelper::render('menuthumbs',
+										array('id' => 1, 
+											'small_width' => JParametersHelper::get('thumb_small_width'),
+											'large_width' => JParametersHelper::get('thumb_large_width'),
+										)),
 					"");
 ?>
 

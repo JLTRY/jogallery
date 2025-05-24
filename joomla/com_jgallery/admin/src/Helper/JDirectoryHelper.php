@@ -138,9 +138,12 @@ class JDirectory
 	public function outputselectdirsmenu($id, &$content)
 	{
 		$sid = 'jgalleryselect' . $id;
-		$imagesid = 'jimages' . $id;
 		$urlroot = Uri::root(true);
-		$selectdirs = array(array($this->getbase64path(), JGalleryHelper::join_paths($this->basename)));
+		$selectdirs = array();
+		// no line for folder
+		if ($this->basename != null){
+			array_push($selectdirs,array($this->getbase64path(), JGalleryHelper::join_paths($this->basename)));
+		}
 		foreach ($this->children as $child) {
 			array_push($selectdirs, array($child->getbase64path(), JGalleryHelper::join_paths($child->dirname, $child->basename)));
 		}
@@ -153,7 +156,11 @@ class JDirectory
 		$sid = 'jgalleryselect' . $id;
 		$imagesid = 'jimages' . $id;
 		$urlroot = Uri::root(true);
-		$selectdirs = array(array($this->getbase64path(), JGalleryHelper::join_paths($this->basename)));
+		$selectdirs = array();
+		// no line for folder
+		if ($this->basename != null){
+			array_push($selectdirs,array($this->getbase64path(), JGalleryHelper::join_paths($this->basename)));
+		}
 		foreach ($this->children as $child) {
 			array_push($selectdirs, array($child->getbase64path(), JGalleryHelper::join_paths($child->dirname, $child->basename)));
 		}
@@ -175,13 +182,11 @@ class JDirectory
 	{
 		$sid = 'jgalleryselect' . $id;
 		$urlroot = Uri::root(true);
-		$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_LAYOUTS);
+		$content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
 		JGalleryHelper::loadLibrary(array("jimages"=> true, "jthumbs" => true, "fancybox" => true, "jgallery" => true));
 		JGalleryHelper::loadLibrary(array("inline" =>
 										array('(function($) {
 											$(document).ready(function() {
-												/*$("#toolbar").append($("#jgallery'. $id .'").detach());*/
-												$("#toolbar").css("height", "5em");
 												jthumbs_getimages($, "' . $sid .'", "' . $id . '", "' . $urlroot .'", false);
 												})})(jQuery);')));
 	}
@@ -196,7 +201,7 @@ class JDirectory
 		{
 			$urlroot .= "/administrator";
 		}
-		$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_LAYOUTS);
+		$content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
 		JGalleryHelper::loadLibrary(array("jimages"=> true, "jcomments" => true, "fancybox" => true, "jgallery" => true));
 		JGalleryHelper::loadLibrary(array("inline" => 
 											array('(function($) {
@@ -270,7 +275,7 @@ class JDirectory
 		$json = $this->getjsondirectories();
 		$icon = "/media/com_jgallery/images/icon-folder-medium.png";
 		$content .= LayoutHelper::render('directories', array('id' => $id), JPATH_LAYOUTS);
-		JGalleryHelper::loadLibrary(array("jdirectories" => true));
+		JGalleryHelper::loadLibrary(array("jdirectories" => true, "bootstrap.tooltip" => true));
 		JGalleryHelper::loadLibrary(array("inline" =>
 										array('(function($) {
 													$(document).ready(function() {

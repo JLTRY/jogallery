@@ -15,6 +15,7 @@ use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Log\Log;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -254,18 +255,18 @@ abstract class JThumbsHelper
 		
 	
 	public static function deletethumbs($rootdir, $directory, $image, &$errors) {
-        JLog::add("deletethumbs:" . $image, JLog::WARNING, 'com_jgallery');
+        Log::add("deletethumbs:" . $image, Log::WARNING, 'com_jgallery');
 		$dir = JGalleryHelper::join_paths(JPATH_ROOT, $rootdir,  $directory);
-        JLog::add("deletethumbs:2:" . $image, JLog::WARNING, 'com_jgallery');
+        Log::add("deletethumbs:2:" . $image, Log::WARNING, 'com_jgallery');
 		foreach (self::$_formats as $format) {
 			$filename = self::getthumb($dir, $format, $image);
-			JLog::add("deletethumbs:" . $filename, JLog::WARNING, 'com_jgallery');
+			Log::add("deletethumbs:" . $filename, Log::WARNING, 'com_jgallery');
 			if (file_exists($filename)){
 				array_push($errors, "success deleting " . $filename);
-                JLog::add("deletethumbs:delete:" . $filename, JLog::WARNING, 'com_jgallery');
+                Log::add("deletethumbs:delete:" . $filename, Log::WARNING, 'com_jgallery');
 				unlink($filename);
 			} else {
-                JLog::add("deletethumbs:dos not exist:" . $filename, JLog::WARNING, 'com_jgallery');
+                Log::add("deletethumbs:dos not exist:" . $filename, Log::WARNING, 'com_jgallery');
 				array_push($errors, "file does not exist " . $filename);
 			}
 		}

@@ -11,7 +11,7 @@ $selectdirs = $displayData['selectdirs'];
 	<?php foreach($selectdirs as $selectdir): ?>
 			<option value="<?php echo $selectdir[0]; ?>">
 				<?php echo $selectdir[1]; ?>
-			</option>	
+			</option>
 	<?php endforeach; ?>
 	</optgroup>
 </select>

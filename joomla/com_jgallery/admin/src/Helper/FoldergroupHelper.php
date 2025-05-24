@@ -176,7 +176,7 @@ abstract class FoldergroupHelper
 		if ($parent == 0) {
 			$content .= "<h2>". $name . "</h2>";
 		}
-		JGalleryHelper::loadLibrary(array("fancybox" => true, "jgallery" => true));
+		JGalleryHelper::loadLibrary(array("lazyload" => true, "fancybox" => true, "jgallery" => true));
 		$dir = utf8_decode(html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory)));
 		$jroot = new JFoldergroup($dir, $directory, $parent, $id, $tmpl);
 		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
@@ -193,7 +193,7 @@ abstract class FoldergroupHelper
 					array_push($listfilteredfiles, $file);
 				}
 			}
-			JGalleryHelper::outputasync($id, $directory, $listfilteredfiles, -1, $content);
+			JGalleryHelper::outputfiles($id, $directory, $listfilteredfiles, -1, $content);
 		}
 		return $content;
 	}

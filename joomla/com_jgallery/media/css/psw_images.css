@@ -1,0 +1,16 @@
+.pswp__button--playpause-button {
+	position: fixed;
+	top: 0;
+	right: 200px;
+	margin-left: 6px;
+}
+.pswp img {
+	max-width: none;
+	object-fit: contain;
+}
+.pswp__img--placeholder--blank{
+	display: none !important;
+}
+.parent {position: relative; top: 0; left: 0; display:inline;}
+.image1 { position: relative; top: -5px; left: -50px;}
+.image2 { position: relative; top: 2px; left: 2px; border: 1px solid #000000;}

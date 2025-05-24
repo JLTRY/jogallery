@@ -1,7 +1,10 @@
 <?php 
 // No direct access to this file
 defined('JPATH_BASE') or die;
-$id = $displayData['id']; ?>
+$id = $displayData['id']; 
+$small_width = $displayData['small_width']; 
+$large_width = $displayData['large_width']; 
+?>
 <div id="jmenuthumbs<?php echo $id;?>" class="form-group" style="height:auto;padding-left:15px;margin-left:15px;border: 1px solid; " >
 	<table >
 		<tr>
@@ -12,8 +15,8 @@ $id = $displayData['id']; ?>
 			<td><label><input type="checkbox" name="keep" value="keep">keep</label></td>
 		</tr>
 		<tr>
-			<td><label>small_width<input type="text" name="small_width" id="small_width<?php echo $id; ?>" value="256" size="5"></label></td>
-			<td><label>large_width<input type="text" name="small_width" id="large_width<?php echo $id; ?>" value="1024" size="5"></label></td>
+			<td><label>small_width<input type="text" name="small_width" id="small_width<?php echo $id; ?>" value="<?php echo $small_width ?>" size="5"></label></td>
+			<td><label>large_width<input type="text" name="large_width" id="large_width<?php echo $id; ?>" value="<?php echo $large_width ?>" size="5"></label></td>
 		</tr>
 	</table>
 </div>

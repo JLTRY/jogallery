@@ -31,14 +31,14 @@ abstract class JParametersHelper
 	  $value = ComponentHelper::getParams('com_jgallery')->get($parameter);
 	  if ($value === null) {
 		if (array_key_exists('thumb_small_width', self::$_default_parameters)){
-			Log::add("Error parameter thumb_small_width exists !!!", JLog::ERROR, 'jerror');
+			Log::add("Error parameter thumb_small_width exists !!!", Log::ERROR, 'jerror');
 		}else {	 
-			Log::add("Error parameter thumb_small_width does not exist !!!", JLog::WARNING, 'jerror');
+			Log::add("Error parameter thumb_small_width does not exist !!!", Log::WARNING, 'jerror');
 		} 
 		if (array_key_exists($parameter, self::$_default_parameters)) {
 			$value = self::$_default_parameters[$parameter];
 		} else {
-			Log::add("Error parameter $parameter does not exist !!!", JLog::ERROR, 'jerror');
+			Log::add("Error parameter $parameter does not exist !!!", Log::ERROR, 'jerror');
 			$value = False;
 		 }
 	  }

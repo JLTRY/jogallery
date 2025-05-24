@@ -21,6 +21,7 @@ use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Layout\LayoutHelper;
 
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -83,11 +84,25 @@ class JGalleryImage
 		}
 	}
 
+
+	public function getthumbbounds($mode, &$width, &$height)
+	{
+		$thumbimage = JThumbsHelper::getthumb(JGalleryHelper::join_paths(JPATH_SITE, $this->dirname), $mode, $this->basename);
+		$imageInfo = getimagesize($thumbimage);
+		$width = $imageInfo[0]; // Largeur en pixels
+		$height = $imageInfo[1]; // Hauteur en pixels
+	}
+
+
 	public static function toArray($object, $full = true) {
 		$ar = get_object_vars($object);
 		if ($full) {
 			$ar["urlfilename"] = self::geturlfilename($object->dirname, $object->urlfilename, $object->relative);
 			$ar["urlshortfilename"] = self::geturlfilename($object->dirname, $object->urlshortfilename, $object->relative);
+			$width = $height = "auto";
+			$object->getthumbbounds("large", $width, $height);
+			$ar["width"] = $width;
+			$ar["height"] = $height;
 		}
 		return $ar;
 	}
@@ -165,13 +180,19 @@ class JGalleryHelper
 		{
 			HTMLHelper::_('jquery.framework');
 		}
-		if (isset($libraries['bootstrap']))
+		if (isset($libraries['bootstrap.tooltip']))
 		{
 			HTMLHelper::_('bootstrap.tooltip');
 		}
 		if (isset($libraries['jimages']))
 		{
 			$wa->useScript('com_jgallery.jimages');
+			$wa->useStyle('com_jgallery.jimages');
+		}
+		if (isset($libraries['psw_images']))
+		{
+			$wa->useScript('com_jgallery.psw_images');
+			$wa->useStyle('com_jgallery.psw_images');
 		}
 		if (isset($libraries['jgallery']))
 		{
@@ -181,6 +202,10 @@ class JGalleryHelper
 		if (isset($libraries['jselectdirs']))
 		{
 			$wa->useScript('com_jgallery.jselectdirs');
+		}
+		if (isset($libraries['jdirectories']))
+		{
+			$wa->useScript('com_jgallery.jdirectories');
 		}
 		if (isset($libraries['jthumbs']))
 		{
@@ -210,13 +235,22 @@ class JGalleryHelper
 			HTMLHelper::_('jquery.framework');
 			$wa->addInlineScript('window.addEventListener("DOMContentLoaded", 
 									function() {
-										initfancybox(jQuery);});', 
+										initfancybox(jQuery);
+										});', 
 										['position' => 'after'],
 										[],
 										['fancybox', 'com_jgallery.jimages', "jquery"]);
 		}
+		if (isset($libraries['lazyload']))
+		{
+			$wa->useScript('lazyload');
+		}
+		if (isset($libraries['photoswipe']))
+		{
+			//$wa->useScript('photoswipe');
+			$wa->useStyle('photoswipe');
+		}
 	}
-
 
 	public static function getVar(...$params) {
 		if (version_compare(JVERSION, '4.0', 'ge')){
@@ -312,7 +346,7 @@ class JGalleryHelper
 				$i = max(0, $i - $nbfound);
 			}
 		}
-		//JLog::add('join_paths=>:'. $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath)), JLog::WARNING, 'jgallery');
+		//Log::add('join_paths=>:'. $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath)), Log::WARNING, 'jgallery');
 		return $prefix . implode(DIRECTORY_SEPARATOR, array_reverse($arjoinpath));
 	}
 	
@@ -440,24 +474,14 @@ class JGalleryHelper
 				}
 			}
 		}
-		
-		usort($listfilteredfiles, array($cur_class,'sortFile'));
 		return $listfilteredfiles;
 	}
 
-	public static function outputsync($directory, $listfiles, &$content)
-	{
-		foreach ($listfiles  as $file) {
-			$urlfilename = $file['urlfilename'];
-			$urlshortfilename = $file['urlshortfilename'];
-			$content .= "<a data-fancybox=\"gallery\"  href=\"$urlfilename\"><img src=\"$urlshortfilename\"/></a>";
-		}
-	}
 
-	public static function outputasync($id, $directory, $listfiles, $page, &$content)
+	public static function outputfancybox($id, $directory, $listfiles, $page, &$content)
 	{
 		$sid = "jgallery" . $id;
-		$content .= LayoutHelper::render('radiobox', array('sid' => $sid));
+		$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_ADMINISTRATOR . '/components/com_jgallery/layouts');
 		JGalleryHelper::loadLibrary(array("jimages"=> true, "fancybox" => true));
 		JGalleryHelper::loadLibrary(array("inline" => array('(function($) {
 														$(document).ready(function() {
@@ -468,13 +492,30 @@ class JGalleryHelper
 													['com_jgallery.jimages'])));
 	}
 
+	public static function outputphotoswipe($id, $directory, $listfiles, $page, &$content)
+	{
+		$sid = "jgallery" . $id;
+		$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_ADMINISTRATOR . '/components/com_jgallery/layouts');
+		JGalleryHelper::loadLibrary(array("psw_images" => true, "photoswipe" => true));
+		JGalleryHelper::loadLibrary(array("inline" => array('import {init_psw,psw_images_getimages} from "' . Uri::root() . '/media/com_jgallery/js/psw_images.js";
+														(function($) {
+																$(document).ready(function() {
+																psw_images_getimages($, "' . $sid .'", ' . json_encode($listfiles) .');
+																init_psw($, "' . $sid .'");
+															})})(jQuery);',
+													['position' => 'after'],
+													['type' => 'module'],
+													["photoswipe"],
+													)));
+	}
+
 	public static function outputimg($rootdir, $directory, $file, $name, $icon,$width, &$content)
 	{
 		$urlfilename = $file['urlfilename'];
 		if ($icon == 'small') {
 			$urlshortfilename = $file['urlshortfilename'];
 		} else {
-			$urlshortfilename = JThumbsHelper::getthumb( JGalleryHelper::join_paths($rootdir, $directory), $icon, $file->basename);
+			$urlshortfilename = JThumbsHelper::getthumburl( JGalleryHelper::join_paths($rootdir, $directory), $icon, $file->basename);
 		}
 		if ($width == "?") {
 			$width = JParametersHelper::get('thumb_' . $icon .'_width');
@@ -491,6 +532,18 @@ class JGalleryHelper
 		$jroot = new JRootDirectory($dir, $directory, $parentlevel, $galid);
 		if (($jroot->findDirs($dir, $directory, JDirectory::$_excludes, true) > 0) || ($jroot->parentlevel > 0)) {
 			$jroot->outputdirs($type, $id, $content, $type);
+		}
+	}
+	
+	public static function outputfiles($id, $directory, $listfiles, $page, &$content, $type='fancybox') {
+		$content .= "<!--" . $type . "-->";
+		switch($type) {
+			case 'fancybox':
+				self::outputfancybox($id, $directory, $listfiles, $page, $content);
+				break;
+			case 'photoswipe':
+				self::outputphotoswipe($id, $directory, $listfiles, $page, $content);
+				break;
 		}
 	}
 
@@ -587,8 +640,13 @@ class JGalleryHelper
 		} else {
 			$media = "IMAGES";
 		}
+		if ( array_key_exists('lightbox', $_params))
+		{
+			$lightbox = $_params['lightbox'];
+		} else {
+			$lightbox = "fancybox";
+		}
 		$document = Factory::getDocument();
-		self::loadLibrary(array("fancybox" => true, "bootstrap" => true));
 		if ( array_key_exists('img', $_params)) {
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 			$found = False;
@@ -607,7 +665,6 @@ class JGalleryHelper
 			$sdir = html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory));
 			$id = rand(1,1024);
 			self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, "directories");
-			$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_ADMINISTRATOR . '/components/com_jgallery/layouts');
 			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
 			if ($parent != 0 && count($listfiles)) {
 				$content .= "<hr/>";
@@ -619,7 +676,7 @@ class JGalleryHelper
 					array_push($listfilteredfiles, $file);
 				}
 			}
-			self::outputasync($id, $directory, $listfilteredfiles, $page, $content);
+			self::outputfiles($id, $directory, $listfilteredfiles, $page, $content, $lightbox);
 		}
 		return $content;
 	}
@@ -658,21 +715,21 @@ class JGalleryHelper
 	static function deleteimage($rootdirectory, $directory, $Image, $keep, &$errors)
 	{
 		$filename = self::join_paths(JPATH_ROOT, $rootdirectory, $directory, $Image);
-		JLog::add("deleteimage:" . $filename, JLog::WARNING, 'com_jgallery');
+		Log::add("deleteimage:" . $filename, Log::WARNING, 'com_jgallery');
 		if (file_exists($filename)){
 			if ($keep) {
 				array_push($errors, "keep " . $filename);
-				JLog::add("deleteimage:keep:" . $filename, JLog::WARNING, 'com_jgallery');
+				Log::add("deleteimage:keep:" . $filename, Log::WARNING, 'com_jgallery');
 			}
 			else {
 				unlink($filename);
-				JLog::add("deleteimage:delete:" . $filename, JLog::WARNING, 'com_jgallery');
+				Log::add("deleteimage:delete:" . $filename, Log::WARNING, 'com_jgallery');
 				array_push($errors, "success deleting " . $filename);
 			}
 		}
 		else {
 			array_push($errors, "file does not exist " . $filename);
-			JLog::add("deleteimage:dose not exist:" . $filename, JLog::WARNING, 'com_jgallery');
+			Log::add("deleteimage:dose not exist:" . $filename, Log::WARNING, 'com_jgallery');
 		}
 	}
 
@@ -683,11 +740,11 @@ class JGalleryHelper
 		$modif = false;
 		foreach ($Images as $Image)
 		{
-			JLog::add("delete" . $rootdir . "/" . $directory . "/" . $Image, JLog::WARNING, 'com_jgallery'); 
+			Log::add("delete" . $rootdir . "/" . $directory . "/" . $Image, Log::WARNING, 'com_jgallery'); 
 			self::deleteimage($rootdir, $directory, $Image, $keep, $errors);
-			JLog::add("delete end:" . $rootdir . "/" . $directory . "/" . $Image, JLog::WARNING, 'com_jgallery'); 
+			Log::add("delete end:" . $rootdir . "/" . $directory . "/" . $Image, Log::WARNING, 'com_jgallery'); 
 			JThumbsHelper::deletethumbs($rootdir, $directory, $Image, $errors);
-			JLog::add("delete end thumbs:" . $rootdir . "/" . $directory . "/" . $Image, JLog::WARNING, 'com_jgallery'); 
+			Log::add("delete end thumbs:" . $rootdir . "/" . $directory . "/" . $Image, Log::WARNING, 'com_jgallery'); 
 			$i = 0;
 			$found = false;
 			foreach($jgalleryfiles as $file)

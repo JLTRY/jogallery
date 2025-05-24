@@ -1,21 +1,26 @@
 <?php
 /**
  * 
-* @copyright Copyright (C) 2012 Jean-Luc TRYOEN. All rights reserved.
+* @copyright Copyright (C) 2015-2025 Jean-Luc TRYOEN. All rights reserved.
 * @license GNU/GPL
 *
 * Version 1.0
 *
 */
 
+use JLTRY\Component\JGallery\Administrator\Model\JGalleryModel;
+use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JGalleryCategoryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\FoldergroupHelper;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Factory;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
+
 // Check to ensure this file is included in Joomla!
 defined( '_JEXEC' ) or die( 'Restricted access' );
-use Joomla\CMS\Plugin\CMSPlugin as JPlugin;
-use Joomla\CMS\Factory as Factory;
-
-JLoader::import('components.com_jgallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
-JLoader::import('components.com_jgallery.helpers.jgallery', JPATH_ADMINISTRATOR);
-JLoader::import('components.com_jgallery.helpers.jparameters', JPATH_ADMINISTRATOR);
 define('PF_REGEX_JDIRECTORYI_PATTERN', "#{jdirectory (.*?)}#s");
 
 

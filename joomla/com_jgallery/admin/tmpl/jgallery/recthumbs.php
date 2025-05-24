@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
+use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Layout\LayoutHelper;
@@ -24,7 +25,11 @@ echo JDirectoryHelper::display(1, array("dir" => JGalleryHelper::join_paths($thi
 									"type" => "recthumbs"));
 $bar = Toolbar::getInstance('toolbar');
 $bar->appendButton('Custom', 
-					LayoutHelper::render('menurecthumbs', array('id' => 1)),
+					LayoutHelper::render('menurecthumbs', 
+										array('id' => 1, 
+											'small_width' => JParametersHelper::get('thumb_small_width'),
+											'large_width' => JParametersHelper::get('thumb_large_width'),
+										)),
 					"");
 ?>
 
