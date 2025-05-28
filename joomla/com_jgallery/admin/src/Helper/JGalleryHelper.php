@@ -378,7 +378,7 @@ class JGalleryHelper
 	}
 
 
-	public static function getFiles($rootdir, $directory,  $icon=true, $startdate=-1, $enddate=-1)
+	public static function getFiles($rootdir, $directory, $media = "ALL", $startdate=-1, $enddate=-1)
 	{
 		$jgallerydir = JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory);
 		$jgalleryfile = JGalleryHelper::join_paths($jgallerydir, "gallery.csv");
@@ -470,7 +470,10 @@ class JGalleryHelper
 			$moddate = $file->moddate;
 			if (($startdate == -1) || (($moddate - $startdate) >= 0)){
 				if (($enddate == -1 ) ||  (($moddate != -1) && ($enddate - $moddate) >= 0)) {
-					array_push($listfilteredfiles, JGalleryImage::toArray($file));
+					//filter files
+					if (($media == "ALL") || ($file->video && ($media == "VIDEOS")) || (!$file->video && ($media == "IMAGES"))) {
+						array_push($listfilteredfiles, JGalleryImage::toArray($file, true));
+					}
 				}
 			}
 		}
@@ -526,18 +529,18 @@ class JGalleryHelper
 
 
 // $dir is the full path sdir is the directory as parameter
-	public static function outputdirs($galid, $id, $dir, $directory, $parentlevel, &$content, $type='radio') {
+	public static function outputdirs($galid, $id, $dir, $directory, $parentlevel, &$content, $type='radio', $media = "ALL", $lightbox = "fancybox") {
 		JDirectoryHelper::loadLibrary();
 		$document = Factory::getDocument();
 		$jroot = new JRootDirectory($dir, $directory, $parentlevel, $galid);
 		if (($jroot->findDirs($dir, $directory, JDirectory::$_excludes, true) > 0) || ($jroot->parentlevel > 0)) {
-			$jroot->outputdirs($type, $id, $content, $type);
+			$jroot->outputdirs($type, $id, $content, $type, $media, $lightbox);
 		}
 	}
 	
-	public static function outputfiles($id, $directory, $listfiles, $page, &$content, $type='fancybox') {
+	public static function outputfiles($id, $directory, $listfiles, $page, &$content, $lightbox='fancybox') {
 		$content .= "<!--" . $type . "-->";
-		switch($type) {
+		switch($lightbox) {
 			case 'fancybox':
 				self::outputfancybox($id, $directory, $listfiles, $page, $content);
 				break;
@@ -646,9 +649,15 @@ class JGalleryHelper
 		} else {
 			$lightbox = "fancybox";
 		}
+		if ( array_key_exists('type', $_params))
+		{
+			$type = $_params['type'];
+		} else {
+			$type = 'directories';
+		}
 		$document = Factory::getDocument();
 		if ( array_key_exists('img', $_params)) {
-			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
+			$listfiles = self::getFiles($rootdir, $directory, "ALL", $startdate, $enddate);
 			$found = False;
 			foreach ($listfiles as $file) {
 				if ($file['basename'] == $_params['img']) {
@@ -664,26 +673,19 @@ class JGalleryHelper
 			//sub directories
 			$sdir = html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory));
 			$id = rand(1,1024);
-			self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, "directories");
-			$listfiles = self::getFiles($rootdir, $directory, false, $startdate, $enddate);
+			self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $media, $lightbox);
+			$listfiles = self::getFiles($rootdir, $directory, $media, $startdate, $enddate);
 			if ($parent != 0 && count($listfiles)) {
 				$content .= "<hr/>";
 			}
-			//filter files
-			$listfilteredfiles = array();
-			foreach($listfiles as $file) {
-				if (($media == "ALL") || ($file["video"] && ($media == "VIDEOS")) || (!$file["video"] && ($media == "IMAGES"))) {
-					array_push($listfilteredfiles, $file);
-				}
-			}
-			self::outputfiles($id, $directory, $listfilteredfiles, $page, $content, $lightbox);
+			self::outputfiles($id, $directory, $listfiles, $page, $content, $lightbox);
 		}
 		return $content;
 	}
 
 	static function savecomments($directory, $jcomments) {
 		$rootdir = JParametersHelper::getrootdir();
-		$jgalleryfiles = JGalleryHelper::getFiles($rootdir , $directory, true);
+		$jgalleryfiles = JGalleryHelper::getFiles($rootdir , $directory);
 		$modif = false;
 		foreach($jcomments as $array_key => $comment) {
 			$i = 0;
@@ -736,7 +738,7 @@ class JGalleryHelper
 	static function deleteimages($directory, $Images, $keep, &$errors)
 	{
 		$rootdir = JParametersHelper::getrootdir();
-		$jgalleryfiles = JGalleryHelper::getFiles($rootdir , $directory, true);
+		$jgalleryfiles = JGalleryHelper::getFiles($rootdir , $directory);
 		$modif = false;
 		foreach ($Images as $Image)
 		{

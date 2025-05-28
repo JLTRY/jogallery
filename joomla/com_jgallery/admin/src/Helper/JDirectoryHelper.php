@@ -151,10 +151,10 @@ class JDirectory
 	}
 
 
-	public function outputselectdirs($id, &$content)
+	public function outputselectdirs($id, &$content, $media, $lightbox )
 	{
 		$sid = 'jgalleryselect' . $id;
-		$imagesid = 'jimages' . $id;
+		$imagesid = 'jgallery' . $id;
 		$urlroot = Uri::root(true);
 		$selectdirs = array();
 		// no line for folder
@@ -166,14 +166,20 @@ class JDirectory
 		}
 		$content .= LayoutHelper::render('selectdirs', array('sid' => $sid, 'selectdirs' => $selectdirs), JPATH_LAYOUTS);
 		$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_LAYOUTS);
-		JGalleryHelper::loadLibrary(array("jimages"=> true, "jselectdirs"=> true, "fancybox", true));
+		JGalleryHelper::loadLibrary(array("jselectdirs"=> true));
+		if ($lightbox == "fancybox") {
+			JGalleryHelper::loadLibrary(array("jimages"=> true, "fancybox"=> true));
+		} else {
+			JGalleryHelper::loadLibrary(array("psw_images"=> true, "photoswipe" => true));
+		}
 		JGalleryHelper::loadLibrary(array("inline" =>
-									array('(function($) {
+									array('import {jselectdirs_getimages} from "' . Uri::root() . '/media/com_jgallery/js/jselectdirs.js";
+											(function($) {
 												$(document).ready(function() {
-													jselectdirs_getimages($, "' . $sid .'", "' . $imagesid . '", "' . Uri::root(false) .'");
+													jselectdirs_getimages($, "' . $sid .'", "' . $imagesid . '", "' . Uri::root(false) .'","' . $media . '","' . $lightbox. '");
 													})})(jQuery);',
 											['position' => 'after'],
-											[],
+											['type' => 'module'],
 											['com_jgallery.jselectdirs'])));
 	}
 
@@ -256,13 +262,12 @@ class JDirectory
 		$json = "";
 		$this->outputjson($json);
 		$sid = "findir" . $id;
-		$content .= LayoutHelper::render('radiobox', array('sid' => $sid), JPATH_LAYOUTS);
-		$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_LAYOUTS);
+		$content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
 		JGalleryHelper::loadLibrary(array("jrecthumbs" => true, "multicheckbox" => true));
 		JGalleryHelper::loadLibrary(array("inline" => 
 										array(
 											'$(document).ready(function() {
-												jrecthumbs_getdirectories($, "#' . $sid .'" , ' . $id .' , "' . Uri::root() .'",' . $json .', false );
+												jrecthumbs_getdirectories($, "#' . $sid .'" , ' . $id .' , "' . Uri::root() .'",' . $json .');
 											});',
 											['position' => 'after'],
 											[],
@@ -287,7 +292,7 @@ class JDirectory
 												['com_jgallery.jdirectories'])));
 	}
 
-	function outputdirs($type, $id, &$content){
+	function outputdirs($type, $id, &$content, $media = "ALL", $lightbox="fancybox"){
 		$content .= "<!--" . $type . "-->";
 		switch($type) {
 			case 'selectthumbs':
@@ -297,7 +302,7 @@ class JDirectory
 				$this->outputselectcomments($id, $content);
 				break;
 			case 'selectdirs':
-				$this->outputselectdirs($id, $content);
+				$this->outputselectdirs($id, $content, $media, $lightbox);
 				break;
 			case 'selectdirsmenu':
 				$this->outputselectdirsmenu($id, $content);

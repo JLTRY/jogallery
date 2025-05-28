@@ -105,6 +105,8 @@ class HtmlView extends BaseHtmlView
 		if ($this->getparam('imageall', 'imageall')){
 			$this->imageall = true;
 		}
+		$this->media = "ALL";
+		$this->getparam('media', 'media');
 		$this->rootdir = JParametersHelper::getrootdir();
 		$this->script = $this->get('Script');
 		$form  = $this->form = $this->get('Form');

@@ -184,15 +184,8 @@ abstract class FoldergroupHelper
 		if ($directory != null && $parent != 0 ) {
 			$content .= "<hr/>";
 			$id = rand(1,1024);
-			$listfiles = JGalleryHelper::getFiles($rootdir, $directory, false, -1, -1);
+			$listfilteredfiles = JGalleryHelper::getFiles($rootdir, $directory, $media, -1, -1);
 			$content .= LayoutHelper::render('jgallery', array('id' => $id), JPATH_ADMINISTRATOR . '/components/com_jgallery/layouts');
-			//filter files
-			$listfilteredfiles = array();
-			foreach($listfiles as $file) {
-				if (($media == "ALL") || ($file["video"] && ($media == "VIDEOS")) || (!$file["video"] && ($media == "IMAGES"))) {
-					array_push($listfilteredfiles, $file);
-				}
-			}
 			JGalleryHelper::outputfiles($id, $directory, $listfilteredfiles, -1, $content);
 		}
 		return $content;

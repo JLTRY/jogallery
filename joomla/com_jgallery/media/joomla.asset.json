@@ -50,14 +50,14 @@
             "uri": "com_jgallery/jimages.css"
         },
         {
-			"name": "com_jgallery.psw_images",
+            "name": "com_jgallery.psw_images",
             "type": "script",
             "uri": "com_jgallery/psw_images.js",
             "dependencies": ["photoswipe"],
-			"attributes": {	"type": "module"}
+            "attributes": {    "type": "module"}
         },
-		{
-		    "name": "com_jgallery.psw_images",
+        {
+            "name": "com_jgallery.psw_images",
             "type": "style",
             "uri": "com_jgallery/psw_images.css",
             "dependencies": [
@@ -68,7 +68,8 @@
             "type": "script",
             "uri": "com_jgallery/jselectdirs.js",
             "dependencies": [
-                "jquery"]
+                "jquery"],
+            "attributes": {    "type": "module"}
         },
         {
             "name": "com_jgallery.tabselectimages",

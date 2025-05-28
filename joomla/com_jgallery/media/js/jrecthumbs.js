@@ -12,7 +12,7 @@ function decode_utf8(s) {
 
 
 
-function recthumbretriever($, sid, id, urlroot, json, menu) {
+function recthumbretriever($, sid, id, urlroot, json) {
     this._sid = sid;
 	this._id = id;
     this._json = json;
@@ -111,18 +111,8 @@ function recthumbretriever($, sid, id, urlroot, json, menu) {
 	};
 
 	this.show = function($) {
-		var html = '<table><tr><td><button type="button" id="thumbs' + id + '" class="btn btn-primary">Thumbs</button></td>'
-        	+ '<td><label><input type="checkbox" name="checkall" value="checkall">checkall</label></td>'
-			+ '<td><label><input type="checkbox" name="force" value="force">force</label></td>'
-			+ '</tr>'
-            + '<tr><td><label>small_width<input type="text" name="small_width" id="small_width' + id +'" value="256" size="5"></label></td>'
-            + '<td><label>large_width<input type="text" name="small_width" id="large_width' + id +'" value="1024" size="5"></label></td>'
-            +'</tr></table>';
 		var onchange = this.onchange.bind(this);
-		this._tabselectdirectories = initmulticheckboxjson($, '#jimages' + this._id , this._json,  onchange, [ this._sidg]);
-		if (menu) {
-			$("#jgallery"+this._id).html(html);
-		}
+		this._tabselectdirectories = initmulticheckboxjson($, '#jimages' + this._id , this._json,  onchange, []);
 		$('#thumbs'+this._id).data('recthumbretriever', this);
 		$('#thumbs'+this._id).click($.proxy(function() {
 			var dataretriever = $('#thumbs'+this._id).data('recthumbretriever');
@@ -156,9 +146,9 @@ function recthumbretriever($, sid, id, urlroot, json, menu) {
 
 
 
-function jrecthumbs_getdirectories($, sid, id, urlroot, json, menu)
+function jrecthumbs_getdirectories($, sid, id, urlroot, json)
 {
-	var thmb = new recthumbretriever($, sid, id, urlroot, json, menu);
+	var thmb = new recthumbretriever($, sid, id, urlroot, json);
 	thmb.show($);
 }
 

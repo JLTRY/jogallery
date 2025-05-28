@@ -7,9 +7,5 @@
  */
 defined('_JEXEC') or die();
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
-use Joomla\CMS\HTML\HTMLHelper;
-
-
-HTMLHelper::_('jquery.framework');
-$data = JGalleryHelper::getFiles($this->rootdir , $this->directory, true);
+$data = JGalleryHelper::getFiles($this->rootdir , $this->directory, $this->media);
 JGalleryHelper::json_answer($data);

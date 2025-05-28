@@ -8,5 +8,5 @@
 
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 defined('_JEXEC') or die();
-$data = JGalleryHelper::getFiles($this->rootdir , $this->directory, true);
+$data = JGalleryHelper::getFiles($this->rootdir , $this->directory, $this->media);
 JGalleryHelper::json_answer($data);

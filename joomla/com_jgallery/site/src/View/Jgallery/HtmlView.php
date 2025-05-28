@@ -59,6 +59,8 @@ class HtmlView extends BaseHtmlView
 		$catid = -1;
 		$this->id = -1;
 		$this->getparam('id', 'id');
+		$this->media = "ALL";
+		$this->getparam('media', 'media');
 		if ($this->item == null) {
 			if ($this->id !== -1) {
 				$model = new JGalleryModel;
