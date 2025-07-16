@@ -410,6 +410,9 @@ class JGalleryHelper
 					$moddate = strtotime($exif['DateTimeOriginal'] . " UCT");
 				} else {
 					self::guessDate(basename($filename), $moddate);
+					if ($moddate == -1) {
+						$moddate = filectime($filename);
+					}
 				}
 				$urlfilename = JThumbsHelper::getthumbformat("large", basename($filename));
 				$urlshortfilename = JThumbsHelper::getthumbformat("small", basename($filename));
@@ -633,9 +636,9 @@ class JGalleryHelper
 		}
 		if ( array_key_exists('id', $_params))
 		{
-			$galid = $_params['id'];
+			$id = $_params['id'];
 		} else {
-			$galid = -1;
+			$id = rand(1,1024);
 		}
 		if ( array_key_exists('media', $_params))
 		{
@@ -672,7 +675,6 @@ class JGalleryHelper
 		}else {
 			//sub directories
 			$sdir = html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory));
-			$id = rand(1,1024);
 			self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $media, $lightbox);
 			$listfiles = self::getFiles($rootdir, $directory, $media, $startdate, $enddate);
 			if ($parent != 0 && count($listfiles)) {

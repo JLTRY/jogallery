@@ -31,7 +31,7 @@ function jselectdirs_ajax($, id, urlroot, value, media, lightbox) {
 }
 
 
-function jselectdirs_getimages($, sid, id, urlroot, value, media, lightbox)
+function jselectdirs_getimages($, sid, id, urlroot, media, lightbox)
 {
 	$("#"+sid).change(function() {
 		jselectdirs_ajax($, id, urlroot, this.value, media, lightbox);
