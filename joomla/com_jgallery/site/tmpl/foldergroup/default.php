@@ -20,6 +20,7 @@ echo FoldergroupHelper::display(array("folders" => $this->folders,
                                    "id" => $this->id,
                                    "name" => $this->name,
                                    "tmpl" => $this->tmpl,
-								   "type" => $this->type));
+								   "type" => $this->type,
+                                   "media" => $this->media));
 
 

@@ -74,6 +74,8 @@ class HtmlView extends BaseHtmlView
 			$modelGallery->setState("folder.id", $this->id);
 			$this->item = $modelGallery->getItem($this->id);
 		}
+		$this->media = "ALL";
+		$this->getparam('media', 'media');
 		$this->form = $this->get('Form');
 
 		// What Access Permissions does this user have? What can (s)he do?

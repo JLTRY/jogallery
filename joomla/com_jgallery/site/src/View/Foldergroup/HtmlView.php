@@ -71,6 +71,8 @@ class HtmlView extends BaseHtmlView
 				$this->directory = utf8_decode(base64_decode($this->directory64));
 			}
 		}
+		$this->media = "ALL";
+		$this->getparam('media', 'media');
 		$this->type = "directories";
 		$this->getparam('type', 'type');
 		if ($this->item != null){

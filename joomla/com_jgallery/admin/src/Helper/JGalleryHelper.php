@@ -357,17 +357,17 @@ class JGalleryHelper
 
 	public static function guessDate($filename, &$date)
 	{
-		if(preg_match('/IMG[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re) ||
-		   preg_match('/PXL[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re) ||
-		   preg_match('/VID[-_](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2}).*/', $filename, $re))
+		if(preg_match('/IMG[-_](\d{4})(\d{2})(\d{2})[-_](\d{2})(\d{2})(\d{2}).*/', $filename, $re) ||
+			preg_match('/PXL[-_](\d{4})(\d{2})(\d{2})[-_](\d{2})(\d{2})(\d{2}).*/', $filename, $re) ||
+			preg_match('/VID[-_](\d{4})(\d{2})(\d{2})[-_](\d{2})(\d{2})(\d{2}).*/', $filename, $re))
 		{
 			$date = strtotime($re[1] . "-" . $re[2] . "-" . $re[3] . " " . $re[4] . ":" . $re[5] . ":" . $re[6] . " UCT");
 		} elseif (preg_match('/IMG[-_](\d{4})(\d{2})(\d{2}).*/', $filename, $re) ||
-		   preg_match('/PXL[-_](\d{4})(\d{2})(\d{2}).*/', $filename, $re) ||
-		   preg_match('/VID[-_](\d{4})(\d{2})(\d{2}).*/', $filename, $re)) {
-			$date = strtotime($re[1] . "-" . $re[2] . "-" . $re[3]  . " UCT");
+			preg_match('/PXL[-_](\d{4})(\d{2})(\d{2}).*/', $filename, $re) ||
+			preg_match('/VID[-_](\d{4})(\d{2})(\d{2}).*/', $filename, $re)) {
+				$date = strtotime($re[1] . "-" . $re[2] . "-" . $re[3]  . " UCT");
 		} else {
-			$date = -1;
+				$date = -1;
 		}
 	}
 
