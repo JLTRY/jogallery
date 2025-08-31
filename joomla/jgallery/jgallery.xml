@@ -2,12 +2,12 @@
 <extension version="1.0" type="plugin" group="content" method="upgrade">
 	<name>Content - JGallery</name>
 	<author>Jean-Luc TRYOEN</author>
-	<creationDate>August 10, 2025</creationDate>
+	<creationDate>August 31, 2025</creationDate>
 	<copyright>Copyright (C) 2021 Jean-Luc TRYOEN. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<authorUrl>www.jltryoen.fr</authorUrl>
-	<version>2.0.3</version>
+	<version>2.0.4</version>
 	<description>JGallery plugin, use it with {jgallery directory=dir}</description>
 	<files>
 		<filename plugin="jgallery">jgallery.php</filename>

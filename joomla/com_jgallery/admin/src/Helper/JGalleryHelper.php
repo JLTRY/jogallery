@@ -74,7 +74,7 @@ class JGalleryImage
 
 	public static function geturlfilename($dirname, $url, $relative)
 	{
-		if (($relative == false) || (substr($url, 0, 1) == "/"))
+		if (($relative == false) || (strstr($url, $dirname) !== false))
 		{
 			return $url;
 		}
@@ -480,6 +480,7 @@ class JGalleryHelper
 				}
 			}
 		}
+
 		return $listfilteredfiles;
 	}
 
