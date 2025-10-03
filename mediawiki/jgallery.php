@@ -3,13 +3,7 @@
 
 class JGallery {
 	public static function onBeforePageDisplay( $article ) {
-		$script = '<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>';
-		$article->addHeadItem("jgallery script", $script);
-		$style = '<link href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" rel="stylesheet">';
-		$article->addHeadItem("jgallery style", $style);
-		$script = '<script type="text/javascript" src="http://www.jltryoen.fr/joomla_5.0/administrator/components/com_jgallery/helpers/jimages.js"></script>';
-		$article->addHeadItem("jgallery script", $script);
-		$article->addModules("ext.jgallery.jgallery");
+		
 	}
 
 	public static function extractOptions( array $options ) {
@@ -29,7 +23,7 @@ class JGallery {
 		return $results;
 	}
 
-	public static function Setup(Parser &$parser) {
+	public static function ParserFirstCallInit(Parser &$parser) {
 		$parser->setHook( 'jgallery', 'JGallery::Render' );
 		return true;
 	}
@@ -47,9 +41,18 @@ class JGallery {
 	}
 
 
-	public static function RenderDirectory($options) {
+	public static function RenderDirectory($article, $options) {
 		$dir = $options['dir'];
 		$output = '<div id="jgallery1" class="form-group" style="height:auto;margin-left:10px" ></div>';
+		$article->addModules(["ext.jgallery.jgallery", "jquery"]);
+		$script = '<script type="text/javascript" src="http://www.jltryoen.fr/joomla_5.0/media/com_jgallery/js/jimages.js"></script>';
+		$article->addHeadItem($script);
+		$script = '<script type="text/javascript" src="vendor/components/jquery/jquery.min.js"></script>';
+		$article->addHeadItem($script);
+		$script = '<script type="text/javascript" src="extensions/JGallery/resources/jgallery.js"></script>';
+		$article->addHeadItem($script);
+		$script = sprintf('<script type="text/javascript" defer>document.addEventListener("DOMContentLoaded", function() {fillgallery(jQuery,"%s");});</script>', $dir);
+		$article->addHeadItem($script);
 		return $output;
 	}
 
@@ -78,10 +81,15 @@ class JGallery {
 		if (!array_key_exists('dir', $options)){
 			return "error no directory dir=xxx";
 		}
+		$output = $parser->getOutput();
+		$script = '<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>';
+		$output->addHeadItem($script);
+		$style = '<link href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" rel="stylesheet">';
+		$output->addHeadItem($style);
 		if (array_key_exists('img', $options)){
 			$output = self::RenderImages($options);
 		} else {
-			$output = self::RenderDirectory($options);
+			$output = self::RenderDirectory($output, $options);
 		}
 		return $output;
 	}

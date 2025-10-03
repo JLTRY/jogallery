@@ -1,5 +1,6 @@
-function fillgallery($, value, params)
+function fillgallery1($, value, params)
 {
+	initfancybox($);
 	id = params[0];
 	rootdir = params[1];
 	url =  rootdir + "index.php?option=com_jgallery&view=jgallery&layout=json&tmpl=component&directory64=" + value;
@@ -21,9 +22,7 @@ function fillgallery($, value, params)
 	});
 }
 
-$(document).ready(function() {
-	loadscript("https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js", function(){ 
-	initfancybox(jQuery)});
-	fillgallery(jQuery, "VHJpYXRobG9uL0pPLzIwMTAvSXJvbm1hbl9IYXdhaWk=", ["jgallery1", "http://www.jltryoen.fr/"]
-	);
-});
+
+function fillgallery(jQuery, directory){
+    fillgallery1(jQuery, btoa(directory), ["jgallery1", "http://www.jltryoen.fr/"]);
+}

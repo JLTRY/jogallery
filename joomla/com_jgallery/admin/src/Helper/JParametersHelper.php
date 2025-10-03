@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_jgallery
  *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2025 JL TRYOEN. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 

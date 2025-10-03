@@ -22,8 +22,7 @@
 		"ext.jgallery.jgallery": {
 			"styles": ["fancybox.css"],
 			"scripts": ["jgallery.js"],
-			"dependencies": ["jquery"
-			]
+			"dependencies": ["jquery"]
 		}
 	},
 	"ExtensionMessagesFiles": {
@@ -35,7 +34,7 @@
 	},
 
 	"Hooks": {
-		"ParserFirstCallInit": ["JGallery::Setup"],
+		"ParserFirstCallInit": ["JGallery::ParserFirstCallInit"],
 		"BeforePageDisplay": "JGallery::onBeforePageDisplay"
 	},
 	"manifest_version": 1
