@@ -161,7 +161,7 @@ class JGalleryImage
  */
 class JGalleryHelper
 {
-	public static function loadLibrary ($libraries = array('jquery' => true))
+	public static function loadLibrary($libraries = array('jquery' => true))
 	{
 		$document = Factory::getDocument();
 		/** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
@@ -663,15 +663,15 @@ class JGalleryHelper
 		if ( array_key_exists('img', $_params)) {
 			$listfiles = self::getFiles($rootdir, $directory, "ALL", $startdate, $enddate);
 			$found = False;
+            $listimages = explode(",", $_params['img']);
 			foreach ($listfiles as $file) {
-				if ($file['basename'] == $_params['img']) {
+				if (in_array($file['basename'], $listimages)) {
 					self::outputimg($rootdir, $directory, $file, $name, $icon, $width, $content);
 					$found = true;
-					break;
 				}
 			}
 			if (!$found) {
-				$content .= "image not found :" . $_params['img'] . " in " . $directory;
+				$content .= "image not found :" . print_r($listimages, 1) . " in " . $directory;
 			}
 		}else {
 			//sub directories

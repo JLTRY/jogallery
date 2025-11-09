@@ -63,6 +63,18 @@
             "dependencies": [
                 "photoswipe"]
         },
+		{
+         "name": "chosen",
+            "type": "script",
+            "uri": "com_jcoaching/chosen/chosen.jquery.min.js",
+            "version": "1.1.3"
+        },
+        {
+        "name": "chosen",
+            "type": "style",
+            "uri": "com_jcoaching/chosen/chosen.css",
+            "version": "1.1.3"
+        },
         {
             "name": "com_jgallery.jselectdirs",
             "type": "script",
@@ -115,6 +127,7 @@
             "type": "script",
             "uri": "com_jgallery/jthumbs.js",
             "dependencies": [
+                "chosen",
                 "com_jgallery.jselectdirs",
                 "com_jgallery.jimages",
                 "com_jgallery.tabselectimages"
@@ -137,6 +150,7 @@
             "type": "script",
             "uri": "com_jgallery/jcomments.js",
             "dependencies": [
+                "chosen",
                 "com_jgallery.jselectdirs",
                 "com_jgallery.jimages",
                 "com_jgallery.tabselectimages"

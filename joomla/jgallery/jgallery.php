@@ -14,15 +14,19 @@ use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\JGalleryCategoryHelper;
 use JLTRY\Component\JGallery\Administrator\Helper\FoldergroupHelper;
-use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Utility\Utility;
 use Joomla\Event\Event;
 use Joomla\Event\SubscriberInterface;
+
 
 // Check to ensure this file is included in Joomla!
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-define('PF_REGEX_JGALLERYI_PATTERN', "#{jgallery (.*?)}#s");
+define('PF_REGEX_VARIABLES', '((?:\s?[a-zA-Z0-9_-]+=\"[^\"]+\")+|(?:\|?[a-zA-Z0-9_-]+=[^\"}]+)+|(?:\s*))');
+define('PF_REGEX_JGALLERY_PATTERN', "#{jgallery\s?". PF_REGEX_VARIABLES ."\s?}#s");
+
 
 
 
@@ -57,6 +61,21 @@ class plgContentJGallery extends CMSPlugin  implements SubscriberInterface
 	}
 
 
+    static function parseAttributes($string, &$retarray)
+    {
+        $pairs = explode('|', trim($string));
+        foreach ($pairs as $pair) {
+            if ($pair == "") {
+                continue;
+            }
+            $pos = strpos($pair, "=");
+            $key = substr($pair, 0, $pos);
+            $value = substr($pair, $pos + 1);
+            $retarray[$key] = $value;
+        }
+    }
+
+
 	/**
 	 * The content plugin that inserts the galleries into content items
 	 *
@@ -85,39 +104,38 @@ class plgContentJGallery extends CMSPlugin  implements SubscriberInterface
 		if ( $app->isClient('administrator') ) {
 			return true;
 		}
-		preg_match_all(PF_REGEX_JGALLERYI_PATTERN, $row->text, $matches);
+        $regexp = PF_REGEX_JGALLERY_PATTERN;
+		preg_match_all(PF_REGEX_JGALLERY_PATTERN, $row->text, $matches);
 		// Number of plugins
-		$count = count($matches[0]);
+		$count = is_array($matches) && count($matches);
 		 // plugin only processes if there are any instances of the plugin in the text
 		if ($count) {
 			for ($i = 0; $i < $count; $i++)
 			{
-				$_params = array();
-				if ($this->getparam('page', 'page')) {
-					$_params['page'] = $this->page;
-				}
+                
 				if (@$matches[1][$i]) {
-					$inline_params = $matches[1][$i];
-					$pairs = explode('|', trim($inline_params));
-					foreach ($pairs as $pair) {
-						$pos = strpos($pair, "=");
-						$key = substr($pair, 0, $pos);
-						$value = substr($pair, $pos + 1);
-						$_params[$key] = $value;
-					}
-					$_params['rootdir'] = JParametersHelper::getrootdir();
-					if (array_key_exists('img', $_params)) {
-						$p_content = JGalleryHelper::display($_params);
-					}elseif (array_key_exists('browse', $_params)) {
-						$p_content = JDirectoryHelper::display(rand(1,1024), $_params);
-					} elseif (array_key_exists('group', $_params)){
-						$id = $_params['group'];
+					if ( strpos( $matches[1][$i], "\"") === false ) {
+                        $params = array();
+                        self::parseAttributes($matches[1][$i], $params);
+                    } else {
+                        $params = Utility::parseAttributes($matches[1][$i]);
+                    }
+                 	if ($this->getparam('page', 'page')) {
+                        $params['page'] = $this->page;
+                    }
+					$params['rootdir'] = JParametersHelper::getrootdir();
+					if (array_key_exists('img', $params)) {
+						$p_content = JGalleryHelper::display($params);
+					}elseif (array_key_exists('browse', $params)) {
+						$p_content = JDirectoryHelper::display(rand(1,1024), $params);
+					} elseif (array_key_exists('group', $params)){
+						$id = $params['group'];
 						$_params['id'] = $id;
-						$p_content = FolderGroupHelper::display($_params);
+						$p_content = FolderGroupHelper::display($params);
 					}
 					else {
 						$p_content = "<!-- display -->".
-									JGalleryHelper::display($_params) .
+									JGalleryHelper::display($params) .
 									"<!-- display end -->";
 					}
 					$row->text = str_replace("{jgallery " . $matches[1][$i] . "}", $p_content, $row->text);

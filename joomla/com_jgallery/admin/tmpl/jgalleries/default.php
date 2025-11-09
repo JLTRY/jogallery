@@ -14,7 +14,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
 HTMLHelper::_('jquery.framework');
-HTMLHelper::_('formbehavior.chosen', 'select');
+//HTMLHelper::_('formbehavior.chosen', 'select');
 
 $listOrder     = $this->escape($this->filter_order);
 $listDirn      = $this->escape($this->filter_order_Dir);
