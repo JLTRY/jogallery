@@ -6,6 +6,7 @@
 	],
 	"url": "https://wiki.jltryoen.fr",
 	"license-name": "GPL-2.0-or-later",
+    "description": "Display Images in a gallery",
 	"type": "parserhook",
 	"requires": {
 		"MediaWiki": ">= 1.33"
