@@ -24,7 +24,7 @@ use Joomla\Event\SubscriberInterface;
 // Check to ensure this file is included in Joomla!
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-define('PF_REGEX_VARIABLES', '((?:\s?[a-zA-Z0-9_-]+=\"[^\"]+\")+|(?:\|?[a-zA-Z0-9_-]+=[^\"}]+)+|(?:\s*))');
+define('PF_REGEX_VARIABLES', '((?:\s?[a-zA-Z0-9_-]+=\"[^\"]+\")+|(?:\|?[a-zA-Z0-9_-]+=[^\"}]+)+)');
 define('PF_REGEX_JGALLERY_PATTERN', "#{jgallery\s?". PF_REGEX_VARIABLES ."\s?}#s");
 
 
@@ -105,20 +105,14 @@ class plgContentJGallery extends CMSPlugin  implements SubscriberInterface
             return true;
         }
         $regexp = PF_REGEX_JGALLERY_PATTERN;
-        preg_match_all(PF_REGEX_JGALLERY_PATTERN, $row->text, $matches);
-        // Number of plugins
-        $count = is_array($matches) && count($matches);
-         // plugin only processes if there are any instances of the plugin in the text
-        if ($count) {
-            for ($i = 0; $i < $count; $i++)
-            {
-                
-                if (@$matches[1][$i]) {
-                    if ( strpos( $matches[1][$i], "\"") === false ) {
+        $row->text = preg_replace_callback($regexp,
+            function($matches){
+                if (@$matches[1]) {
+                    if ( strpos( $matches[1], "\"") === false ) {
                         $params = array();
-                        self::parseAttributes($matches[1][$i], $params);
+                        self::parseAttributes($matches[1], $params);
                     } else {
-                        $params = Utility::parseAttributes($matches[1][$i]);
+                        $params = Utility::parseAttributes($matches[1]);
                     }
                     if ($this->getparam('page', 'page')) {
                         $params['page'] = $this->page;
@@ -138,10 +132,9 @@ class plgContentJGallery extends CMSPlugin  implements SubscriberInterface
                                     JGalleryHelper::display($params) .
                                     "<!-- display end -->";
                     }
-                    $row->text = str_replace("{jgallery " . $matches[1][$i] . "}", $p_content, $row->text);
+                    return $p_content;
                 }
-            }
-        }
+            }, $row->text);
         return true; 
     }
 }
