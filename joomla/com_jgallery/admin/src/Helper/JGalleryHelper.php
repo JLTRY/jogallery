@@ -537,9 +537,11 @@ class JGalleryHelper
 		JDirectoryHelper::loadLibrary();
 		$document = Factory::getDocument();
 		$jroot = new JRootDirectory($dir, $directory, $parentlevel, $galid);
-		if (($jroot->findDirs($dir, $directory, JDirectory::$_excludes, true) > 0) || ($jroot->parentlevel > 0)) {
+        $ret = $jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
+		if (($ret > 0) || ($jroot->parentlevel > 0)) {
 			$jroot->outputdirs($type, $id, $content, $type, $media, $lightbox);
 		}
+        return $ret;
 	}
 	
 	public static function outputfiles($id, $directory, $listfiles, $page, &$content, $lightbox='fancybox') {
@@ -676,12 +678,15 @@ class JGalleryHelper
 		}else {
 			//sub directories
 			$sdir = html_entity_decode(JGalleryHelper::join_paths(JPATH_SITE, $rootdir,  $directory));
-			self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $media, $lightbox);
-			$listfiles = self::getFiles($rootdir, $directory, $media, $startdate, $enddate);
-			if ($parent != 0 && count($listfiles)) {
-				$content .= "<hr/>";
-			}
-			self::outputfiles($id, $directory, $listfiles, $page, $content, $lightbox);
+			if (self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $media, $lightbox) >=0) {
+                $listfiles = self::getFiles($rootdir, $directory, $media, $startdate, $enddate);
+                if ($parent != 0 && count($listfiles)) {
+                    $content .= "<hr/>";
+                }
+                self::outputfiles($id, $directory, $listfiles, $page, $content, $lightbox);
+            } else {
+                $content = "Directory does not exist $directory";
+            }
 		}
 		return $content;
 	}

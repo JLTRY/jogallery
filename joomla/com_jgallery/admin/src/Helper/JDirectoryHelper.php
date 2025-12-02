@@ -95,6 +95,9 @@ class JDirectory
 	{
 		$subdirs = array();
 		$dirs = array();
+        if (!is_dir($sdir)) {
+            return(-1);
+        }
 		foreach (new \DirectoryIterator($sdir) as $fileInfo) {
 			if ($fileInfo->isDot()) continue;
 			$filename = $fileInfo->getFileName();
@@ -111,7 +114,7 @@ class JDirectory
 									$recurse);
 			}
 		}
-		return count($this->children);
+		return 0;
 	}
 	
 	public function getRoute($parentdir, $directory, $parentlevel, $id=0, $tmpl=null)
@@ -357,8 +360,12 @@ abstract class JDirectoryHelper
 		$document = Factory::getDocument();
 		JGalleryHelper::loadLibrary(array('jgallery' => true));
 		$jroot = new JRootDirectory($dir, $directory);
-		$jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
-		$jroot->outputdirs($type, $id, $content);
+		list($ret, $count) = $jroot->findDirs($dir, $directory, JDirectory::$_excludes, true);
+        if ($ret != 0) {
+            $content = $count;
+        } else {
+            $jroot->outputdirs($type, $id, $content);
+        }
 	}
 
 	public static function display($id, $_params)
