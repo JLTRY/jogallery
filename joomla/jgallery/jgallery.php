@@ -24,8 +24,8 @@ use Joomla\Event\SubscriberInterface;
 // Check to ensure this file is included in Joomla!
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-define('PF_REGEX_VARIABLES', '((?:\s?[a-zA-Z0-9_-]+=\"[^\"]+\")+|(?:\|?[a-zA-Z0-9_-]+=[^\"}]+)+)');
-define('PF_REGEX_JGALLERY_PATTERN', "#{jgallery\s?". PF_REGEX_VARIABLES ."\s?}#s");
+define('JG_REGEX_VARIABLES', '((?:\s?[a-zA-Z0-9_-]+=\"[^\"]+\")+|(?:\|?[a-zA-Z0-9_-]+=[^\"}]+)+)');
+define('JG_REGEX_JGALLERY_PATTERN', "#{jgallery\s?". JG_REGEX_VARIABLES ."\s?}#s");
 
 
 
@@ -104,7 +104,7 @@ class plgContentJGallery extends CMSPlugin  implements SubscriberInterface
         if ( $app->isClient('administrator') ) {
             return true;
         }
-        $regexp = PF_REGEX_JGALLERY_PATTERN;
+        $regexp = JG_REGEX_JGALLERY_PATTERN;
         $row->text = preg_replace_callback($regexp,
             function($matches){
                 if (@$matches[1]) {
