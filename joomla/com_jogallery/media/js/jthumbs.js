@@ -34,7 +34,7 @@ function thumbretriever($, id, urlroot, directory, values, menu) {
 				$("#jogallerylog"+this._id).html(txt);
 				console.log('OK');
 				var imge = $("img[id='"+ imgname + "']");
-				imge.attr('src', imge.attr('src')+"?timestamp=" + new Date().getTime());
+				imge.delay('slow').attr('src', imge.attr('src')+"?timestamp=" + new Date().getTime());
 				this._tabselectimages.check(tvalue[0], false);
 			},
 			error: function(xhr, status, text) {
