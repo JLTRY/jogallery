@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset
+				name="details"
+				label="COM_JOGALLERY_JOGALLERY_DETAILS">
+		<field
+				name="id"
+				type="hidden"
+		/>
+		<field
+				name="directory"
+				type="folderlist" 
+				label="COM_JOGALLERY_JOGALLERY_DIRECTORY_LABEL"
+				description="COM_JOGALLERY_JOGALLERY_DIRECTORY_DESC"
+				required="true"
+				default=""
+				directory=""
+				recursive="false"
+				/>
+		<field
+				name="jogallerycatid"
+				type="category"
+				extension="com_jogallery"
+				class="inputbox"
+				default=""
+				label="COM_JOGALLERY_JOGALLERY_FIELD_CATID_LABEL"
+				description="COM_JOGALLERY_JOGALLERY_FIELD_CATID_DESC"
+				required="true">
+			<option value="0">JOPTION_SELECT_CATEGORY</option>
+		</field>
+		<field
+			name="catid"
+			type="hidden"
+		/>
+	</fieldset>
+	<fields name="params">
+		<fieldset
+				name="params"
+				label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS">
+			<field
+					name="show_category"
+					type="list"
+					label="COM_JOGALLERY_JOGALLERY_FIELD_SHOW_CATEGORY_LABEL"
+					description="COM_JOGALLERY_JOGALLERY_FIELD_SHOW_CATEGORY_DESC"
+					default="">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+			</field>
+		</fieldset>
+	</fields>
+	<fieldset
+			name="accesscontrol"
+			label="COM_JOGALLERY_FIELDSET_RULES">
+		<field
+				name="asset_id"
+				type="hidden"
+				filter="unset"/>
+		<field
+				name="rules"
+				type="rules"
+				label="COM_JOGALLERY_FIELD_RULES_LABEL"
+				filter="rules"
+				validate="rules"
+				class="inputbox"
+				component="com_jogallery"
+				section="message"/>
+	</fieldset>
+</form>

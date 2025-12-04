@@ -8,12 +8,12 @@
 *
 */
 
-use JLTRY\Component\JGallery\Administrator\Model\JGalleryModel;
-use JLTRY\Component\JGallery\Administrator\Helper\JParametersHelper;
-use JLTRY\Component\JGallery\Administrator\Helper\JGalleryHelper;
-use JLTRY\Component\JGallery\Administrator\Helper\JDirectoryHelper;
-use JLTRY\Component\JGallery\Administrator\Helper\JGalleryCategoryHelper;
-use JLTRY\Component\JGallery\Administrator\Helper\FoldergroupHelper;
+use JLTRY\Component\JOGallery\Administrator\Model\JOGalleryModel;
+use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryCategoryHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\FoldergroupHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
 use Joomla\Event\Event;
@@ -30,7 +30,7 @@ define('PF_REGEX_JDIRECTORYI_PATTERN', "#{jdirectory (.*?)}#s");
 * Directory Content Plugin
 *
 */
-class plgContentJDirectory extends JPlugin
+class plgContentJODirectory extends JPlugin
 {
 	protected static $_ID = 0;
 	/**
@@ -42,7 +42,7 @@ class plgContentJDirectory extends JPlugin
 	function __construct( &$subject, $params )
 	{
 		parent::__construct( $subject, $params );
-		plgContentJDirectory::$_ID++;
+		plgContentJODirectory::$_ID++;
 	}
 
 	/**
@@ -99,7 +99,7 @@ class plgContentJDirectory extends JPlugin
 						$_result[$key] = $value;
 					}
 					$_result['rootdir'] = JParametersHelper::getrootdir();
-					$p_content = JDirectoryHelper::display(plgContentJDirectory::$_ID, $_result);
+					$p_content = JODirectoryHelper::display(plgContentJODirectory::$_ID, $_result);
 					$row->text = str_replace("{jdirectory " . $matches[1][$i] . "}", $p_content, $row->text);
 				}
 			}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_JOGALLERY_VIEW_DEFAULT_TITLE">
+		<message>COM_JOGALLERY_VIEW_DEFAULT_DESC</message>
+	</layout>
+	<fields name="params"
+			addfieldpath="/administrator/components/com_jogallery/src/Field/">
+		<fieldset name="request">
+			<field
+				type="sql"
+				name="id"
+				label="COM_JOGALLERY_JOGALLERY_FIELD_DIRECTORY_LABEL"
+				query="SELECT `directory`,`id`  FROM #__jogallery"
+				default="1"
+				key_field="id"
+				value_field="directory"
+				description="COM_JOGALLERY_JOGALLERY_FIELD_DIRECTORY_DESC"
+			/>
+		</fieldset>
+	</fields>
+</metadata>

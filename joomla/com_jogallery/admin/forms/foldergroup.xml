@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form addrulepath="/administrator/components/com_jogallery/models/rules">
+	<fieldset 
+		name="details"
+		label="COM_MENUS_ITEM_DETAILS">
+		<field
+			name="id"
+			type="hidden"/>
+		<field
+			name="name"
+			type="text"
+            label="COM_MEDIA_NAME"
+            description="COM_JCOACHING_TYPEEVENT_NAME_DESC"
+            size="40"
+            class="inputbox"
+            required="true"
+            default="" />
+		<field
+            name="image"
+            type="media" default=""  directory="/images/phoca_gallery" 
+            label="COM_MEDIA_NAME"
+            description="COM_JCOACHING_JCOACHING_FIELD_IMAGE_DESC"				
+            required="false" />	
+		<field
+            name="catid"
+            type="category"
+            extension="com_jogallery"
+            class="inputbox"
+            default=""
+            label="COM_JOGALLERY_JOGALLERY_FIELD_CATID_LABEL"
+            description="COM_JOGALLERY_JOGALLERY_FIELD_CATID_DESC"
+            required="true">
+			<option value="0">JOPTION_SELECT_CATEGORY</option>
+		</field>            
+            
+        <field addfieldpath="/administrator/components/com_jogallery/models/fields"
+                name="folders"
+                type="folderlist" key_field="name" value_field="name"
+                directory="/images/phocagallery"
+                recursive="true"
+                label="COM_MEDIA_FOLDERS"
+                exclude="thumbs"
+                multiple="true"
+        />
+      
+	</fieldset>
+	
+</form>

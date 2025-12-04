@@ -1,0 +1,160 @@
+{
+    "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+    "name": "com_jogallery",
+    "version": "3.0.0",
+    "description": "Joomla CMS",
+    "license": "GPL-2.0-or-later",
+    "assets": [
+        {
+            "name": "fancybox",
+            "type": "script",
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"
+        },
+        {
+            "name": "fancybox",
+            "type": "style",
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+        },
+        {
+            "name": "photoswipe",
+            "type": "script",
+            "uri": "https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js",
+            "dependencies": ["jquery"],
+            "attributes": {"type": "module"}
+        },
+        {
+            "name": "photoswipe",
+            "type": "style",
+            "uri": "https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.min.css"
+        },
+        {
+            "name": "fancybox",
+            "type": "style",
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+        },
+        {
+            "name": "lazyload",
+            "type": "script",
+            "uri": "https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.js"
+        },
+        {
+            "name": "com_jogallery.jimages",
+            "type": "script",
+            "uri": "com_jogallery/jimages.js",
+            "dependencies": [
+                "jquery"]
+        },
+        {
+            "name": "com_jogallery.jimages",
+            "type": "style",
+            "uri": "com_jogallery/jimages.css"
+        },
+        {
+            "name": "com_jogallery.psw_images",
+            "type": "script",
+            "uri": "com_jogallery/psw_images.js",
+            "dependencies": ["photoswipe"],
+            "attributes": {    "type": "module"}
+        },
+        {
+            "name": "com_jogallery.psw_images",
+            "type": "style",
+            "uri": "com_jogallery/psw_images.css",
+            "dependencies": [
+                "photoswipe"]
+        },
+		{
+         "name": "chosen",
+            "type": "script",
+            "uri": "com_jcoaching/chosen/chosen.jquery.min.js",
+            "version": "1.1.3"
+        },
+        {
+        "name": "chosen",
+            "type": "style",
+            "uri": "com_jcoaching/chosen/chosen.css",
+            "version": "1.1.3"
+        },
+        {
+            "name": "com_jogallery.jselectdirs",
+            "type": "script",
+            "uri": "com_jogallery/jselectdirs.js",
+            "dependencies": [
+                "jquery"],
+            "attributes": {    "type": "module"}
+        },
+        {
+            "name": "com_jogallery.tabselectimages",
+            "type": "script",
+            "uri": "com_jogallery/tabselectimages.js",
+            "dependencies": [
+                "jquery"]
+        },
+        {
+            "name": "com_jogallery.jdirectories",
+            "type": "script",
+            "uri": "com_jogallery/jdirectories.js",
+            "dependencies": [
+                "jquery"]
+        },
+        {
+            "name": "com_jogallery.jogallery",
+            "type": "script",
+            "uri": "com_jogallery/jogallery.js"
+        },
+        {
+            "name": "com_jogallery.jogallery",
+            "type": "style",
+            "uri": "com_jogallery/jogallery.css"
+        },
+        {
+            "name": "com_jogallery.radiobox",
+            "type": "script",
+            "uri": "com_jogallery/radiobox.js"
+        },
+        {
+            "name": "com_jogallery.multicheckbox",
+            "type": "script",
+            "uri": "com_jogallery/multicheckbox.js"
+        },
+        {
+            "name": "com_jogallery.multicheckbox",
+            "type": "style",
+            "uri": "com_jogallery/multicheckbox.css"
+        },
+        {
+            "name": "com_jogallery.jthumbs",
+            "type": "script",
+            "uri": "com_jogallery/jthumbs.js",
+            "dependencies": [
+                "chosen",
+                "com_jogallery.jselectdirs",
+                "com_jogallery.jimages",
+                "com_jogallery.tabselectimages"
+            ]
+        },
+        {
+            "name": "com_jogallery.jrecthumbs",
+            "type": "script",
+            "uri": "com_jogallery/jrecthumbs.js",
+            "dependencies": [
+                "com_jogallery.jdirectories",
+                "com_jogallery.jimages",
+                "com_jogallery.radiobox",
+                "com_jogallery.jogallery",
+                "com_jogallery.tabselectimages"
+            ]
+        },
+        {
+            "name": "com_jogallery.jcomments",
+            "type": "script",
+            "uri": "com_jogallery/jcomments.js",
+            "dependencies": [
+                "chosen",
+                "com_jogallery.jselectdirs",
+                "com_jogallery.jimages",
+                "com_jogallery.tabselectimages"
+            ]
+        }
+    ]
+}

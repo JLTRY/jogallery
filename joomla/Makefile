@@ -1,12 +1,13 @@
-VERSION = "2.0.5"
+VERSION = "3.0.0"
 VERSION2 = $(shell echo $(VERSION)|sed 's/ /-/g')
-ZIPFILE = pkg_jgallery-$(VERSION2).zip
+PACKAGE = pkg_jogallery
+ZIPFILE = $(PACKAGE)-$(VERSION2).zip
 
 
 all: parts $(ZIPFILE)
 
 
-INSTALLS = com_jgallery jgallery
+INSTALLS = com_jogallery jogallery
 
 EXTRAS = 
 
@@ -27,8 +28,8 @@ parts: $(ZIPS)
 $(ZIPFILE): $(ZIPS)
 	@echo "-------------------------------------------------------"
 	@echo "Creating extension zip file: $(ZIPFILE)"
-	@mv $(INSTALLS:=.zip) pkg_jgallery/packages/
-	@(cd pkg_jgallery; zip -r ../$@ * $(ZIPIGNORES))
+	@mv $(INSTALLS:=.zip) $(PACKAGE)/packages/
+	@(cd $(PACKAGE); zip -r ../$@ * $(ZIPIGNORES))
 	@echo "-------------------------------------------------------"
 	@echo "Finished creating package $(ZIPFILE)."
 
