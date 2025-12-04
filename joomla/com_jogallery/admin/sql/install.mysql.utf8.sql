@@ -1,4 +1,4 @@
-RENAME TABLE IF EXISTS `#__jgallery` TO `#__jogallery`;
+RENAME TABLE `#__jgallery` TO `#__jogallery`;
 
 CREATE TABLE IF NOT EXISTS `#__jogallery` (
 	`id`       INT(11)     NOT NULL AUTO_INCREMENT,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `#__jogallery` (
 	DEFAULT CHARSET =utf8;
 
 
-RENAME TABLE IF EXISTS `#__jgallery_foldergroups` TO `#__jogallery_foldergroups`;
+RENAME TABLE `#__jgallery_foldergroups` TO `#__jogallery_foldergroups`;
 CREATE TABLE IF NOT EXISTS `#__jogallery_foldergroups` (
   `id` int NOT NULL AUTO_INCREMENT,
   `published` tinyint NOT NULL DEFAULT '1',
