@@ -15,9 +15,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('jquery.framework');
 
 $data = JThumbsHelper::generatethumbimage(JOGalleryHelper::join_paths($this->rootdir),
-									 JOGalleryHelper::join_paths($this->directory),
-									 $this->image,
-									 $this->force,
+                                     JOGalleryHelper::join_paths($this->directory),
+                                     $this->image,
+                                     $this->force,
                                      $this->small_width,
                                      $this->large_width);
 JOGalleryHelper::json_answer($data);

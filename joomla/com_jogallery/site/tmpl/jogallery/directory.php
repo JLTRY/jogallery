@@ -11,6 +11,6 @@
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jogallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
 echo JODirectoryHelper::display(1, array("directory" => JOGalleryHelper::join_paths($this->directory),
-									 "rootdir" => JOGalleryHelper::join_paths($this->rootdir)));
+                                     "rootdir" => JOGalleryHelper::join_paths($this->rootdir)));
 ?>
 

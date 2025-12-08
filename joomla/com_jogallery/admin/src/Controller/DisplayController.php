@@ -22,11 +22,11 @@ defined('_JEXEC') or die('Restricted access');
  */
 class DisplayController extends BaseController
 {
-	/**
-	 * The default view for the display method.
-	 *
-	 * @var string
-	 * @since 12.2
-	 */
-	protected $default_view = 'jogalleries';
+    /**
+     * The default view for the display method.
+     *
+     * @var string
+     * @since 12.2
+     */
+    protected $default_view = 'jogalleries';
 }

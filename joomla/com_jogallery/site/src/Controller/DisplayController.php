@@ -29,6 +29,6 @@ defined('_JEXEC') or die('Restricted access');
  */
 class DisplayController extends BaseController
 {
-	protected $default_view = 'jogallery';
+    protected $default_view = 'jogallery';
 }
 

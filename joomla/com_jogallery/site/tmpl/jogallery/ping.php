@@ -13,9 +13,9 @@ JLoader::import('components.com_jogallery.helpers.jogallery', JPATH_ADMINISTRATO
 JLoader::import('components.com_jogallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 $data = array();
 /*JThumbsHelper::generatethumbimage(JOGalleryHelper::join_paths($this->rootdir),
-									 JOGalleryHelper::join_paths($this->directory),
-									 $this->image,
-									 false);*/
+                                     JOGalleryHelper::join_paths($this->directory),
+                                     $this->image,
+                                     false);*/
 usleep(50000);									 
 JOGalleryHelper::json_answer($data);
 ?>									 

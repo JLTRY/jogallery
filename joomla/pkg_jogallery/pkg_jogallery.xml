@@ -16,4 +16,7 @@
 	<file type="plugin" id="jogallery">jogallery.zip</file>
 	</files>
 
+    <updateservers>
+       <server type="extension" priority="1" name="JO's Google auth updates">https://raw.githubusercontent.com/JLTRY/jogoogleauth/master/pkg_jogoogleauth/update_pkg.xml</server>
+    </updateservers>
 </extension>

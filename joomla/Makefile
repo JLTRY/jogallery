@@ -2,10 +2,13 @@ VERSION = "3.0.0"
 VERSION2 = $(shell echo $(VERSION)|sed 's/ /-/g')
 PACKAGE = pkg_jogallery
 ZIPFILE = $(PACKAGE)-$(VERSION2).zip
+UPDATEFILE = update_pkg.xml
+ROOT = $(shell pwd)
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+mkfile_dir := $(dir $(mkfile_path))
 
 
-all: parts $(ZIPFILE)
-
+all: parts $(ZIPFILE) fixsha
 
 INSTALLS = com_jogallery jogallery
 
@@ -38,3 +41,12 @@ $(ZIPFILE): $(ZIPS)
 fixversions:
 	@echo "Updating all install xml files to version $(VERSION)"
 	@export ATVERS=$(VERSION); export ATDATE=$(DATE); find . \( -name '*.xml' ! -name 'default.xml' ! -name 'metadata.xml' ! -name 'config.xml' \) -exec  ./fixvd {} \;
+revertversions:
+	@echo "Reverting all install xml files"
+	@find . \( -name '*.xml' ! -name 'default.xml' ! -name 'metadata.xml' ! -name 'config.xml' \) -exec git checkout {} \;
+
+fixsha:
+	@echo "Updating update xml files with checksums"
+	@(cd $(ROOT);./fixsha.sh $(ZIPFILE) $(UPDATEFILE))
+untabify:
+	@find . -name '*.php' -exec $(mkfile_dir)/replacetabs.sh {} \;

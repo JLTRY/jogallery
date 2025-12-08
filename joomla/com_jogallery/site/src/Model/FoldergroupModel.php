@@ -25,35 +25,35 @@ defined('_JEXEC') or die('Restricted access');
  */
 class FoldergroupModel extends BaseDatabaseModel
 {
-	/**
-	 * @var object item
-	 */
-	protected $item;
+    /**
+     * @var object item
+     */
+    protected $item;
 
 
-	/**
-	 * Get the foldergroup
-	 * @return object The message to be displayed to the user
-	 */
-	public function getItem($pk=NULL)
-	{
-		if (!isset($this->item)) 
-		{
-			$id    = $this->getState('folder.id');
-			$db    = Factory::getDbo();
-			$query = $db->getQuery(true);
-			$query->select('name, h.published, folders, h.id, catid')->from('#__jogallery_foldergroups as h')
-				  ->leftJoin('#__categories as c ON h.catid=c.id')
-				  ->where('h.id=' . (int)$id);
-			$db->setQuery((string)$query);
-		
-			if ($this->item = $db->loadObject()) 
-			{
-				// Load the JSON string
-				$folders = json_decode($this->item->folders, $associative=true);
-				$this->item->folders = $folders;
-			}
-		}
-		return $this->item;
-	}
+    /**
+     * Get the foldergroup
+     * @return object The message to be displayed to the user
+     */
+    public function getItem($pk=NULL)
+    {
+        if (!isset($this->item)) 
+        {
+            $id    = $this->getState('folder.id');
+            $db    = Factory::getDbo();
+            $query = $db->getQuery(true);
+            $query->select('name, h.published, folders, h.id, catid')->from('#__jogallery_foldergroups as h')
+                  ->leftJoin('#__categories as c ON h.catid=c.id')
+                  ->where('h.id=' . (int)$id);
+            $db->setQuery((string)$query);
+        
+            if ($this->item = $db->loadObject()) 
+            {
+                // Load the JSON string
+                $folders = json_decode($this->item->folders, $associative=true);
+                $this->item->folders = $folders;
+            }
+        }
+        return $this->item;
+    }
 }

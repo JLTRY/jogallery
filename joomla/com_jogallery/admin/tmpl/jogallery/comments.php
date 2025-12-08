@@ -20,22 +20,22 @@ HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
 ?>
 <?php echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::join_paths($this->directory),
-											"rootdir" => JOGalleryHelper::join_paths($this->rootdir),
-											"type" => "selectcomments"));
+                                            "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+                                            "type" => "selectcomments"));
 $bar = Toolbar::getInstance('toolbar');
 $bar->appendButton('Custom', 
-					JODirectoryHelper::display(1, 
-									array("dir" => JOGalleryHelper::join_paths($this->directory),
-										"rootdir" => JOGalleryHelper::join_paths($this->rootdir),
-										"type" => "selectdirsmenu")),
-					"");
+                    JODirectoryHelper::display(1, 
+                                    array("dir" => JOGalleryHelper::join_paths($this->directory),
+                                        "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+                                        "type" => "selectdirsmenu")),
+                    "");
 $bar->appendButton('Custom', 
-					LayoutHelper::render('menucomments', array('id' => 1)),
-					"");
+                    LayoutHelper::render('menucomments', array('id' => 1)),
+                    "");
 ?>
 
 
 <form  method="post" name="adminForm" id="adminForm" class="form-validate">
-	<input type="hidden" name="task" value="jogallery.thumbs" />
-	<?php echo HTMLHelper::_('form.token'); ?>
+    <input type="hidden" name="task" value="jogallery.thumbs" />
+    <?php echo HTMLHelper::_('form.token'); ?>
 </form>

@@ -30,37 +30,37 @@ defined('_JEXEC') or die('Restricted access');
  */
 class HtmlView extends BaseHtmlView
 {
-	/**
-	 * Display the Foldergroups view
-	 *
-	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
-	 *
-	 * @return  void
-	 */
-	function display($tpl = null)
-	{
-		
-		// Get application
-		$app = Factory::getApplication();
-		$context = "jogallery.list.admin.foldergroups";
-		// Get data from the model
-		$this->items		= $this->get('Items');
-		$this->pagination	= $this->get('Pagination');
-		$this->state		= $this->get('State');
-		$this->filter_order	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'name', 'cmd');
-		$this->filter_order_Dir = $app->getUserStateFromRequest($context.'filter_order_Dir', 'filter_order_Dir', 'asc', 'cmd');
-		$this->filterForm    	= $this->get('FilterForm');
-		$this->activeFilters 	= $this->get('ActiveFilters');
+    /**
+     * Display the Foldergroups view
+     *
+     * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+     *
+     * @return  void
+     */
+    function display($tpl = null)
+    {
+        
+        // Get application
+        $app = Factory::getApplication();
+        $context = "jogallery.list.admin.foldergroups";
+        // Get data from the model
+        $this->items		= $this->get('Items');
+        $this->pagination	= $this->get('Pagination');
+        $this->state		= $this->get('State');
+        $this->filter_order	= $app->getUserStateFromRequest($context.'filter_order', 'filter_order', 'name', 'cmd');
+        $this->filter_order_Dir = $app->getUserStateFromRequest($context.'filter_order_Dir', 'filter_order_Dir', 'asc', 'cmd');
+        $this->filterForm    	= $this->get('FilterForm');
+        $this->activeFilters 	= $this->get('ActiveFilters');
 
-		// What Access Permissions does this user have? What can (s)he do?
-		$this->canDo = JOGalleryHelper::getActions('foldergroup');
+        // What Access Permissions does this user have? What can (s)he do?
+        $this->canDo = JOGalleryHelper::getActions('foldergroup');
 
-		// Check for errors.
-		if (is_array($errors) && count($errors = $this->get('Errors')))
-		{
-			Factory::getApplication()->enqueueMessage( implode('<br />', $errors),'error');
-			return false;
-		}
+        // Check for errors.
+        if (is_array($errors) && count($errors = $this->get('Errors')))
+        {
+            Factory::getApplication()->enqueueMessage( implode('<br />', $errors),'error');
+            return false;
+        }
         $lang = Factory::getLanguage();
         $extensions = ['com_installer', 'com_media', 'com_menus', 'com_content'];
         $base_dir =  JPATH_ADMINISTRATOR;
@@ -69,55 +69,55 @@ class HtmlView extends BaseHtmlView
         foreach ($extensions as $extension ) { 
             $lang->load($extension, $base_dir, $language_tag, $reload);
         }
-		// Set the submenu
-		JOGalleryHelper::addSubmenu('foldergroups');
+        // Set the submenu
+        JOGalleryHelper::addSubmenu('foldergroups');
 
-		// Set the toolbar and number of found items
-		$this->addToolBar();
+        // Set the toolbar and number of found items
+        $this->addToolBar();
 
-		// Display the template
-		parent::display($tpl);
+        // Display the template
+        parent::display($tpl);
 
-		// Set the document
-		$document = Factory::getDocument();
-		$document->setTitle(Text::_('COM_JOGALLERY_ADMINISTRATION'));;
-	}
+        // Set the document
+        $document = Factory::getDocument();
+        $document->setTitle(Text::_('COM_JOGALLERY_ADMINISTRATION'));;
+    }
 
-	/**
-	 * Add the page title and toolbar.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.6
-	 */
-	protected function addToolBar()
-	{
-		$title = Text::_('COM_JOGALLERY_MANAGER_GROUPS');
+    /**
+     * Add the page title and toolbar.
+     *
+     * @return  void
+     *
+     * @since   1.6
+     */
+    protected function addToolBar()
+    {
+        $title = Text::_('COM_JOGALLERY_MANAGER_GROUPS');
 
-		if ($this->pagination->total)
-		{
-			$title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
-		}
+        if ($this->pagination->total)
+        {
+            $title .= "<span style='font-size: 0.5em; vertical-align: middle;'>(" . $this->pagination->total . ")</span>";
+        }
 
-		ToolbarHelper::title($title, 'foldergroup');
+        ToolbarHelper::title($title, 'foldergroup');
 
-		if ($this->canDo->get('core.create')) 
-		{
-			ToolbarHelper::addNew('foldergroup.add', 'JTOOLBAR_NEW');
-		}
-		if ($this->canDo->get('core.edit')) 
-		{
-			ToolbarHelper::editList('foldergroup.edit', 'JTOOLBAR_EDIT');
-		}
-		if ($this->canDo->get('core.delete')) 
-		{
-			ToolbarHelper::deleteList('', 'foldergroups.delete', 'JTOOLBAR_DELETE');
-		}
-		if ($this->canDo->get('core.admin')) 
-		{
-			ToolbarHelper::divider();
-			ToolbarHelper::preferences('com_jogallery');
-		}
-	}
+        if ($this->canDo->get('core.create')) 
+        {
+            ToolbarHelper::addNew('foldergroup.add', 'JTOOLBAR_NEW');
+        }
+        if ($this->canDo->get('core.edit')) 
+        {
+            ToolbarHelper::editList('foldergroup.edit', 'JTOOLBAR_EDIT');
+        }
+        if ($this->canDo->get('core.delete')) 
+        {
+            ToolbarHelper::deleteList('', 'foldergroups.delete', 'JTOOLBAR_DELETE');
+        }
+        if ($this->canDo->get('core.admin')) 
+        {
+            ToolbarHelper::divider();
+            ToolbarHelper::preferences('com_jogallery');
+        }
+    }
 
 }

@@ -12,9 +12,9 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 echo JOGalleryHelper::display(array(	"dir" => JOGalleryHelper::join_paths($this->directory),
-									"rootdir" => JOGalleryHelper::join_paths($this->rootdir),
-									"id" => $this->id,
-									"parent" => $this->parent,
-									"page" => $this->page));
+                                    "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+                                    "id" => $this->id,
+                                    "parent" => $this->parent,
+                                    "page" => $this->page));
 
 

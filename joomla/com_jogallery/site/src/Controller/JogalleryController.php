@@ -25,21 +25,21 @@ defined('_JEXEC') or die('Restricted access');
  */
 class JOGalleryController extends FormController
 {
-	public function savecomments() {
-		$input = new InputFilter(
-					array(
-						'img','p','a','u','i','b','strong','span','div','ul','li','ol','h1','h2','h3','h4','h5',
-						'table','tr','td','th','tbody','theader','tfooter','br'
-						),
-					array(
-						'src','width','height','alt','style','href','rel','target','align','valign','border','cellpading',
-						'cellspacing','title','id','class'
-						)
-					);
-		$directory64 = Factory::getApplication()->getInput()->getVar( 'directory64', '' );
-		// tell the view which tmpl to use 
-		$post_data = Factory::getApplication()->getInput()->getVar('comments', array());
-		$ret = JOGalleryHelper::savecomments(utf8_decode(base64_decode($directory64)), $post_data);
-		JOGalleryHelper::json_answer($ret);
-	}
+    public function savecomments() {
+        $input = new InputFilter(
+                    array(
+                        'img','p','a','u','i','b','strong','span','div','ul','li','ol','h1','h2','h3','h4','h5',
+                        'table','tr','td','th','tbody','theader','tfooter','br'
+                        ),
+                    array(
+                        'src','width','height','alt','style','href','rel','target','align','valign','border','cellpading',
+                        'cellspacing','title','id','class'
+                        )
+                    );
+        $directory64 = Factory::getApplication()->getInput()->getVar( 'directory64', '' );
+        // tell the view which tmpl to use 
+        $post_data = Factory::getApplication()->getInput()->getVar('comments', array());
+        $ret = JOGalleryHelper::savecomments(utf8_decode(base64_decode($directory64)), $post_data);
+        JOGalleryHelper::json_answer($ret);
+    }
 }

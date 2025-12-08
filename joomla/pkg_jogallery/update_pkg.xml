@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+	<update>
+		<name>JOGallery</name>
+		<description>JO's Galleries</description>
+		<element>pkg_jogallery</element>
+		<type>package</type>
+		<client>site</client>
+		<version>3.0.0</version>
+		<infourl title="JO's Gallery">https://github.com/JLTRY/jogallery/</infourl>
+		<downloads>
+			<downloadurl type="full" format="zip">https://github.com/JLTRY/jogallery/releases/download/v3.0.0/pkg_jogallery-3.0.0.zip</downloadurl>
+		</downloads>
+		<tags>
+			<tag>Stable</tag>
+		</tags>
+		<maintainer>JL TRYOEN</maintainer>
+		<maintainerurl>https://github.com/JLTRY/jogallery</maintainerurl>
+		<php_minimum>8.0</php_minimum>
+		<targetplatform name="joomla" version="(4\.[01234]|5\.[01234]|6\.[0])"/>
+		<sha256>11587CFEE152489FC93250B2E6C355E4C09A15BC75CCAD5C5F7C17825E09E238</sha256>
+		<sha384>7CF24A633C2815529E538C5E55AE0198CF0B3A5EA29EF3B82A88BE85F4BD02C18ECA955899E617182C840F9FAB480D7D</sha384>
+		<sha512>3370D5D3DDB994CE38A045CA63B4CD707E0DB06E371EDFCDC80C832888D4C882EE108C0E1797D2843067FAE27168B6625535AA7717033AD203EE0EE2293E5878</sha512>
+	</update>
+</updates>

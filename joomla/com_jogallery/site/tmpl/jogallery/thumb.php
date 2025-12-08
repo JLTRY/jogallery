@@ -12,9 +12,9 @@ defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_jogallery.helpers.jogallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jogallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 $data = JThumbsHelper::generatethumbimage(JOGalleryHelper::join_paths($this->rootdir),
-									 JOGalleryHelper::join_paths($this->directory),
-									 $this->image,
-									 false);
+                                     JOGalleryHelper::join_paths($this->directory),
+                                     $this->image,
+                                     false);
 JOGalleryHelper::json_answer($data);
 ?>
 

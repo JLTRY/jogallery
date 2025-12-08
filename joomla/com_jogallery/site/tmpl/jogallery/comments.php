@@ -17,11 +17,11 @@ HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
 ?>
 <?php   echo JCommentsHelper::display(1, array("dir" => JOGalleryHelper::join_paths($this->directory),
-									    "rootdir" => JOGalleryHelper::join_paths($this->rootdir)));?>
+                                        "rootdir" => JOGalleryHelper::join_paths($this->rootdir)));?>
 
 
 <form action="<?php echo Route::_('index.php?option=com_jogallery&layout=thumbs&id=' . (int) $this->item->id); ?>"
     method="post" name="adminForm" id="adminForm" class="form-validate">
-	<input type="hidden" name="task" value="jogallery.thumbs" />
-	<?php echo HTMLHelper::_('form.token'); ?>
+    <input type="hidden" name="task" value="jogallery.thumbs" />
+    <?php echo HTMLHelper::_('form.token'); ?>
 </form>

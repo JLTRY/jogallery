@@ -21,21 +21,21 @@ use Joomla\CMS\Toolbar\Toolbar;
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
 echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::join_paths($this->directory),
-									"rootdir" => JOGalleryHelper::join_paths($this->rootdir),
-									"type" => "recthumbs"));
+                                    "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+                                    "type" => "recthumbs"));
 $bar = Toolbar::getInstance('toolbar');
 $bar->appendButton('Custom', 
-					LayoutHelper::render('menurecthumbs', 
-										array('id' => 1, 
-											'small_width' => JParametersHelper::get('thumb_small_width'),
-											'large_width' => JParametersHelper::get('thumb_large_width'),
-										)),
-					"");
+                    LayoutHelper::render('menurecthumbs', 
+                                        array('id' => 1, 
+                                            'small_width' => JParametersHelper::get('thumb_small_width'),
+                                            'large_width' => JParametersHelper::get('thumb_large_width'),
+                                        )),
+                    "");
 ?>
 
 
 <form action="<?php echo Route::_('index.php?option=com_jogallery&layout=thumbs&id=' . (int) $this->item->id); ?>"
     method="post" name="adminForm" id="adminForm" class="form-validate">
-	<input type="hidden" name="task" value="jogallery.thumbs" />
-	<?php echo HTMLHelper::_('form.token'); ?>
+    <input type="hidden" name="task" value="jogallery.thumbs" />
+    <?php echo HTMLHelper::_('form.token'); ?>
 </form>
