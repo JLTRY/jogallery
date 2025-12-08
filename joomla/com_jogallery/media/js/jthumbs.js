@@ -15,38 +15,43 @@ function thumbretriever($, id, urlroot, directory, values, menu) {
 	this._forced = false;
 	this._keep = false;
 
-	this.getthumb = function(imgname, params) {
-		url = this._urlroot + "/administrator/index.php?option=com_jogallery&view=jogallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
-				 + this._directory +"&image64=" + btoa(encode_utf8(imgname)) +"&force=" + Number(this._forced);
-		$.map(params, function(value, key) {
-				url += "&" + key + "=" + value;
-			}
-		);
-		console.log("thumbretriver" + url);
-		$.ajax({
-			url: url,
-			type: "POST",
-			dataType: "json",
-			async: 'false',
-			context: this,
-			success: function(tvalue) {
-				txt = decode_utf8(atob(this._directory)) + " " + tvalue[0] + "=>" + tvalue[1] + ":" + tvalue[2][0] + "<br/>";
-				$("#jogallerylog"+this._id).html(txt);
-				console.log('OK');
-				var imge = $("img[id='"+ imgname + "']");
-				imge.delay('slow').attr('src', imge.attr('src')+"?timestamp=" + new Date().getTime());
-				this._tabselectimages.check(tvalue[0], false);
-			},
-			error: function(xhr, status, text) {
-				var response = xhr.responseText;
-				console.log('Failure!');
-				if (response) {
-					console.log(response);
-				} else {
-					// This would mean an invalid response from the server - maybe the site went down or whatever...
+	this.getthumb = function(index, params) {
+		if (index < this._listimages.length) {
+			var imgname = this._listimages[index];
+			this.index = index;
+			url = this._urlroot + "/administrator/index.php?option=com_jogallery&view=jogallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
+					 + this._directory +"&image64=" + btoa(encode_utf8(imgname)) +"&force=" + Number(this._forced);
+			$.map(params, function(value, key) {
+					url += "&" + key + "=" + value;
 				}
-			}
-		});
+			);
+			console.log("thumbretriver" + url);
+			$.ajax({
+				url: url,
+				type: "POST",
+				dataType: "json",
+				async: 'false',
+				context: this,
+				success: function(tvalue) {
+					var txt = this. index.toString().padStart(4, ' ') + "/" + this._listimages.length + " " + decode_utf8(atob(this._directory)) + " " + tvalue[0] + "=>" + tvalue[1] + ":" + tvalue[2][0] + "<br/>";
+					$("#jogallerylog"+this._id).html(txt);
+					console.log('OK');
+					var imge = $("img[id='"+ imgname + "']");
+					imge.attr('src', imge.attr('src')+"?timestamp=" + new Date().getTime());
+					this._tabselectimages.check(tvalue[0], false);
+				},
+				error: function(xhr, status, text) {
+					var response = xhr.responseText;
+					console.log('Failure!');
+					if (response) {
+						console.log(response);
+					} else {
+						// This would mean an invalid response from the server - maybe the site went down or whatever...
+					}
+				}
+			});
+			setTimeout($.proxy(this.getthumb, this), 500, index+1, params);
+		}
 	};
 	this.checkall = function(checked) {
 		this._tabselectimages.checkall(checked);
@@ -68,13 +73,7 @@ function thumbretriever($, id, urlroot, directory, values, menu) {
 		this._isstarted = true;
 		console.log("started");
 		console.log(params);
-		$.each(this._listimages, 
-				$.proxy(function(index, value) {
-					if (this._isstarted) {
-						this.getthumb(value, params);
-					}
-				}, this)
-		);	   
+		this.getthumb(0, params);
 		this._isstarted = false;
 	};
 	this.stopthumbs = function() {
