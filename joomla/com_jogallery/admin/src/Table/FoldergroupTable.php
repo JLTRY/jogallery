@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -30,11 +31,11 @@ class FoldergroupTable extends Table
      *
      * @param   JDatabaseDriver  &$db  A database connector object
      */
-    function __construct(&$db)
+    public function __construct(&$db)
     {
         parent::__construct('#__jogallery_foldergroups', 'id', $db);
     }
-    
+
     /**
      * Overloaded bind function
      *
@@ -45,14 +46,12 @@ class FoldergroupTable extends Table
      */
     public function bind($array, $ignore = '')
     {
-        if (isset($array['folders']) && is_array($array['folders']))
-        {
-            // Convert the params field to a string.
-            $folders = new Registry;
+        if (isset($array['folders']) && is_array($array['folders'])) {
+// Convert the params field to a string.
+            $folders = new Registry();
             $folders->loadArray($array['folders']);
             $array['folders'] = (string)$folders;
         }
         return parent::bind($array, $ignore);
     }
 }
-

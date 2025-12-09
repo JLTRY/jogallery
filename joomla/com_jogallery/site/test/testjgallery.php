@@ -1,10 +1,7 @@
 <?php
-if (array_key_exists('directory', $_GET))
-{
+if (array_key_exists('directory', $_GET)) {
     $directory = $_GET['directory'];
-}
-else
-{
+} else {
     $directory = "2021 - 02- Luchon";
 }
 $rootdir = "images/phocagallery";

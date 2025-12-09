@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -14,10 +15,8 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-echo JOGalleryHelper::display(array(	"dir" => JOGalleryHelper::join_paths($this->directory),
-                                    "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+echo JOGalleryHelper::display(array(    "dir" => JOGalleryHelper::joinPaths($this->directory),
+                                    "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
                                     "id" => $this->id,
                                     "parent" => $this->parent,
                                     "page" => $this->page));
-
-

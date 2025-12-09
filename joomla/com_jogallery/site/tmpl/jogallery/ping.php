@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -15,11 +16,9 @@
 JLoader::import('components.com_jogallery.helpers.jogallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jogallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 $data = array();
-/*JThumbsHelper::generatethumbimage(JOGalleryHelper::join_paths($this->rootdir),
-                                     JOGalleryHelper::join_paths($this->directory),
+/*JThumbsHelper::generatethumbimage(JOGalleryHelper::joinPaths($this->rootdir),
+                                     JOGalleryHelper::joinPaths($this->directory),
                                      $this->image,
                                      false);*/
-usleep(50000);									 
-JOGalleryHelper::json_answer($data);
-?>									 
-
+usleep(50000);
+JOGalleryHelper::jsonAnswer($data);

@@ -1,8 +1,8 @@
-# com_jogoogleauth 1.0.0
+# com_jogallery 3.0.0
 
 ## Quick Start
 
-Download <a href="https://github.com/JLTRY/jogoogleauth/releases/latest" target="_blank">latest version</a> of package
+Download <a href="https://github.com/JLTRY/jogallery/releases/latest" target="_blank">latest version</a> of package
 
 ## Requirements
 
@@ -10,12 +10,11 @@ Joomla 5.0+
 
 ## Features
 
-The package includes a component (helper), one plugin and one module
-- component_jogoogleauth
-- user/jogoogleauth : a plugin to be able to connect to Joomla with Google credentials
-- modules/jogoogleauth : a module that shows a button to connect to Joomla with Google credentials
+The package includes a component and a plugin
+- component_jogallery : used to configure galleries of your images
+- pllugins/content/jogallery : a plugin that helps to include a galleyr into your articles
 
 
-## 2025-09-23 version 1.0.0
+## 2025-12-08 version 3.0.0
 
 Initial version

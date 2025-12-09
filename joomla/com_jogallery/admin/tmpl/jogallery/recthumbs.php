@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -18,20 +19,23 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Toolbar\Toolbar;
-
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
-echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::join_paths($this->directory),
-                                    "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::joinPaths($this->directory),
+                                    "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
                                     "type" => "recthumbs"));
 $bar = Toolbar::getInstance('toolbar');
-$bar->appendButton('Custom', 
-                    LayoutHelper::render('menurecthumbs', 
-                                        array('id' => 1, 
+$bar->appendButton(
+    'Custom',
+    LayoutHelper::render(
+        'menurecthumbs',
+        array('id' => 1,
                                             'small_width' => JParametersHelper::get('thumb_small_width'),
                                             'large_width' => JParametersHelper::get('thumb_large_width'),
-                                        )),
-                    "");
+                    )
+    ),
+    ""
+);
 ?>
 
 

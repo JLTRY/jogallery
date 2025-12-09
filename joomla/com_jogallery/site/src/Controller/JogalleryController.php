@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -8,6 +9,7 @@
  */
 
 namespace JLTRY\Component\JOGallery\Site\Controller;
+
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
@@ -26,21 +28,20 @@ use Joomla\CMS\Filter\InputFilter;
  */
 class JOGalleryController extends FormController
 {
-    public function savecomments() {
-        $input = new InputFilter(
-                    array(
+    public function savecomments()
+    {
+        $input = new InputFilter(array(
                         'img','p','a','u','i','b','strong','span','div','ul','li','ol','h1','h2','h3','h4','h5',
                         'table','tr','td','th','tbody','theader','tfooter','br'
-                        ),
-                    array(
-                        'src','width','height','alt','style','href','rel','target','align','valign','border','cellpading',
+                        ), array(
+                        'src','width','height','alt','style','href','rel','target',
+                        'align','valign','border','cellpading',
                         'cellspacing','title','id','class'
-                        )
-                    );
-        $directory64 = Factory::getApplication()->getInput()->getVar( 'directory64', '' );
-        // tell the view which tmpl to use 
+                        ));
+        $directory64 = Factory::getApplication()->getInput()->getVar('directory64', '');
+// tell the view which tmpl to use
         $post_data = Factory::getApplication()->getInput()->getVar('comments', array());
         $ret = JOGalleryHelper::savecomments(utf8_decode(base64_decode($directory64)), $post_data);
-        JOGalleryHelper::json_answer($ret);
+        JOGalleryHelper::jsonAnswer($ret);
     }
 }

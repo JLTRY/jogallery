@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -6,7 +7,6 @@
  * @copyright   Copyright (C) 2015 - 2025 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 
 use JLTRY\Component\JOGallery\Administrator\Helper\JThumbsHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
@@ -23,23 +23,31 @@ use Joomla\CMS\Layout\LayoutHelper;
 
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
-echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::join_paths($this->directory),
-                                    "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::joinPaths($this->directory),
+                                    "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
                                     "type" => "selectthumbs"));
 $bar = Toolbar::getInstance('toolbar');
-$bar->appendButton('Custom', 
-                    JODirectoryHelper::display(1, 
-                                    array("dir" => JOGalleryHelper::join_paths($this->directory),
-                                        "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
-                                        "type" => "selectdirsmenu")),
-                    "");
-$bar->appendButton('Custom', 
-                    LayoutHelper::render('menuthumbs',
-                                        array('id' => 1, 
+$bar->appendButton(
+    'Custom',
+    JODirectoryHelper::display(
+        1,
+        array("dir" => JOGalleryHelper::joinPaths($this->directory),
+                                        "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
+                    "type" => "selectdirsmenu")
+    ),
+    ""
+);
+$bar->appendButton(
+    'Custom',
+    LayoutHelper::render(
+        'menuthumbs',
+        array('id' => 1,
                                             'small_width' => JParametersHelper::get('thumb_small_width'),
                                             'large_width' => JParametersHelper::get('thumb_large_width'),
-                                        )),
-                    "");
+                    )
+    ),
+    ""
+);
 ?>
 
 

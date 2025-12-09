@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -30,16 +31,13 @@ class FoldergroupModel extends BaseDatabaseModel
      * @var object item
      */
     protected $item;
-
-
-    /**
+/**
      * Get the foldergroup
      * @return object The message to be displayed to the user
      */
-    public function getItem($pk=NULL)
+    public function getItem($pk = null)
     {
-        if (!isset($this->item)) 
-        {
+        if (!isset($this->item)) {
             $id    = $this->getState('folder.id');
             $db    = Factory::getDbo();
             $query = $db->getQuery(true);
@@ -47,11 +45,9 @@ class FoldergroupModel extends BaseDatabaseModel
                   ->leftJoin('#__categories as c ON h.catid=c.id')
                   ->where('h.id=' . (int)$id);
             $db->setQuery((string)$query);
-        
-            if ($this->item = $db->loadObject()) 
-            {
-                // Load the JSON string
-                $folders = json_decode($this->item->folders, $associative=true);
+            if ($this->item = $db->loadObject()) {
+            // Load the JSON string
+                $folders = json_decode($this->item->folders, $associative = true);
                 $this->item->folders = $folders;
             }
         }

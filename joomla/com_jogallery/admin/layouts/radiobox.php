@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -9,7 +10,7 @@
 
 // No direct access to this file
 defined('JPATH_BASE') or die;
-$sid = $displayData['sid']; 
+$sid = $displayData['sid'];
 
 ?>
 <!-- radiobox -->

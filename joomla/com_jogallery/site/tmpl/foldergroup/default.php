@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -13,9 +14,8 @@
 
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\FoldergroupHelper;
-
 echo FoldergroupHelper::display(array("folders" => $this->folders,
-                                   "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+                                   "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
                                    "parent" => $this->parent,
                                    "directory" => $this->directory,
                                    "id" => $this->id,
@@ -23,5 +23,3 @@ echo FoldergroupHelper::display(array("folders" => $this->folders,
                                    "tmpl" => $this->tmpl,
                                    "type" => $this->type,
                                    "media" => $this->media));
-
-

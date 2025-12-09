@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -6,10 +7,10 @@
  * @copyright   Copyright (C) 2005 - 2015 JL Tryoen. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
- 
+
 namespace JLTRY\Component\JOGallery\Administrator\Controller;
 
-use JLTRY\Component\JOGallery\Administrator\Helper\JGalleryHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\FormController;
 
@@ -49,10 +50,9 @@ class FoldergroupController extends FormController
     */
     protected function allowEdit($data = array(), $key = 'id')
     {
-        $id = isset( $data[ $key ] ) ? $data[ $key ] : 0;
-        if( !empty( $id ) )
-        {
-            return JGalleryHelper::authorise( "core.edit", "com_jogallery");
+        $id = isset($data[ $key ]) ? $data[ $key ] : 0;
+        if (!empty($id)) {
+            return JOGalleryHelper::authorise("core.edit", "com_jogallery");
         }
     }
 }

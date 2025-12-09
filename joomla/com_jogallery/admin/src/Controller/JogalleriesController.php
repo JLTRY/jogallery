@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -35,5 +36,5 @@ class JOGalleriesController extends AdminController
     public function getModel($name = 'Jogallery', $prefix = 'Administrator', $config = ['ignore_request' => true])
     {
          return parent::getModel($name, $prefix, $config);
-    } 
+    }
 }

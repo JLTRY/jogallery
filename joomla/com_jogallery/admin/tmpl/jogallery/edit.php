@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -14,7 +15,6 @@
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
-
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('jquery.framework');
 
@@ -22,21 +22,25 @@ HTMLHelper::_('jquery.framework');
 <form action="<?php echo Route::_('index.php?option=com_jogallery&layout=edit&id=' . (int) $this->id); ?>"
     method="post" name="adminForm" id="adminForm" class="form-validate">
     <div class="form-horizontal">
-        <?php foreach ($this->form->getFieldsets() as $name => $fieldset): ?>
+        <?php foreach ($this->form->getFieldsets() as $name => $fieldset) :
+            ?>
             <fieldset class="adminform">
                 <legend><?php echo Text::_($fieldset->label); ?></legend>
                 <div class="row-fluid">
                     <div class="span6">
-                        <?php foreach ($this->form->getFieldset($name) as $field): ?>
+                        <?php foreach ($this->form->getFieldset($name) as $field) :
+                            ?>
                             <div class="control-group">
                                 <div class="control-label"><?php echo $field->label; ?></div>
                                 <div class="controls"><?php echo $field->input; ?></div>
                             </div>
-                        <?php endforeach; ?>
+                            <?php
+                        endforeach; ?>
                     </div>
                 </div>
             </fieldset>
-        <?php endforeach; ?>
+            <?php
+        endforeach; ?>
     </div>
     <input type="hidden" name="task" value="jogallery.edit" />
     <?php echo HTMLHelper::_('form.token'); ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -59,17 +60,11 @@ class JOGalleryModel extends AdminModel
     public function getForm($data = array(), $loadData = true)
     {
         // Get the form.
-        $form = $this->loadForm(
-            'com_jogallery.jogallery',
-            'jogallery',
-            array(
+        $form = $this->loadForm('com_jogallery.jogallery', 'jogallery', array(
                 'control' => 'jform',
                 'load_data' => $loadData
-            )
-        );
-
-        if (empty($form))
-        {
+            ));
+        if (empty($form)) {
             return false;
         }
 
@@ -85,13 +80,8 @@ class JOGalleryModel extends AdminModel
     protected function loadFormData()
     {
         // Check the session for previously entered form data.
-        $data = Factory::getApplication()->getUserState(
-            'com_jogallery.edit.jogallery.data',
-            array()
-        );
-
-        if (empty($data))
-        {
+        $data = Factory::getApplication()->getUserState('com_jogallery.edit.jogallery.data', array());
+        if (empty($data)) {
             $data = $this->getItem();
         }
         $data->jogallerycatid = $data->catid;
@@ -103,9 +93,8 @@ class JOGalleryModel extends AdminModel
      */
     protected function canDelete($record)
     {
-        if( !empty( $record->id ) )
-        {
-            return JOGalleryHelper::authorise( "core.delete", "com_jogallery.message." . $record->id );
+        if (!empty($record->id)) {
+            return JOGalleryHelper::authorise("core.delete", "com_jogallery.message." . $record->id);
         } else {
             return false;
         }

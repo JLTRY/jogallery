@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -8,6 +9,7 @@
  */
 
 namespace JLTRY\Component\JOGallery\Site\Controller;
+
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\InputFilter;
@@ -32,4 +34,3 @@ class DisplayController extends BaseController
 {
     protected $default_view = 'jogallery';
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -13,27 +14,31 @@
 
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
-
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Layout\LayoutHelper;
-
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
 ?>
-<?php echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::join_paths($this->directory),
-                                            "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
+<?php echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::joinPaths($this->directory),
+                                            "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
                                             "type" => "selectcomments"));
 $bar = Toolbar::getInstance('toolbar');
-$bar->appendButton('Custom', 
-                    JODirectoryHelper::display(1, 
-                                    array("dir" => JOGalleryHelper::join_paths($this->directory),
-                                        "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
-                                        "type" => "selectdirsmenu")),
-                    "");
-$bar->appendButton('Custom', 
-                    LayoutHelper::render('menucomments', array('id' => 1)),
-                    "");
+$bar->appendButton(
+    'Custom',
+    JODirectoryHelper::display(
+        1,
+        array("dir" => JOGalleryHelper::joinPaths($this->directory),
+                                        "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
+                    "type" => "selectdirsmenu")
+    ),
+    ""
+);
+$bar->appendButton(
+    'Custom',
+    LayoutHelper::render('menucomments', array('id' => 1)),
+    ""
+);
 ?>
 
 

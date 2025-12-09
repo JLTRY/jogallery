@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -16,9 +17,7 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
-
 HTMLHelper::_('formbehavior.chosen', 'select');
-
 $listOrder     = $this->escape($this->filter_order);
 $listDirn      = $this->escape($this->filter_order_Dir);
 
@@ -56,33 +55,47 @@ $listDirn      = $this->escape($this->filter_order_Dir);
         <tfoot>
             <tr>
                 <td colspan="4">
-                    <?php if ($this->pagination) { echo   $this->pagination->getListFooter(); }?>
+                    <?php if ($this->pagination) {
+                        echo   $this->pagination->getListFooter();
+                    }?>
                 </td>
             </tr>
         </tfoot>
         <tbody>
-            <?php if (!empty($this->items)) : ?>
+            <?php if (!empty($this->items)) :
+                ?>
                 <?php foreach ($this->items as $i => $row) :
                     $link = Route::_('index.php?option=com_jogallery&task=foldergroup.edit&id=' . $row->id);
-                ?>
+                    ?>
                     <tr>
                         <td>
                             <?php echo HTMLHelper::_('grid.id', $i, $row->id); ?>
-                        </td>					
+                        </td>                    
                         <td>
-                            <a href="<?php echo $link; ?>" title="<?php echo Text::_('COM_JOGALLERY_EDIT_GROUP') . " "  . $row->name; ?>">
+                            <a href="<?php echo $link; ?>" 
+                                title="<?php echo Text::_('COM_JOGALLERY_EDIT_GROUP') .
+                                " "  . $row->name; ?>">
                                 <?php echo $row->name; ?>
                             </a>
                         </td>
                         <td align="center">
-                            <?php echo HTMLHelper::_('jgrid.published', $row->published, $i, 'foldergroups.', true, 'cb'); ?>
+                            <?php echo HTMLHelper::_(
+                                'jgrid.published',
+                                $row->published,
+                                $i,
+                                'foldergroups.',
+                                true,
+                                'cb'
+                            ); ?>
                         </td>
                         <td align="center">
                             <?php echo $row->id; ?>
                         </td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    <?php
+                endforeach; ?>
+                <?php
+            endif; ?>
         </tbody>
     </table>
     <input type="hidden" name="task" value=""/>
@@ -91,4 +104,3 @@ $listDirn      = $this->escape($this->filter_order_Dir);
     <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
     <?php echo HTMLHelper::_('form.token'); ?>
 </form>
-

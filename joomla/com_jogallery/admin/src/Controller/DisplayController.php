@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -8,6 +9,7 @@
  */
 
 namespace JLTRY\Component\JOGallery\Administrator\Controller;
+
 use Joomla\CMS\MVC\Controller\BaseController;
 
 // phpcs:disable PSR1.Files.SideEffects

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package    JOGallery
  * @author     JLTryoen http://www.jltryoen.fr
@@ -7,9 +8,10 @@
  */
 
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
+
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-$data = JOGalleryHelper::getFiles($this->rootdir , $this->directory, $this->media);
-JOGalleryHelper::json_answer($data);
+$data = JOGalleryHelper::getFiles($this->rootdir, $this->directory, $this->media);
+JOGalleryHelper::jsonAnswer($data);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -14,12 +15,11 @@
 JLoader::import('components.com_jogallery.helpers.jcomments', JPATH_ADMINISTRATOR);
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
-
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
 ?>
-<?php   echo JCommentsHelper::display(1, array("dir" => JOGalleryHelper::join_paths($this->directory),
-                                        "rootdir" => JOGalleryHelper::join_paths($this->rootdir)));?>
+<?php   echo JCommentsHelper::display(1, array("dir" => JOGalleryHelper::joinPaths($this->directory),
+                                        "rootdir" => JOGalleryHelper::joinPaths($this->rootdir)));?>
 
 
 <form action="<?php echo Route::_('index.php?option=com_jogallery&layout=thumbs&id=' . (int) $this->item->id); ?>"

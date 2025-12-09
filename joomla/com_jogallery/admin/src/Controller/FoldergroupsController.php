@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -6,7 +7,9 @@
  * @copyright   Copyright (C) 2005 - 2015 JL Tryoen. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 namespace JLTRY\Component\JOGallery\Administrator\Controller;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\AdminController;
 
@@ -32,8 +35,11 @@ class FoldergroupsController extends AdminController
      *
      * @since   1.6
      */
-    public function getModel($name = 'Foldergroups', $prefix = 'Administrator', $config = array('ignore_request' => true))
-    {
+    public function getModel(
+        $name = 'Foldergroups',
+        $prefix = 'Administrator',
+        $config = array('ignore_request' => true)
+    ) {
         $model = parent::getModel($name, $prefix, $config);
         return $model;
     }

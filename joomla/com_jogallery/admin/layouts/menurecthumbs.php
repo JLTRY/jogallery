@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -10,10 +11,11 @@
 // No direct access to this file
 defined('JPATH_BASE') or die;
 $id = $displayData['id'];
-$small_width = $displayData['small_width']; 
-$large_width = $displayData['large_width']; 
+$small_width = $displayData['small_width'];
+$large_width = $displayData['large_width'];
 ?>
-<div id="jmenuthumbs<?php echo $id;?>" class="form-group" style="height:auto;padding-left:15px;margin-left:15px;border: 1px solid; " >
+<div id="jmenuthumbs<?php echo $id;?>" class="form-group" 
+    style="height:auto;padding-left:15px;margin-left:15px;border: 1px solid; " >
     <table>
         <tr>
             <td>
@@ -28,10 +30,19 @@ $large_width = $displayData['large_width'];
         </tr>
         <tr>
             <td>
-                <label>small_width<input type="text" name="small_width" id="small_width<?php echo $id; ?>" value="<?php echo $small_width ?>" size="5"></label>
+                <label>small_width
+                    <input type="text" name="small_width" 
+                           id="small_width<?php echo $id; ?>" 
+                           value="<?php echo $small_width ?>" size="5">
+                </label>
             </td>
             <td>
-                <label>large_width<input type="text" name="small_width" id="large_width<?php echo $id; ?>" value="<?php echo $large_width ?>" size="5"></label>
+                <label>
+                large_width
+                <input type="text" name="small_width" 
+                       id="large_width<?php echo $id; ?>" 
+                       value="<?php echo $large_width ?>" size="5">
+                </label>
             </td>
         </tr>
     </table>

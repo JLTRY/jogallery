@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 
+ *
 * @copyright Copyright (C) 2015-2025 Jean-Luc TRYOEN. All rights reserved.
 * @license GNU/GPL
 *
@@ -22,14 +23,12 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryCategoryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\FoldergroupHelper;
 
-
-
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
 define('JG_REGEX_VARIABLES', '((?:\s?[a-zA-Z0-9_-]+=\"[^\"]+\")+|(?:\|?[a-zA-Z0-9_-]+=[^\"}]+)+)');
-define('JG_REGEX_JOGALLERY_PATTERN', "#{jgallery\s?". JG_REGEX_VARIABLES ."\s?}#s");
+define('JG_REGEX_JOGALLERY_PATTERN', "#{jgallery\s?" . JG_REGEX_VARIABLES . "\s?}#s");
 
 
 
@@ -38,9 +37,8 @@ define('JG_REGEX_JOGALLERY_PATTERN', "#{jgallery\s?". JG_REGEX_VARIABLES ."\s?}#
 * JOGallery Content Plugin
 *
 */
-class JOGallery extends CMSPlugin  implements SubscriberInterface
+class JOGallery extends CMSPlugin implements SubscriberInterface
 {
-
     /**
      * Returns an array of events this subscriber will listen to.
      *
@@ -53,7 +51,8 @@ class JOGallery extends CMSPlugin  implements SubscriberInterface
         ];
     }
 
-    function getparam($name, $param) {
+    public function getparam($name, $param)
+    {
         $found = false;
         $app     = Factory::getApplication();
         $input   = $app->getInput();
@@ -65,7 +64,7 @@ class JOGallery extends CMSPlugin  implements SubscriberInterface
     }
 
 
-    static function parseAttributes($string, &$retarray)
+    protected static function parseAttributes($string, &$retarray)
     {
         $pairs = explode('|', trim($string));
         foreach ($pairs as $pair) {
@@ -101,18 +100,19 @@ class JOGallery extends CMSPlugin  implements SubscriberInterface
         // In Joomla 4 a generic Event is passed
         // In Joomla 5 a concrete ContentPrepareEvent is passed
         [$context, $article, $params, $page] = array_values($event->getArguments());
-         if ( strpos( $article->text, '{jgallery' ) === false ) {
+        if (strpos($article->text, '{jgallery') === false) {
             return true;
         }
         $app = Factory::getApplication();
-        if ( $app->isClient('administrator') ) {
+        if ($app->isClient('administrator')) {
             return true;
         }
         $regexp = JG_REGEX_JOGALLERY_PATTERN;
-        $article->text = preg_replace_callback($regexp,
-            function($matches){
+        $article->text = preg_replace_callback(
+            $regexp,
+            function ($matches) {
                 if (@$matches[1]) {
-                    if ( strpos( $matches[1], "\"") === false ) {
+                    if (strpos($matches[1], "\"") === false) {
                         $params = array();
                         self::parseAttributes($matches[1], $params);
                     } else {
@@ -124,21 +124,22 @@ class JOGallery extends CMSPlugin  implements SubscriberInterface
                     $params['rootdir'] = JParametersHelper::getrootdir();
                     if (array_key_exists('img', $params)) {
                         $p_content = JOGalleryHelper::display($params);
-                    }elseif (array_key_exists('browse', $params)) {
-                        $p_content = JODirectoryHelper::display(rand(1,1024), $params);
-                    } elseif (array_key_exists('group', $params)){
+                    } elseif (array_key_exists('browse', $params)) {
+                        $p_content = JODirectoryHelper::display(rand(1, 1024), $params);
+                    } elseif (array_key_exists('group', $params)) {
                         $id = $params['group'];
                         $params['id'] = $id;
                         $p_content = FolderGroupHelper::display($params);
-                    }
-                    else {
-                        $p_content = "<!-- display -->".
+                    } else {
+                        $p_content = "<!-- display -->" .
                                     JOGalleryHelper::display($params) .
                                     "<!-- display end -->";
                     }
                     return $p_content;
                 }
-            }, $article->text);
-        return true; 
+            },
+            $article->text
+        );
+        return true;
     }
 }

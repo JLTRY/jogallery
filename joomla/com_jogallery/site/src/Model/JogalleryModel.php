@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Site
  * @subpackage  com_jogallery
@@ -31,8 +32,7 @@ class JOGalleryModel extends BaseDatabaseModel
      * @var object item
      */
     protected $item;
-
-    /**
+/**
      * Method to auto-populate the model state.
      *
      * This method should only be called once per instantiation and is designed
@@ -41,8 +41,8 @@ class JOGalleryModel extends BaseDatabaseModel
      *
      * Note. Calling getState in this method will result in recursion.
      *
-     * @return	void
-     * @since	2.5
+     * @return  void
+     * @since   2.5
      */
     protected function populateState()
     {
@@ -50,8 +50,7 @@ class JOGalleryModel extends BaseDatabaseModel
         $jinput = Factory::getApplication()->input;
         $id     = $jinput->get('id', 1, 'INT');
         $this->setState('message.id', $id);
-
-        // Load the parameters.
+// Load the parameters.
         $this->setState('params', Factory::getApplication()->getParams());
         parent::populateState();
     }
@@ -61,10 +60,9 @@ class JOGalleryModel extends BaseDatabaseModel
      * Get the message
      * @return object The message to be displayed to the user
      */
-    public function getItem($pk=NULL)
+    public function getItem($pk = null)
     {
-        if (!isset($this->item)) 
-        {
+        if (!isset($this->item)) {
             $id    = $pk;
             $db    = Factory::getDbo();
             $query = $db->getQuery(true);
@@ -73,15 +71,12 @@ class JOGalleryModel extends BaseDatabaseModel
                   ->leftJoin('#__categories as c ON h.catid=c.id')
                   ->where('h.id=' . (int)$id);
             $db->setQuery((string)$query);
-        
-            if ($this->item = $db->loadObject()) 
-            {
-                // Load the JSON string
-                $params = new Registry;
+            if ($this->item = $db->loadObject()) {
+            // Load the JSON string
+                $params = new Registry();
                 $params->loadString($this->item->params, 'JSON');
                 $this->item->params = $params;
-
-                // Merge global params with item params
+            // Merge global params with item params
                 $params = clone $this->getState('params');
                 $params->merge($this->item->params);
                 $this->item->params = $params;

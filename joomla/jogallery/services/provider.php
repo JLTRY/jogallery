@@ -1,4 +1,5 @@
 <?php
+
 /**
 * @copyright Copyright (C) 2025 Jean-Luc TRYOEN. All rights reserved.
 * @license GNU/GPL
@@ -18,7 +19,6 @@ use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
 
-
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
@@ -32,20 +32,19 @@ return new class () implements ServiceProviderInterface {
      * @return  void
      *
      * @since   4.3.0
-     */
-     public function register(Container $container)
-        {
-            $container->set(
-                PluginInterface::class,
-                function (Container $container) {
-    
-                    $config = (array) PluginHelper::getPlugin('content', 'jogallery');
-                    $subject = $container->get(DispatcherInterface::class);
-                    $app = Factory::getApplication();
-                    $plugin = new JOGallery($subject, $config);
-                    $plugin->setApplication($app);
-                    return $plugin;
-                }
-            );
+    */
+    public function register(Container $container)
+    {
+        $container->set(
+            PluginInterface::class,
+            function (Container $container) {
+                $config = (array) PluginHelper::getPlugin('content', 'jogallery');
+                $subject = $container->get(DispatcherInterface::class);
+                $app = Factory::getApplication();
+                $plugin = new JOGallery($subject, $config);
+                $plugin->setApplication($app);
+                return $plugin;
+            }
+        );
     }
 };

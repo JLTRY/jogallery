@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -8,6 +9,7 @@
  */
 
 namespace JLTRY\Component\JOGallery\Administrator\Helper;
+
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
 
@@ -18,7 +20,7 @@ use Joomla\CMS\Log\Log;
 
 abstract class JParametersHelper
 {
-    static $_default_parameters =
+    private static $default_parameters =
         array('rootdir' => 'phocagallery',
              'thumb_small_format' => '/thumbs/phoca_thumb_s_%s',
              'thumb_large_format' => '/thumbs/phoca_thumb_l_%s',
@@ -29,20 +31,22 @@ abstract class JParametersHelper
              'thumb_quality' => 90
         );
 
-    static function get($parameter) {
-      $value = ComponentHelper::getParams('com_jogallery')->get($parameter);
-      if ($value === null) {
-        if (array_key_exists($parameter, self::$_default_parameters)) {
-            $value = self::$_default_parameters[$parameter];
-        } else {
-            Log::add("Error parameter $parameter does not exist !!!", Log::ERROR, 'jerror');
-            $value = False;
-         }
-      }
-      return $value;
+    public static function get($parameter)
+    {
+        $value = ComponentHelper::getParams('com_jogallery')->get($parameter);
+        if ($value === null) {
+            if (array_key_exists($parameter, self::$default_parameters)) {
+                $value = self::$_default_parameters[$parameter];
+            } else {
+                Log::add("Error parameter $parameter does not exist !!!", Log::ERROR, 'jerror');
+                $value = false;
+            }
+        }
+        return $value;
     }
 
-    static function getrootdir() {
+    public static function getrootdir()
+    {
         return "images/" . self::get('rootdir');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_jogallery
@@ -38,21 +39,22 @@ class HtmlView extends BaseHtmlView
     protected $item;
     protected $script;
     protected $canDo;
-    
-    function getparam($name, $param) {
+
+    public function getparam($name, $param)
+    {
         $found = false;
         $app     = Factory::getApplication();
         $input   = $app->getInput();
         if ($input->get($param) !== null) {
             $this->{$name} = $input->get($param);
             $found = true;
-        } else  if (method_exists($app, 'getParams')) {
+        } elseif (method_exists($app, 'getParams')) {
             $params  = $app->getParams();
             if ($params->get($param) !== null) {
                 $this->{$name} = $params->get($param);
                 $found = true;
             }
-        } 
+        }
         return $found;
     }
 
@@ -71,23 +73,22 @@ class HtmlView extends BaseHtmlView
         $this->item = $this->get('Item');
         $this->getparam('id', 'id');
         if ($this->id) {
-            $modelGallery = new FoldergroupModel;
+            $modelGallery = new FoldergroupModel();
             $modelGallery->setState("folder.id", $this->id);
             $this->item = $modelGallery->getItem($this->id);
         }
         $this->media = "ALL";
         $this->getparam('media', 'media');
         $this->form = $this->get('Form');
-
-        // What Access Permissions does this user have? What can (s)he do?
-        if (isset($this->item))
+// What Access Permissions does this user have? What can (s)he do?
+        if (isset($this->item)) {
             $this->canDo = JOGalleryHelper::getActions('foldergroup', $this->item->id);
-        else	
+        } else {
             $this->canDo = JOGalleryHelper::getActions('foldergroup');
+        }
         // Check for errors.
-        if (is_array($errors) && count($errors = $this->get('Errors')))
-        {
-            Factory::getApplication()->enqueueMessage( implode('<br />', $errors),'error');
+        if (is_array($errors) && count($errors = $this->get('Errors'))) {
+            Factory::getApplication()->enqueueMessage(implode('<br />', $errors), 'error');
             return false;
         }
         $lang = Factory::getLanguage();
@@ -95,17 +96,15 @@ class HtmlView extends BaseHtmlView
         $base_dir =  JPATH_ADMINISTRATOR;
         $language_tag = $lang->getTag();
         $reload = true;
-        foreach ($extensions as $extension ) { 
+        foreach ($extensions as $extension) {
             $lang->load($extension, $base_dir, $language_tag, $reload);
         }
 
         // Set the toolbar
         $this->addToolBar();
-
-        // Display the template
+// Display the template
         parent::display($tpl);
-
-        // Set the document
+// Set the document
         $this->setDocument(Factory::getDocument());
     }
 
@@ -119,47 +118,52 @@ class HtmlView extends BaseHtmlView
     protected function addToolBar()
     {
         $input = Factory::getApplication()->input;
-
-        // Hide Joomla Administrator Main menu
+// Hide Joomla Administrator Main menu
         $input->set('hidemainmenu', true);
-
         $isNew = ($this->item->id == 0);
-
         ToolbarHelper::title($isNew ? Text::_('COM_JOGALLERY_CREATE_NEW_GROUP')
                                      : Text::_('COM_JOGALLERY_GROUP_EDIT'), 'Foldergroup');
-        // Build the actions for new and existing records.
-        if ($isNew)
-        {
-            // For new records, check the create permission.
-            if ($this->canDo->get('core.create')) 
-            {
+// Build the actions for new and existing records.
+        if ($isNew) {
+// For new records, check the create permission.
+            if ($this->canDo->get('core.create')) {
                 ToolbarHelper::apply('foldergroup.apply', 'JTOOLBAR_APPLY');
                 ToolbarHelper::save('foldergroup.save', 'JTOOLBAR_SAVE');
-                ToolbarHelper::custom('foldergroup.save2new', 'save-new.png', 'save-new_f2.png',
-                                       'JTOOLBAR_SAVE_AND_NEW', false);
+                ToolbarHelper::custom(
+                    'foldergroup.save2new',
+                    'save-new.png',
+                    'save-new_f2.png',
+                    'JTOOLBAR_SAVE_AND_NEW',
+                    false
+                );
             }
             ToolbarHelper::cancel('foldergroup.cancel', 'JTOOLBAR_CANCEL');
-        }
-        else
-        {
-            if ($this->canDo->get('core.edit'))
-            {
-                // We can save the new record
+        } else {
+            if ($this->canDo->get('core.edit')) {
+        // We can save the new record
                 ToolbarHelper::apply('foldergroup.apply', 'JTOOLBAR_APPLY');
                 ToolbarHelper::save('foldergroup.save', 'JTOOLBAR_SAVE');
- 
+
                 // We can save this record, but check the create permission to see
                 // if we can return to make a new one.
-                if ($this->canDo->get('core.create')) 
-                {
-                    ToolbarHelper::custom('foldergroup.save2new', 'save-new.png', 'save-new_f2.png',
-                                           'JTOOLBAR_SAVE_AND_NEW', false);
+                if ($this->canDo->get('core.create')) {
+                    ToolbarHelper::custom(
+                        'foldergroup.save2new',
+                        'save-new.png',
+                        'save-new_f2.png',
+                        'JTOOLBAR_SAVE_AND_NEW',
+                        false
+                    );
                 }
             }
-            if ($this->canDo->get('core.create')) 
-            {
-                ToolbarHelper::custom('foldergroup.save2copy', 'save-copy.png', 'save-copy_f2.png',
-                                       'JTOOLBAR_SAVE_AS_COPY', false);
+            if ($this->canDo->get('core.create')) {
+                ToolbarHelper::custom(
+                    'foldergroup.save2copy',
+                    'save-copy.png',
+                    'save-copy_f2.png',
+                    'JTOOLBAR_SAVE_AS_COPY',
+                    false
+                );
             }
             ToolbarHelper::cancel('foldergroup.cancel', 'JTOOLBAR_CLOSE');
         }

@@ -11,7 +11,8 @@ const defaultOptions = {
 };
 
 class PhotoSwipeFullscreen {
-    constructor(lightbox, options) {
+    constructor(lightbox, options)
+    {
         this.options = {
             ...defaultOptions,
             ...options
@@ -22,7 +23,8 @@ class PhotoSwipeFullscreen {
         });
     }
 
-    initPlugin(pswp) {
+    initPlugin(pswp)
+    {
         this.fullscreenAPI = this.getFullscreenAPI();
         const fullscreenSVG = '<svg aria-hidden="true" class="pswp__icn" viewBox="0 0 32 32" width="32" height="32">' +
             '<use class="pswp__icn-shadow" xlink:href="#pswp__icn-fullscreen-exit"/>' +
@@ -60,13 +62,14 @@ class PhotoSwipeFullscreen {
         });
     }
 
-    toggleFullscreen() {
+    toggleFullscreen()
+    {
         if (this.fullscreenAPI) {
             if (this.fullscreenAPI.isFullscreen()) {
                 // Exit full-screen mode
                 this.fullscreenAPI.exit();
                 // Toggle "Exit" and "Enter" full-screen SVG icon display
-                setTimeout(function() {
+                setTimeout(function () {
                     document.getElementById('pswp__icn-fullscreen-exit').style.display = 'none';
                     document.getElementById('pswp__icn-fullscreen-request').style.display = 'inline';
                 }, 300);
@@ -74,7 +77,7 @@ class PhotoSwipeFullscreen {
                 // Enter full-screen mode
                 this.fullscreenAPI.request(document.querySelector(`.pswp`));
                 // Toggle "Exit" and "Enter" full-screen SVG icon display
-                setTimeout(function() {
+                setTimeout(function () {
                     document.getElementById('pswp__icn-fullscreen-exit').style.display = 'inline';
                     document.getElementById('pswp__icn-fullscreen-request').style.display = 'none';
                 }, 300);
@@ -82,7 +85,8 @@ class PhotoSwipeFullscreen {
         }
     }
 
-    getFullscreenAPI() {
+    getFullscreenAPI()
+    {
         let api;
         let enterFS;
         let exitFS;
