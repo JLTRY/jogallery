@@ -9,7 +9,7 @@
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_JOGALLERY_DESCRIPTION</description>
 
@@ -45,9 +45,9 @@
 		<!-- Administration Menu Section -->
 		<menu link='index.php?option=com_jogallery' img="./media/com_jogallery/images/tux-16x16.png">COM_JOGALLERY_MENU</menu>
         <submenu>
-            <menu view="categories" link="option=com_categories&amp;view=categories&amp;extension=com_jogallery">COM_CATEGORIES</menu>
-            <menu view="galleries" link='option=com_jogallery' img="../media/com_jogallery/images/tux-16x16.png">COM_JOGALLERY_SUBMENU_GALLERIES</menu>
-            <menu view="foldergroups" link='option=com_jogallery&amp;view=foldergroups'>COM_JOGALLERY_SUBMENU_FOLDERS</menu>
+            <menu link="option=com_categories&amp;view=categories&amp;extension=com_jogallery">COM_CATEGORIES</menu>
+            <menu link='option=com_jogallery' img="../media/com_jogallery/images/tux-16x16.png">COM_JOGALLERY_SUBMENU_GALLERIES</menu>
+            <menu link='option=com_jogallery&amp;view=foldergroups'>COM_JOGALLERY_SUBMENU_FOLDERS</menu>
         </submenu>
 		<!-- Administration Main File Copy Section -->
 		<!-- Note the folder attribute: This attribute describes the folder

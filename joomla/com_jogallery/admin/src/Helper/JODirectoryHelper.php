@@ -11,7 +11,9 @@ namespace JLTRY\Component\JOGallery\Administrator\Helper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Log\Log;

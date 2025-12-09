@@ -14,7 +14,6 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryCategoryHelper;
 use JLTRY\Component\JOGallery\Site\Model\FoldergroupModel;
-
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Factory\MVCFactory;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
@@ -22,6 +21,10 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Factory as Factory;
 use Joomla\CMS\Language\Text as Text;
 use Joomla\CMS\Helper\ModuleHelper;
+
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 
 /**

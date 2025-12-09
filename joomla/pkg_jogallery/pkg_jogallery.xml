@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <extension type="package" version="4.0" method="upgrade">
-	<name>pkg_jogallery</name>
+	<name>PKG_JOGALLERY</name>
 	<packagename>jogallery</packagename>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<creationDate>November  6, 2025</creationDate>
 	<copyright>(C) 2007-2024 JL Tryoen. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<author>J.L. Tryoen</author>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<packager>J.L. Tryoen</packager>
-	<description>JO's galleries</description>
+	<description>PKG_JOGALLERY_DESCRIPTION</description>
 
 	<files folder="packages">
-	<file type="component" id="com_jogallery">com_jogallery.zip</file>
-	<file type="plugin" id="jogallery">jogallery.zip</file>
+		<file type="component" id="com_jogallery">com_jogallery.zip</file>
+		<file type="plugin" id="jogallery"  group="content" client="site">jogallery.zip</file>
 	</files>
-
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.pkg_jogallery.sys.ini</language>
+        <language tag="fr-FR">language/fr-FR/fr-FR.pkg_jogallery.sys.ini</language>
+    </languages>
     <updateservers>
        <server type="extension" priority="1" name="JO's Google auth updates">https://raw.githubusercontent.com/JLTRY/jogoogleauth/master/pkg_jogoogleauth/update_pkg.xml</server>
     </updateservers>

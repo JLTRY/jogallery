@@ -9,8 +9,10 @@
  
 namespace JLTRY\Component\JOGallery\Administrator\View\JOGallery;
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 
 use JLTRY\Component\JOGallery\Administrator\Model\JOGalleryModel;
 use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
@@ -56,10 +58,7 @@ class HtmlView extends BaseHtmlView
         return $found;
     }
     
-    public static function authorise($what)
-    {
-        return Factory::getUser()->authorise($what, "com_jogallery");
-    }
+
 
     /**
      * Display the Hello World view
@@ -119,7 +118,7 @@ class HtmlView extends BaseHtmlView
         // Check for errors.
         if (is_array($errors) && count($errors = $this->get('Errors')))
         {
-            JError::raiseError(500, implode('<br />', $errors));
+            Factory::getApplication()->enqueueMessage(implode('<br />', $errors), 'error');
             return false;
         }
 

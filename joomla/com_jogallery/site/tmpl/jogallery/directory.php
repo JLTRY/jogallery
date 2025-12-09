@@ -8,7 +8,10 @@
  */
 
 // No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 JLoader::import('components.com_jogallery.helpers.jdirectory', JPATH_ADMINISTRATOR);
 echo JODirectoryHelper::display(1, array("directory" => JOGalleryHelper::join_paths($this->directory),
                                      "rootdir" => JOGalleryHelper::join_paths($this->rootdir)));

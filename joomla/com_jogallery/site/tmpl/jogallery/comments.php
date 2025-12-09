@@ -7,8 +7,10 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 JLoader::import('components.com_jogallery.helpers.jcomments', JPATH_ADMINISTRATOR);
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;

@@ -10,8 +10,9 @@
 namespace JLTRY\Component\JOGallery\Administrator\Controller;
 use Joomla\CMS\MVC\Controller\BaseController;
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * General Controller of JOGallerycomponent

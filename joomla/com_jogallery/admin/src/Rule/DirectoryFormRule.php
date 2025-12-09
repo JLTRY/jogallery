@@ -7,13 +7,16 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+namespace JLTRY\Component\JOGallery\Administrator\Rule;
+use Joomla\CMS\Form\FormRule;
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
  
 /**
  * Form Rule class for the Joomla Framework.
  */
-class JFormRuleDirectory extends JFormRule
+class DirectoryFormRule extends FormRule
 {
     /**
      * The regular expression.

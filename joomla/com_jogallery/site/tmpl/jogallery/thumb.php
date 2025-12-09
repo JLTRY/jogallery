@@ -8,7 +8,10 @@
  */
 
 // No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 JLoader::import('components.com_jogallery.helpers.jogallery', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_jogallery.helpers.jthumbs', JPATH_ADMINISTRATOR);
 $data = JThumbsHelper::generatethumbimage(JOGalleryHelper::join_paths($this->rootdir),

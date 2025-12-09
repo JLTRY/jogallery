@@ -15,8 +15,9 @@ use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * JOGalleryModel
@@ -104,7 +105,9 @@ class JOGalleryModel extends AdminModel
     {
         if( !empty( $record->id ) )
         {
-            return Factory::getUser()->authorise( "core.delete", "com_jogallery.message." . $record->id );
+            return JOGalleryHelper::authorise( "core.delete", "com_jogallery.message." . $record->id );
+        } else {
+            return false;
         }
     }
 }

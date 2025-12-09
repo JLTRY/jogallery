@@ -14,9 +14,12 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 
 /**
  * JOGallery Foldergroup Model
@@ -103,7 +106,7 @@ class FoldergroupModel extends AdminModel
     {
         if( !empty( $record->id ) )
         {
-            return Factory::getUser()->authorise( "core.delete", "com_jogallery.message." . $record->id );
+            return JOGalleryHelper;authorise( "core.delete", "com_jogallery.message." . $record->id );
         }
     }
 

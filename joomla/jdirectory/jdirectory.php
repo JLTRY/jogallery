@@ -19,8 +19,10 @@ use Joomla\CMS\Factory;
 use Joomla\Event\Event;
 use Joomla\Event\SubscriberInterface;
 
-// Check to ensure this file is included in Joomla!
-defined( '_JEXEC' ) or die( 'Restricted access' );
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 define('PF_REGEX_JDIRECTORYI_PATTERN', "#{jdirectory (.*?)}#s");
 
 

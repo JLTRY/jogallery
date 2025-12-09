@@ -1,4 +1,4 @@
-VERSION = "3.0.0"
+VERSION = "3.0.1"
 VERSION2 = $(shell echo $(VERSION)|sed 's/ /-/g')
 PACKAGE = pkg_jogallery
 ZIPFILE = $(PACKAGE)-$(VERSION2).zip
@@ -18,7 +18,7 @@ NAMES = $(INSTALLS) $(EXTRAS)
 
 ZIPS = $(NAMES:=.zip)
 
-ZIPIGNORES = -x "*.git*"
+ZIPIGNORES = -x "*.git*" -x "*/test/*"
 
 parts: $(ZIPS)
 
@@ -40,7 +40,8 @@ $(ZIPFILE): $(ZIPS)
 
 fixversions:
 	@echo "Updating all install xml files to version $(VERSION)"
-	@export ATVERS=$(VERSION); export ATDATE=$(DATE); find . \( -name '*.xml' ! -name 'default.xml' ! -name 'metadata.xml' ! -name 'config.xml' \) -exec  ./fixvd {} \;
+	@find . \( -name '*.xml' ! -name 'default.xml' ! -name 'metadata.xml' ! -name 'config.xml' \) -exec  ./fixvd.sh {} $(VERSION) \;
+
 revertversions:
 	@echo "Reverting all install xml files"
 	@find . \( -name '*.xml' ! -name 'default.xml' ! -name 'metadata.xml' ! -name 'config.xml' \) -exec git checkout {} \;

@@ -10,7 +10,10 @@
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 
 // No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 echo JOGalleryHelper::display(array(	"dir" => JOGalleryHelper::join_paths($this->directory),
                                     "rootdir" => JOGalleryHelper::join_paths($this->rootdir),
                                     "id" => $this->id,

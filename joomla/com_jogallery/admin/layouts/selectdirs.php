@@ -1,6 +1,16 @@
 <?php 
-// No direct access to this file
-defined('JPATH_BASE') or die;
+/**
+ * @package     Joomla.Administrator
+ * @subpackage  com_jogallery
+ *
+ * @copyright   Copyright (C) 2015 - 2025 JL TRYOEN All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 $sid = $displayData['sid']; 
 $selectdirs = $displayData['selectdirs']; 
 ?>

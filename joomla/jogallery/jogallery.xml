@@ -7,10 +7,11 @@
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<authorUrl>www.jltryoen.fr</authorUrl>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<description>JOGallery plugin, use it with {jogallery directory=dir}</description>
+	<namespace path="src">JLTRY\Plugin\Content\JOGallery</namespace>
 	<files>
-		<filename plugin="jogallery">jogallery.php</filename>
-		<filename plugin="jogallery">jogallery.css</filename>
+		<folder plugin="jogallery">services</folder>
+		<folder>src</folder>
 	</files>
 </extension>

@@ -7,6 +7,9 @@
  */
 
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
-defined('_JEXEC') or die();
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
+
 $data = JOGalleryHelper::getFiles($this->rootdir , $this->directory, $this->media);
 JOGalleryHelper::json_answer($data);

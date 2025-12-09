@@ -8,11 +8,14 @@
  */
  
 namespace JLTRY\Component\JOGallery\Administrator\Controller;
+
+use JLTRY\Component\JOGallery\Administrator\Helper\JGalleryHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\FormController;
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * JOGallery Controller
@@ -49,7 +52,7 @@ class FoldergroupController extends FormController
         $id = isset( $data[ $key ] ) ? $data[ $key ] : 0;
         if( !empty( $id ) )
         {
-            return Factory::getUser()->authorise( "core.edit", "com_jogallery");
+            return JGalleryHelper::authorise( "core.edit", "com_jogallery");
         }
     }
 }

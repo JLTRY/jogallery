@@ -8,21 +8,25 @@
 *
 */
 
+namespace JLTRY\Plugin\Content\JOGallery\Extension;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Utility\Utility;
+use Joomla\CMS\Event\Content\ContentPrepareEvent;
+use Joomla\Event\SubscriberInterface;
 use JLTRY\Component\JOGallery\Administrator\Model\JOGalleryModel;
 use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryCategoryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\FoldergroupHelper;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Utility\Utility;
-use Joomla\Event\Event;
-use Joomla\Event\SubscriberInterface;
 
 
-// Check to ensure this file is included in Joomla!
-defined( '_JEXEC' ) or die( 'Restricted access' );
+
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 define('JG_REGEX_VARIABLES', '((?:\s?[a-zA-Z0-9_-]+=\"[^\"]+\")+|(?:\|?[a-zA-Z0-9_-]+=[^\"}]+)+)');
 define('JG_REGEX_JOGALLERY_PATTERN', "#{jgallery\s?". JG_REGEX_VARIABLES ."\s?}#s");
@@ -34,7 +38,7 @@ define('JG_REGEX_JOGALLERY_PATTERN', "#{jgallery\s?". JG_REGEX_VARIABLES ."\s?}#
 * JOGallery Content Plugin
 *
 */
-class plgContentJOGallery extends CMSPlugin  implements SubscriberInterface
+class JOGallery extends CMSPlugin  implements SubscriberInterface
 {
 
     /**
@@ -83,21 +87,21 @@ class plgContentJOGallery extends CMSPlugin  implements SubscriberInterface
      *
      * @return true if anything has been inserted into the content object
      */
-    public function onContentPrepare(Event $event)
+    public function onContentPrepare(ContentPrepareEvent $event)
     {
-        if (version_compare(JVERSION, '5', 'lt')) {
-            [$context, $row, $params, $page] = $event->getArguments();
-        } 
-         else {
-            $context = $event['context'];
-            $row = $event['subject'];
-            $params = $event['params'];
+        //Escape fast
+        if (!$this->getApplication()->isClient('site')) {
+            return;
         }
         //Escape fast
         if (!$this->params->get('enabled', 1)) {
             return true;
         }
-         if ( strpos( $row->text, '{jgallery' ) === false ) {
+        // use this format to get the arguments for both Joomla 4 and Joomla 5
+        // In Joomla 4 a generic Event is passed
+        // In Joomla 5 a concrete ContentPrepareEvent is passed
+        [$context, $article, $params, $page] = array_values($event->getArguments());
+         if ( strpos( $article->text, '{jgallery' ) === false ) {
             return true;
         }
         $app = Factory::getApplication();
@@ -105,7 +109,7 @@ class plgContentJOGallery extends CMSPlugin  implements SubscriberInterface
             return true;
         }
         $regexp = JG_REGEX_JOGALLERY_PATTERN;
-        $row->text = preg_replace_callback($regexp,
+        $article->text = preg_replace_callback($regexp,
             function($matches){
                 if (@$matches[1]) {
                     if ( strpos( $matches[1], "\"") === false ) {
@@ -134,7 +138,7 @@ class plgContentJOGallery extends CMSPlugin  implements SubscriberInterface
                     }
                     return $p_content;
                 }
-            }, $row->text);
+            }, $article->text);
         return true; 
     }
 }

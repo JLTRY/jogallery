@@ -15,8 +15,9 @@ use Joomla\CMS\Table\Table as JTable;
 use Joomla\Registry\Registry as JRegistry;
 use Joomla\CMS\Access\Rules as JAccessRules;
 
-// No direct access
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Hello Table class

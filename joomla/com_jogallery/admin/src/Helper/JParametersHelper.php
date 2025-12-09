@@ -10,8 +10,10 @@
 namespace JLTRY\Component\JOGallery\Administrator\Helper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Log\Log;
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects
 
 
 abstract class JParametersHelper
@@ -30,11 +32,6 @@ abstract class JParametersHelper
     static function get($parameter) {
       $value = ComponentHelper::getParams('com_jogallery')->get($parameter);
       if ($value === null) {
-        if (array_key_exists('thumb_small_width', self::$_default_parameters)){
-            Log::add("Error parameter thumb_small_width exists !!!", Log::ERROR, 'jerror');
-        }else {	 
-            Log::add("Error parameter thumb_small_width does not exist !!!", Log::WARNING, 'jerror');
-        } 
         if (array_key_exists($parameter, self::$_default_parameters)) {
             $value = self::$_default_parameters[$parameter];
         } else {

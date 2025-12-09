@@ -8,11 +8,11 @@
  */
 
 namespace JLTRY\Component\JOGallery\Administrator\Controller;
-use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Log\Log;
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -40,7 +40,7 @@ class JOGalleryController extends FormController
         $id = isset( $data[ $key ] ) ? $data[ $key ] : 0;
         if( !empty( $id ) )
         {
-            return Factory::getUser()->authorise( "core.edit", "com_jogallery.message." . $id );
+            return JGalleryHelper::authorise( "core.edit", "com_jogallery.message." . $id );
         }
     }
     

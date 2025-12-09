@@ -22,8 +22,9 @@ use Joomla\CMS\Access\Access;
 use Joomla\CMS\Layout\LayoutHelper;
 
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// phpcs:disable PSR1.Files.SideEffects
+\defined('_JEXEC') or die;
+// phpcs:enable PSR1.Files.SideEffects;
 
 
 
@@ -294,6 +295,13 @@ class JOGalleryHelper
         }
     }
 
+
+    public static function authorise($what, $assetname="com_jogallery")
+    {
+        return Factory::getApplication()->getIdentity()->authorise($what, $assetname);
+    }
+
+
     /**
      * Get the actions
      */
@@ -308,11 +316,10 @@ class JOGalleryHelper
             $assetName = 'com_jogallery.message.'.(int) $messageId;
         }
 
-        //$actions = Access::getActions('com_jogallery', 'component');
         $actions = Access::getActionsFromFile(JPATH_COMPONENT_ADMINISTRATOR . '/access.xml');
 
         foreach ($actions as $action) {
-            $result->set($action->name, Factory::getUser()->authorise($action->name, $assetName));
+            $result->set($action->name, self::authorise($action->name, $assetName));
         }
 
         return $result;
