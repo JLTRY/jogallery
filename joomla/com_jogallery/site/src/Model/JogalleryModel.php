@@ -47,7 +47,7 @@ class JOGalleryModel extends BaseDatabaseModel
     protected function populateState()
     {
         // Get the message id
-        $jinput = Factory::getApplication()->input;
+        $jinput = Factory::getApplication()->getInput();
         $id     = $jinput->get('id', 1, 'INT');
         $this->setState('message.id', $id);
 // Load the parameters.

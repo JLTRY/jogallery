@@ -121,7 +121,7 @@ class JOGalleryHelper
     {
 
         if (version_compare(JVERSION, '4.0', 'ge')) {
-            return call_user_func_array(array(Factory::getApplication()->input, 'getVar'), $params);
+            return call_user_func_array(array(Factory::getApplication()->getInput(), 'getVar'), $params);
         } else {
             return call_user_func_array('JRequest::getVar', $params);
         }

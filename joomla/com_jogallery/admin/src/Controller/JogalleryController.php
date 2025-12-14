@@ -29,61 +29,45 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
  */
 class JOGalleryController extends FormController
 {
-    /**
-    * Implement to allow edit or not
-    * Overwrites: JControllerForm::allowEdit
-    *
-    * @param array $data
-    * @param string $key
-    * @return bool
-    */
-    protected function allowEdit($data = array(), $key = 'id')
-    {
-        $id = isset($data[ $key ]) ? $data[ $key ] : 0;
-        if (!empty($id)) {
-            return JOGalleryHelper::authorise("core.edit", "com_jogallery.message." . $id);
-        }
-    }
-
 
     public function genthumbs()
     {
         $view = $this->getView('jogallery', 'html');
-// sets the template to someview.php
-        $input = Factory::getApplication()->input;
+        // sets the template to someview.php
+        $input = Factory::getApplication()->getInput();
         $viewLayout = $input->getVar('tmpl', 'thumbs');
-// tell the view which tmpl to use
+        // tell the view which tmpl to use
         $view->setLayout($viewLayout);
         $model = $this->getModel('jogallery');
         $view->setModel($model, true);
-// go off to the view and call the display method
+        // go off to the view and call the display method
         $view->display();
     }
 
     public function genrecthumbs()
     {
         $view = $this->getView('jogallery', 'html');
-// sets the template to someview.php
-        $input = Factory::getApplication()->input;
+        // sets the template to someview.php
+        $input = Factory::getApplication()->getInput();
         $viewLayout  = $input->getVar('tmpl', 'recthumbs');
-// tell the view which tmpl to use
+        // tell the view which tmpl to use
         $view->setLayout($viewLayout);
         $model = $this->getModel('jogallery');
         $view->setModel($model, true);
-// go off to the view and call the display method
+        // go off to the view and call the display method
         $view->display();
     }
 
     public function comments()
     {
         $view = $this->getView('jogallery', 'html');
-// sets the template to someview.php
-        $viewLayout  = Factory::getApplication()->input->getVar('tmpl', 'comments');
-// tell the view which tmpl to use
+        // sets the template to someview.php
+        $viewLayout  = Factory::getApplication()->getInput()->getVar('tmpl', 'comments');
+        // tell the view which tmpl to use
         $view->setLayout($viewLayout);
         $model = $this->getModel('jogallery');
         $view->setModel($model, true);
-// go off to the view and call the display method
+        // go off to the view and call the display method
         $view->display();
     }
 
@@ -100,7 +84,7 @@ class JOGalleryController extends FormController
                         'cellspacing','title','id','class'
                         ));
         $directory64 = Factory::getApplication()->getInput()->getVar('directory64', '');
-// tell the view which tmpl to use
+        // tell the view which tmpl to use
         $post_data = Factory::getApplication()->getInput()->getVar('comments', array());
         $ret = JOGalleryHelper::savecomments(utf8_decode(base64_decode($directory64)), $post_data);
         JOGalleryHelper::jsonAnswer($ret);
@@ -108,9 +92,8 @@ class JOGalleryController extends FormController
 
     public function delete()
     {
-        $input = Factory::getApplication()->input;
-//$input = new JInput($_POST);
-        $directory64 = Factory::getApplication()->getInput()->getVar('directory64', '');
+        $input = Factory::getApplication()->getInput();
+        $directory64 = $input->getVar('directory64', '');
 // tell the view which tmpl to use
         $post_data = $input->getVar('images', array());
         $keep = $input->getVar('keep', 1);
@@ -126,7 +109,7 @@ class JOGalleryController extends FormController
     {
         $data = JOGalleryHelper::getVar('jform', array(), 'post', 'array');
         $data['catid'] = $data['jogallerycatid'];
-        Factory::getApplication()->input->post->set('jform', $data);
+        Factory::getApplication()->getInput()->post->set('jform', $data);
         return parent::save('id', 'id');
     }
 }

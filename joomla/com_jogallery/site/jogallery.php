@@ -17,7 +17,7 @@ use Joomla\CMS\Factory as Factory;
 // Get an instance of the controller prefixed by HelloWorld
 $controller = JControllerLegacy::getInstance('JOGallery');
 // Perform the Request task
-$input = Factory::getApplication()->input;
+$input = Factory::getApplication()->getInput();
 $controller->execute($input->getCmd('task'));
 // Redirect if set by the controller
 $controller->redirect();
