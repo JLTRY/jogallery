@@ -23,3 +23,4 @@ Once configured, the galleries can be shown in articles.
 ## 2025-12-08 version 3.0.3
 
 Initial official version
+![jogallery](https://github.com/user-attachments/assets/a6fdcead-fc31-4fe9-a23d-fa281f33d6a4)
