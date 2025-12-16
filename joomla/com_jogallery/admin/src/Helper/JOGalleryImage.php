@@ -149,7 +149,10 @@ class JOGalleryImage
                 fputcsv($fp, array_keys(get_object_vars((object)$results[0])), ";");
             }
             foreach ($results as $fields) {
-                fputcsv($fp, get_object_vars((object)$fields), ";");
+                $vars = get_object_vars((object)$fields);
+                fputcsv($fp, array_map(function($value) {
+                                        return $value === false ? '0' : $value;
+                                        }, get_object_vars((object)$fields)), ";");
             }
             fflush($fp);
             fclose($fp);
