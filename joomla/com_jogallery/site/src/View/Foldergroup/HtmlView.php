@@ -76,6 +76,8 @@ class HtmlView extends BaseHtmlView
         }
         $this->media = "ALL";
         $this->getparam('media', 'media');
+        $this->lightbox = "fancybox";
+        $this->getparam('lightbox', 'lightbox'); 
         $this->type = "directories";
         $this->getparam('type', 'type');
         if ($this->item != null) {
@@ -100,7 +102,7 @@ class HtmlView extends BaseHtmlView
         }
         if ($canview) {
             $this->rootdir = JParametersHelper::getrootdir();
-// Display the view
+            // Display the view
             parent::display($tpl);
         }
     }

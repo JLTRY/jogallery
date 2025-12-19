@@ -64,21 +64,24 @@ class HtmlView extends BaseHtmlView
         );
         $this->filterForm       = $this->get('FilterForm');
         $this->activeFilters    = $this->get('ActiveFilters');
-// What Access Permissions does this user have? What can (s)he do?
+        // What Access Permissions does this user have? What can (s)he do?
         $this->canDo = JOGalleryHelper::getActions();
-// Check for errors.
+        // Check for errors.
         if (is_array($errors) && count($errors = $this->get('Errors'))) {
             Factory::getApplication()->enqueueMessage(implode('<br />', $errors), 'error');
             return false;
         }
+        //load languages
+        $language = Factory::getLanguage();
+        $language->load('com_jogallery', JPATH_ADMINISTRATOR);
 
         // Set the submenu
         JOGalleryHelper::addSubmenu('jogalleries');
-// Set the toolbar and number of found items
+        // Set the toolbar and number of found items
         $this->addToolBar();
-// Display the template
+        // Display the template
         parent::display($tpl);
-// Set the document
+        // Set the document
         $document = Factory::getDocument();
         $document->setTitle(Text::_('COM_JOGALLERY_ADMINISTRATION'));
     }

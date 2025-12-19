@@ -6,9 +6,17 @@ function radiobox($, idp, values, callback, params)
     this._values = values;
     this._callback = callback;
     this._params = params;
+	this._curid = null;
     this.callback = function (value) {
         this._callback($, value, this._params);
     }
+    this.setchecked = function(id) {
+		if (this._curid) {
+			$('label[for="' + this._curid + '"]').attr('class', 'btn btn-sm btn-warning');
+		}
+		$('label[for="' + id + '"]').attr('class', 'btn btn-sm btn-info');
+		this._curid = id;
+	};
 
     this.init = function () {
         $(this._idp).html('');
@@ -20,9 +28,11 @@ function radiobox($, idp, values, callback, params)
         $.each(this._values,function (index, item) {
             text += '<td>' +
                         '<input name="' + this._idp +
+								' class=\"radiobox\" ' +
                                 '" type="radio" ' +
                                 " id=\"" + item.name + '"' +
-                                'style="display:none;" value="' + item.value + '" />' +
+                                'style="display:none;" '+
+								 ' value="' + item.value + '" />' +
                         "<label class=\"" + btclass + "\"" +
                                     " for=\"" +  item.name  + "\" >" +
                         item.relative +
@@ -39,34 +49,26 @@ function radiobox($, idp, values, callback, params)
         $("#findir" + this._idp).data('radiobox', this);
         var that = this;
         var lastval = null;
+		var lastid = null;
         $(this._idp).find("input").each(function () {
+			this.radiobox = that;
             $(this).change(function () {
-                var radiobox = that;
-                var label = $('label[for="' + $(this).attr('value') + '"]');
-                if (label.length <= 0) {
-                    var parentElem = $(this).parent(),
-                        parentTagName = parentElem.get(0).tagName.toLowerCase();
-                    if (parentTagName == "label") {
-                        label = parentElem;
-                    }
-                }
-                if ($(this).checked) {
-                    label.attr('class', 'btn btn-sm btn-info');
-                    //$(this).prop("checked", false );
-                } else {
-                    label.attr('class', 'btn btn-sm btn-warning');
-                    //$(this).prop("checked", true);
-                }
+                var radiobox = $(this).data('radiobox');
                 radiobox.callback($(this).val());
+				radiobox.setchecked($(this).attr('id'), true);
             });
             lastval = $(this).val();
+			lastid = $(this).attr('id');
         });
-        return lastval;
+		$(this._idp).find("input").each(function (){ 
+			$(this).data('radiobox', that);
+		});
+		if (lastid) {
+			this.setchecked(lastid);
+			this.callback(lastval);
+		}
     };
-    lastval = this.init();
-    if (lastval != null) {
-        this.callback(lastval);
-    }
+    this.init();
     return this;
 }
 

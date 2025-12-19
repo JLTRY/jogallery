@@ -64,6 +64,8 @@ class HtmlView extends BaseHtmlView
         $this->getparam('id', 'id');
         $this->media = "ALL";
         $this->getparam('media', 'media');
+        $this->lightbox = "fancybox";
+        $this->getparam('lightbox', 'lightbox'); 
         if ($this->item == null) {
             if ($this->id !== -1) {
                 $model = new JOGalleryModel();

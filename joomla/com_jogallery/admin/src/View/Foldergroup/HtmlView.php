@@ -80,7 +80,7 @@ class HtmlView extends BaseHtmlView
         $this->media = "ALL";
         $this->getparam('media', 'media');
         $this->form = $this->get('Form');
-// What Access Permissions does this user have? What can (s)he do?
+        // What Access Permissions does this user have? What can (s)he do?
         if (isset($this->item)) {
             $this->canDo = JOGalleryHelper::getActions('foldergroup', $this->item->id);
         } else {
@@ -99,12 +99,11 @@ class HtmlView extends BaseHtmlView
         foreach ($extensions as $extension) {
             $lang->load($extension, $base_dir, $language_tag, $reload);
         }
-
         // Set the toolbar
         $this->addToolBar();
-// Display the template
+        // Display the template
         parent::display($tpl);
-// Set the document
+        // Set the document
         $this->setDocument(Factory::getDocument());
     }
 
@@ -118,14 +117,14 @@ class HtmlView extends BaseHtmlView
     protected function addToolBar()
     {
         $input = Factory::getApplication()->getInput();
-// Hide Joomla Administrator Main menu
+        // Hide Joomla Administrator Main menu
         $input->set('hidemainmenu', true);
         $isNew = ($this->item->id == 0);
         ToolbarHelper::title($isNew ? Text::_('COM_JOGALLERY_CREATE_NEW_GROUP')
                                      : Text::_('COM_JOGALLERY_GROUP_EDIT'), 'Foldergroup');
-// Build the actions for new and existing records.
+        // Build the actions for new and existing records.
         if ($isNew) {
-// For new records, check the create permission.
+            // For new records, check the create permission.
             if ($this->canDo->get('core.create')) {
                 ToolbarHelper::apply('foldergroup.apply', 'JTOOLBAR_APPLY');
                 ToolbarHelper::save('foldergroup.save', 'JTOOLBAR_SAVE');
@@ -140,7 +139,7 @@ class HtmlView extends BaseHtmlView
             ToolbarHelper::cancel('foldergroup.cancel', 'JTOOLBAR_CANCEL');
         } else {
             if ($this->canDo->get('core.edit')) {
-        // We can save the new record
+                // We can save the new record
                 ToolbarHelper::apply('foldergroup.apply', 'JTOOLBAR_APPLY');
                 ToolbarHelper::save('foldergroup.save', 'JTOOLBAR_SAVE');
 
@@ -178,6 +177,6 @@ class HtmlView extends BaseHtmlView
         $isNew = ($this->item->id == 0);
         $document->setTitle($isNew ? Text::_('COM_JOGALLERY_FOLDERGROUP_CREATING')
                                     : Text::_('COM_JOGALLERY_FOLDERGROUP_EDITING'));
-        Text::script('com_jogallery_JOGallery_ERROR_UNACCEPTABLE');
+        Text::script('COM_JOGALLERY_JOGallery_ERROR_UNACCEPTABLE');
     }
 }

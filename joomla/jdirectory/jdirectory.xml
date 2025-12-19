@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<authorUrl>www.jltryoen.fr</authorUrl>
-	<version>3.0.1</version>
+	<version>3.0.3</version>
 	<description>JDirectory plugin, use it with {jdirectory directory=dir}</description>
 	<files>
 		<filename plugin="jdirectory">jdirectory.php</filename>

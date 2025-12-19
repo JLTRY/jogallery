@@ -14,9 +14,11 @@
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryCategoryHelper;
+
 HTMLHelper::_('jquery.framework');
-//HTMLHelper::_('formbehavior.chosen', 'select');
 
 $listOrder     = $this->escape($this->filter_order);
 $listDirn      = $this->escape($this->filter_order_Dir);
@@ -24,35 +26,33 @@ $listDirn      = $this->escape($this->filter_order_Dir);
 <form action="index.php?option=com_jogallery&view=jogalleries" method="post" id="adminForm" name="adminForm">
     <div class="row-fluid">
         <div class="span6">
-            <?php echo Text::_('COM_JOGALLERY_JGALLERIE_FILTER'); ?>
             <?php
-                /*echo JLayoutHelper::render(
-                    'joomla.searchtools.default',
-                    array('view' => $this)
-                );*/
+                echo LayoutHelper::render('joomla.searchtools.default', ['view' => $this]);
             ?>
         </div>
     </div>
     <table class="table table-striped table-hover">
         <thead>
         <tr>
-            <th width="1%"><?php echo Text::_('COM_JOGALLERY_NUM'); ?></th>
-            <th width="2%">
+            <th class="w-1 text-left">
                 <?php echo HTMLHelper::_('grid.checkall'); ?>
             </th>
-            <th width="90%">
+            <th class="w-1 text-left">
+                <?php echo HTMLHelper::_('grid.sort', 'COM_JOGALLERY_PUBLISHED', 'published', $listDirn, $listOrder); ?>
+            </th>
+            <th class="text-left" style="min-width:100px">
                 <?php echo HTMLHelper::_(
                     'grid.sort',
-                    'COM_JOGALLERY_JOGALLERYS_NAME',
+                    'COM_JOGALLERY_JOGALLERIES_NAME',
                     'directory',
                     $listDirn,
                     $listOrder
                 ); ?>
             </th>
-            <th width="5%">
-                <?php echo HTMLHelper::_('grid.sort', 'COM_JOGALLERY_PUBLISHED', 'published', $listDirn, $listOrder); ?>
+            <th class="text-left" style="min-width:50px">
+                <?php echo Text::_('COM_JOGALLERY_CATEGORY'); ?>
             </th>
-            <th width="2%">
+            <th class="w-1 text-left">
                 <?php echo HTMLHelper::_('grid.sort', 'COM_JOGALLERY_ID', 'id', $listDirn, $listOrder); ?>
             </th>
         </tr>
@@ -73,17 +73,10 @@ $listDirn      = $this->escape($this->filter_order_Dir);
                     $link = Route::_('index.php?option=com_jogallery&task=jogallery.edit&id=' . $row->id);
                     ?>
                     <tr>
-                        <td><?php echo $this->pagination->getRowOffset($i); ?></td>
-                        <td>
-                            <?php echo HTMLHelper::_('grid.id', $i, $row->id); ?>
+                        <td class="w-1 text-center">
+                             <?php echo HTMLHelper::_('grid.id', $i, $row->id); ?>
                         </td>
-                        <td>
-                            <a href="<?php echo $link; ?>" 
-                                title="<?php echo Text::_('COM_JOGALLERY_EDIT_JOGALLERY'); ?>">
-                                <?php echo $row->directory; ?>
-                            </a>
-                        </td>
-                        <td align="center">
+                        <td class="w-1 text-left">
                             <?php echo HTMLHelper::_(
                                 'jgrid.published',
                                 $row->published,
@@ -93,7 +86,18 @@ $listDirn      = $this->escape($this->filter_order_Dir);
                                 'cb'
                             ); ?>
                         </td>
-                        <td align="center">
+                        <td class="text-left" style="min-width:100px">
+                            <a href="<?php echo $link; ?>" 
+                                title="<?php echo Text::_('COM_JOGALLERY_EDIT_JOGALLERY'); ?>">
+                                <?php echo $row->directory; ?>
+                            </a>
+                        </td>
+                        <td class="text-left" style="min-width:50px">
+                            <?php 
+                                echo (($row->catid ==0)? "-" : JOGalleryCategoryHelper::getCategoryTitle($row->catid)); 
+                            ?>
+                        </td>
+                        <td class="w-1 text-left">
                             <?php echo $row->id; ?>
                         </td>
                     </tr>

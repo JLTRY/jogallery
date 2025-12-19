@@ -2,7 +2,9 @@ function fillgallery($, value, params)
 {
     id = params[0];
     rootdir = params[1];
-    url =  rootdir + "index.php?option=com_jogallery&view=jogallery&tmpl=component&directory64=" + value;
+    media = params[2];
+    lightbox = params[3];
+    url =  rootdir + "index.php?option=com_jogallery&view=jogallery&tmpl=component&directory64=" + value +"&media=" + media + "&lightbox=" + lightbox;
     $.ajax({
         url: url,
         type: "POST",

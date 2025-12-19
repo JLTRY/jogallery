@@ -33,11 +33,7 @@ function psw_imagesviewer($, id, values)
                     var sdate = "";
                 }
                 if (this._vidextensions.includes(extension)) {
-                    /*content = '<video class="lazy" controls="controls" width="auto" height="240" ><source src="'+ urlfilename + basename + '" type="video/mp4"> Sorry, your browser doesnt support    embedded videos</video>';*/
-                    /*content ="<a  href=\"" + urlfilename +"\">" + basename +"</a><br>";*/
-                    /*content += "<a data-fancybox=\"gallery\"  href=\"" + urlfilename +"\"  data-caption=\"" +  sdate + tvalue['comment'] + "\">" +
-                                "<span class=\"parent\"><img class=\"image2\" width=\"128\" id=\""+ sid + "\" src=\"" + urlshortfilename + " \"/><i class=\"fa-solid fa-video image1\"></i></span></a>";*/
-                    content += '<a href="' + urlfilename + '"' +
+                   content += '<a href="' + urlfilename + '"' +
                                   'data-pswp-video-src="' + urlfilename + '"' +
                                   'data-pswp-width="800" data-pswp-height="600" data-pswp-type="video">' +
                                   '<span class="parent"><img class="image2" src="' + urlshortfilename + '" alt="" width="200"/><i class=\"fa-solid fa-video image1\"></i></span>' +

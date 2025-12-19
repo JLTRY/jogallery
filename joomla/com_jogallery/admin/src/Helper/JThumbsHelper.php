@@ -268,7 +268,7 @@ abstract class JThumbsHelper
         Log::add("deletethumbs:" . $image, Log::WARNING, 'com_jogallery');
         $dir = JOGalleryHelper::joinPaths(JPATH_ROOT, $rootdir, $directory);
         Log::add("deletethumbs:2:" . $image, Log::WARNING, 'com_jogallery');
-        foreach (self::$_formats as $format) {
+        foreach (self::$formats as $format) {
             $filename = self::getthumb($dir, $format, $image);
             Log::add("deletethumbs:" . $filename, Log::WARNING, 'com_jogallery');
             if (file_exists($filename)) {

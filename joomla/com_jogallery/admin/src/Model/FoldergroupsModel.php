@@ -22,7 +22,7 @@ use Joomla\Filter\OutputFilter;
 // phpcs:enable PSR1.Files.SideEffects
 
 /**
- * JOGalleryModelfoldergroups Model
+ * FoldergroupsModel
  *
  * @since  0.0.1
  */
@@ -77,7 +77,10 @@ class FoldergroupsModel extends ListModel
         } elseif ($published === '') {
             $query->where('(published IN (0, 1))');
         }
-
+        $category = $this->getState('filter.category');
+        if (is_array($category)) {
+           $query->where('catid IN (' . implode(',',$category) . ')');
+        }
         // Add the list ordering clause.
         $orderCol   = $this->state->get('list.ordering', 'name');
         $orderDirn  = $this->state->get('list.direction', 'asc');

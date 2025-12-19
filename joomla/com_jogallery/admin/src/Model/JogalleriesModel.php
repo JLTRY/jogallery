@@ -23,7 +23,7 @@ use Joomla\Filter\OutputFilter;
 
 
 /**
- * HelloWorldList Model
+ * JOGalleriesModel
  *
  * @since  0.0.1
  */
@@ -60,10 +60,10 @@ class JOGalleriesModel extends ListModel
         // Initialize variables.
         $db    = Factory::getDbo();
         $query = $db->getQuery(true);
-// Create the base select statement.
+        // Create the base select statement.
         $query->select('*')
               ->from($db->quoteName('#__jogallery'));
-// Filter: like / search
+        // Filter: like / search
         $search = $this->getState('filter.search');
         if (!empty($search)) {
             $like = $db->quote('%' . $search . '%');
@@ -77,7 +77,10 @@ class JOGalleriesModel extends ListModel
         } elseif ($published === '') {
             $query->where('(published IN (0, 1))');
         }
-
+        $category = $this->getState('filter.category');
+        if (is_array($category)) {
+           $query->where('catid IN (' . implode(',',$category) . ')');
+        }
         // Add the list ordering clause.
         $orderCol   = $this->state->get('list.ordering', 'directory');
         $orderDirn  = $this->state->get('list.direction', 'asc');

@@ -111,7 +111,7 @@ class HtmlView extends BaseHtmlView
         }
         // What Access Permissions does this user have? What can (s)he do?
         $this->canDo = $this->item && JOGalleryHelper::getActions($this->item->id);
-// Check for errors.
+        // Check for errors.
         if (is_array($errors) && count($errors = $this->get('Errors'))) {
             Factory::getApplication()->enqueueMessage(implode('<br />', $errors), 'error');
             return false;
@@ -121,10 +121,10 @@ class HtmlView extends BaseHtmlView
         $this->addToolBar();
         $language = Factory::getLanguage();
         $language->load('joomla', JPATH_ADMINISTRATOR);
-        $language->load('com_JOGALLERY', JPATH_ADMINISTRATOR, null, true);
-// Display the template
+        $language->load('com_jogallery', JPATH_ADMINISTRATOR, null, true);
+        // Display the template
         parent::display($tpl);
-// Set the document
+        // Set the document
         $this->setDocument(Factory::getDocument());
     }
 

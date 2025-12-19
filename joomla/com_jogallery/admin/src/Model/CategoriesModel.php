@@ -73,13 +73,13 @@ class JOGalleryModelCategories extends ListModel
         }
     }
 
-    public function getcategoryandchildren($id)
+    public function getCategoryandChildren($id)
     {
         $allcat = $this->getItems();
         $children = array($id);
         foreach ($allcat as $cat) {
             if ($cat->parent_id == $id) {
-                $children  = array_merge($children, $this->getcategoryandchildren($cat->id));
+                $children  = array_merge($children, $this->getCategoryandChildren($cat->id));
             }
         }
         return $children;

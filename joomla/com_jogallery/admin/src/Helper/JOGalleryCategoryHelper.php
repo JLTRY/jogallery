@@ -22,7 +22,7 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JGalleryCategory;
 
 abstract class JOGalleryCategoryHelper
 {
-    public static function getcategorytitle($catID)
+    public static function getCategoryTitle($catID)
     {
         $db = Factory::getDBO();
         $db->setQuery("SELECT title FROM #__categories WHERE id = " . $catID);
@@ -30,7 +30,7 @@ abstract class JOGalleryCategoryHelper
         return $title;
     }
 
-    public static function getcategoryaccess($catID)
+    public static function getCategoryAccess($catID)
     {
         $db = Factory::getDBO();
         $db->setQuery("SELECT access FROM #__categories WHERE id = " . $catID);
@@ -39,7 +39,7 @@ abstract class JOGalleryCategoryHelper
     }
 
 
-    public static function getcategoryparams($catID)
+    public static function getCategoryParams($catID)
     {
         $jmodelcategories = JOGalleryModelCategories::getInstance();
         $category = $jmodelcategories->getItem($catID);
@@ -47,7 +47,7 @@ abstract class JOGalleryCategoryHelper
     }
 
 
-    public static function getcategoryandchildren($catID, $type = 'Content', $recurse = true)
+    public static function getCategoryandChildren($catID, $type = 'Content', $recurse = true)
     {
         $categories = Categories::getInstance($type);
         $cat = $categories->get($catID);
@@ -57,7 +57,7 @@ abstract class JOGalleryCategoryHelper
             foreach ($children as $child) {
                 $catchildren = array_merge(
                     $catchildren,
-                    self::getcategoryandchildren($child->id, $type, true)
+                    self::getCategoryandChildren($child->id, $type, true)
                 );
             }
         }
@@ -84,7 +84,7 @@ abstract class JOGalleryCategoryHelper
             $ok = true;
         } else {
             $levels = $user->getAuthorisedViewLevels();
-            $access = self::getcategoryaccess($catid);
+            $access = self::getCategoryAccess($catid);
             $ok = in_array($access, $levels);
         }
         return $ok;

@@ -44,7 +44,7 @@ class JOGalleryHelper
     public static function loadLibrary($libraries = array('jquery' => true))
     {
         $document = Factory::getDocument();
-/** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
+        /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
         $wa = $document->getWebAssetManager();
         $wr = $wa->getRegistry();
         $wr->addExtensionRegistryFile("com_jogallery");
@@ -112,7 +112,7 @@ class JOGalleryHelper
             $wa->useScript('lazyload');
         }
         if (isset($libraries['photoswipe'])) {
-//$wa->useScript('photoswipe');
+            $wa->useScript('photoswipe');
             $wa->useStyle('photoswipe');
         }
     }
@@ -373,11 +373,12 @@ class JOGalleryHelper
             JPATH_ADMINISTRATOR . '/components/com_jogallery/layouts'
         );
         JOGalleryHelper::loadLibrary(array("jimages" => true, "fancybox" => true));
-        JOGalleryHelper::loadLibrary(array("inline" => array('(function($) {
+        JOGalleryHelper::loadLibrary(array("inline" => 
+                                               array('(function($) {
                                                         $(document).ready(function() {
-              jimages_getimages($, "' .
-                  $sid . '", ' . json_encode($listfiles) . ');
-          })})(jQuery);',
+                                                              jimages_getimages($, "' .
+                                                                  $sid . '", ' . json_encode($listfiles) . ');
+                                                          })})(jQuery);',
                                                     ['position' => 'after'],
                                                     [],
                                                     ['com_jogallery.jimages'])));
@@ -393,18 +394,18 @@ class JOGalleryHelper
         );
         JOGalleryHelper::loadLibrary(array("psw_images" => true, "photoswipe" => true));
         JOGalleryHelper::loadLibrary(array("inline" => array('import {init_psw,psw_images_getimages} from "' .
-                        Uri::root() .
-                        '/media/com_jogallery/js/psw_images.js";
-                                                        (function($) {
-              $(document).ready(function() {
-              psw_images_getimages($, "' . $sid .
-                  '", ' . json_encode($listfiles) . ');
-              init_psw($, "' . $sid . '");
-          })})(jQuery);',
-                                                    ['position' => 'after'],
-                                                    ['type' => 'module'],
-                                                    ["photoswipe"],
-                                                    )));
+                                                                Uri::root() .
+                                                                '/media/com_jogallery/js/psw_images.js";
+                                                                (function($) {
+                                                                  $(document).ready(function() {
+                                                                  psw_images_getimages($, "' . $sid .
+                                                                      '", ' . json_encode($listfiles) . ');
+                                                                  init_psw($, "' . $sid . '");
+                                                            })})(jQuery);',
+                                                            ['position' => 'after'],
+                                                            ['type' => 'module'],
+                                                            ["photoswipe"],
+                                                            )));
     }
 
     public static function outputimg($rootdir, $directory, $file, $name, $icon, $width, &$content)
@@ -475,10 +476,8 @@ class JOGalleryHelper
         if (is_array($_params) == false) {
             return  "errorf:" . print_r($_params, true);
         }
-        if (
-                ! array_key_exists('directory', $_params) &&
-            ! array_key_exists('dir', $_params)
-        ) {
+        if (! array_key_exists('directory', $_params) &&
+            ! array_key_exists('dir', $_params)) {
             return  "errorf: missing dir/directory param" . print_r($_params, true);
         }
         $directory = null;
@@ -570,7 +569,7 @@ class JOGalleryHelper
                 $content .= "image not found :" . print_r($listimages, 1) . " in " . $directory;
             }
         } else {
-        //sub directories
+            //sub directories
             $sdir = html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir, $directory));
             if (self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $media, $lightbox) >= 0) {
                 $listfiles = self::getFiles($rootdir, $directory, $media, $startdate, $enddate);

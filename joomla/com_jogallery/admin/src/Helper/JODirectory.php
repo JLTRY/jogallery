@@ -187,7 +187,7 @@ class JODirectory
         $imagesid = 'jogallery' . $id;
         $urlroot = Uri::root(true);
         $selectdirs = array();
-// no line for folder
+        // no line for folder
         if ($this->basename != null) {
             array_push($selectdirs, array($this->getbase64path(),
                 JOGalleryHelper::joinPaths($this->basename)));
@@ -217,7 +217,8 @@ class JODirectory
                                                     jselectdirs_getimages($, "' . $sid . '", "' .
                                                         $imagesid . '", "' .
                                                         Uri::root(false) . '","' .
-                                                        $media . '","' . $lightbox . '");
+                                                        $media . '","' .
+                                                        $lightbox . '");
                                                     })})(jQuery);',
                                             ['position' => 'after'],
                                             ['type' => 'module'],
@@ -284,7 +285,7 @@ class JODirectory
         $json = json_encode($arr);
     }
 
-    public function outputradio($id, &$content)
+    public function outputradio($id, &$content, $media, $lightbox)
     {
         $json = "";
         $this->outputjson($json);
@@ -299,9 +300,11 @@ class JODirectory
                                                         $sid . '" ,' .
                                                         $json .
                                                         ',  fillgallery, [ "#' .
-                                                        $sidg . '", "' .
-                                                        Uri::root() . '"]);
-                                                    });',
+                                                        $sidg . '", '.
+                                                        '"' . Uri::root() . '", ' .
+                                                        '"' . $media . '", '.
+                                                        '"' . $lightbox . '"]);' .
+                                                    '});',
                                                     ['position' => 'after'],
                                                     [],
                                                     ['com_jogallery.radiobox'])));
@@ -370,7 +373,7 @@ class JODirectory
                 $this->outputdirectories($id, $content);
                 break;
             default:
-                $this->outputradio($id, $content);
+                $this->outputradio($id, $content, $media, $lightbox);
                 break;
         }
         $content .= "<!--" . $type . "end -->";

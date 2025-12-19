@@ -38,7 +38,7 @@ use Joomla\CMS\Layout\LayoutHelper;
  */
 abstract class FoldergroupHelper
 {
-    public static function getcategoryaccess($catID)
+    public static function getCategoryAccess($catID)
     {
         $db = Factory::getDBO();
         $db->setQuery("SELECT access FROM #__categories WHERE id = " . $catID . " LIMIT 1;");
@@ -49,7 +49,7 @@ abstract class FoldergroupHelper
     public static function usercanviewcategory($user, $catid)
     {
         $levels = $user->getAuthorisedViewLevels();
-        $access = self::getcategoryaccess($catid);
+        $access = self::getCategoryAccess($catid);
         $ok = in_array($access, $levels);
         return $ok;
     }
