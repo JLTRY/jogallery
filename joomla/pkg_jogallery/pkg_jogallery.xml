@@ -20,6 +20,6 @@
         <language tag="fr-FR">language/fr-FR/fr-FR.pkg_jogallery.sys.ini</language>
     </languages>
     <updateservers>
-       <server type="extension" priority="1" name="JO's Google auth updates">https://raw.githubusercontent.com/JLTRY/jogallery/master/joomla/pkg_jogallery/update_pkg.xml</server>
+       <server type="extension" priority="1" name="JO's Galleries updates">https://raw.githubusercontent.com/JLTRY/jogallery/master/joomla/pkg_jogallery/update_pkg.xml</server>
     </updateservers>
 </extension>
