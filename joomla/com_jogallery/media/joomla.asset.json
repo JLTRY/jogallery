@@ -8,12 +8,12 @@
         {
             "name": "fancybox",
             "type": "script",
-            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.7/dist/fancybox/fancybox.umd.js"
         },
         {
             "name": "fancybox",
             "type": "style",
-            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.7/dist/fancybox/fancybox.css"
         },
         {
             "name": "photoswipe",
@@ -26,11 +26,6 @@
             "name": "photoswipe",
             "type": "style",
             "uri": "https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.min.css"
-        },
-        {
-            "name": "fancybox",
-            "type": "style",
-            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
         },
         {
             "name": "lazyload",
