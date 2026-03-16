@@ -48,6 +48,7 @@ class JOGalleryHelper
         $wa = $document->getWebAssetManager();
         $wr = $wa->getRegistry();
         $wr->addExtensionRegistryFile("com_jogallery");
+        $wr->addExtensionRegistryFile("lib_jltry");
         if ($document->getType() != 'html') {
             return;
         }
@@ -91,8 +92,8 @@ class JOGalleryHelper
             $wa->useScript('com_jogallery.radiobox');
         }
         if (isset($libraries['multicheckbox'])) {
-            $wa->useScript('com_jogallery.multicheckbox');
-            $wa->useStyle('com_jogallery.multicheckbox');
+            $wa->useScript('lib_jltry.multicheckbox');
+            $wa->useStyle('lib_jltry.multicheckbox');
         }
         if (isset($libraries['fancybox'])) {
             $wa->useScript('fancybox');

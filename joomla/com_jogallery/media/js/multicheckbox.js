@@ -29,7 +29,7 @@ function multicheckbox($, idp, names, values, initialvalues, callback, params) {
 		else
 			label.attr('class', 'btn btn-sm btn-warning');
 	};
-    this.check = function(value, checked) {
+	this.check = function(value, checked) {
 		$(this._idp).find('[class="multicheckbox"]').each(function() {
 			if ($(this).attr("for") == value) {
 				$(this).prop('checked', checked);
@@ -64,7 +64,7 @@ function multicheckbox($, idp, names, values, initialvalues, callback, params) {
 										+ that._names[index]
 								+ "</label>";
 			text = text + '</td>';
-			if ((index+1) % 6 == 0)
+			if ((index+1 % 6) == 0)
 				text = text + '</tr><tr>';
 		});
 		text += "</tr></table>";

@@ -1,0 +1,3 @@
+[submodule "joomla/lib_jltry"]
+	path = joomla/lib_jltry
+	url = https://github.com/JLTRY/lib_jltry

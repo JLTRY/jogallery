@@ -32,11 +32,12 @@
             description="COM_JOGALLERY_JOGALLERY_FIELD_CATID_DESC"
             required="true">
 			<option value="0">JOPTION_SELECT_CATEGORY</option>
-		</field>            
+		</field>
             
         <field addfieldpath="/administrator/components/com_jogallery/models/fields"
                 name="folders"
                 type="folderlist" key_field="name" value_field="name"
+				layout="joomla.form.field.list-fancy-select"
                 directory="/images/phocagallery"
                 recursive="true"
                 label="COM_MEDIA_FOLDERS"

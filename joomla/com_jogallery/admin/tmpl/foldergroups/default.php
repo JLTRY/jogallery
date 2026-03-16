@@ -20,7 +20,6 @@ use JLTRY\Component\JOGallery\Administrator\Helper\JThumbsHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryCategoryHelper;
 
-HTMLHelper::_('formbehavior.chosen', 'select');
 $listOrder     = $this->escape($this->filter_order);
 $listDirn      = $this->escape($this->filter_order_Dir);
 

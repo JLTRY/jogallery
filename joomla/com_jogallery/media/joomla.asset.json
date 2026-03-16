@@ -108,16 +108,6 @@
             "uri": "com_jogallery/radiobox.js"
         },
         {
-            "name": "com_jogallery.multicheckbox",
-            "type": "script",
-            "uri": "com_jogallery/multicheckbox.js"
-        },
-        {
-            "name": "com_jogallery.multicheckbox",
-            "type": "style",
-            "uri": "com_jogallery/multicheckbox.css"
-        },
-        {
             "name": "com_jogallery.jthumbs",
             "type": "script",
             "uri": "com_jogallery/jthumbs.js",
