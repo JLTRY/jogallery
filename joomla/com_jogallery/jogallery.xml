@@ -2,14 +2,14 @@
 <extension type="component" version="5.0" method="upgrade">
 	<name>com_jogallery</name>
 	<!-- The following elements are optional and free of formatting constraints -->
-	<creationDate>November  6, 2025</creationDate>
+	<creationDate>April  2, 2026</creationDate>
 	<author>Jean-Luc TRYOEN</author>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<authorUrl>http://www.jltryoen.fr</authorUrl>
 	<copyright>Copyright (C) 2025 JLTRY - All Rights Reserved</copyright>
 	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<!--  The version string is recorded in the components table -->
-	<version>3.0.4</version>
+	<version>3.0.5</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_JOGALLERY_DESCRIPTION</description>
 

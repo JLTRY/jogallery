@@ -6,10 +6,10 @@
 		<element>pkg_jogallery</element>
 		<type>package</type>
 		<client>site</client>
-		<version>3.0.4</version>
+		<version>3.0.5</version>
 		<infourl title="JO's Gallery">https://github.com/JLTRY/jogallery/</infourl>
 		<downloads>
-			<downloadurl type="full" format="zip">https://github.com/JLTRY/jogallery/releases/download/v3.0.4/pkg_jogallery-3.0.4.zip</downloadurl>
+			<downloadurl type="full" format="zip">https://github.com/JLTRY/jogallery/releases/download/v3.0.5/pkg_jogallery-3.0.5.zip</downloadurl>
 		</downloads>
 		<tags>
 			<tag>Stable</tag>
@@ -18,8 +18,8 @@
 		<maintainerurl>https://github.com/JLTRY/jogallery</maintainerurl>
 		<php_minimum>8.0</php_minimum>
 		<targetplatform name="joomla" version="(4\.[01234]|5\.[01234]|6\.[0])"/>
-		<sha256>4ABD0C100AB8144AFB40183AB60C639009D1D21CFF9898307BFA3A9FF9170F06</sha256>
-		<sha384>952DD35B2761EC80263EA12447C2D266D91B205A34F0665D4CADAE1E5A3707EC9EB70C9ADA71068AB40F0C96FEA16CD4</sha384>
-		<sha512>9C83EDC4D699C7398145808FE3601203DC46F43935A15576947F54D61E759D612D0AF2FA28FDD8A92B2BB03CB20BBB4E06A4FD77AD46F118E05AD0C8D1917E64</sha512>
+		<sha256>0FF61922AD2A794C1EED9ADE5CC3D85801AD4B1C81F5E3176A0C67BBA1D47BFC</sha256>
+		<sha384>0A8A18C2B5564EF1E7C1435EF5C473DA3511E1C53264281C2FC46D6FA7E9E6123B1698D1DBA06E43779CB8F31E99AEBB</sha384>
+		<sha512>9C82049EA4C0E3B8AFEC6C4FD52EAE83FEB561BECA10A1D767C9131869861375375B59C825611C7DCE38BE88406EDB7A7A00A07B3A8DD4FE4EC2DB26EF251349</sha512>
 	</update>
 </updates>
