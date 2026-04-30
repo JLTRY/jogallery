@@ -14,6 +14,7 @@ use JLTRY\Component\JOGallery\Administrator\Model\FoldergroupModel;
 use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JODirectory;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOFolderGroup;
+use JLTRY\Component\JOGallery\Administrator\Helper\JORootDirectory;
 use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Table\Foldergroup;
@@ -38,6 +39,25 @@ use Joomla\CMS\Layout\LayoutHelper;
  */
 abstract class FoldergroupHelper
 {
+    public static function folders($path)
+    {
+        $rootdir = JParametersHelper::getrootdir();
+        $directory = utf8_decode(html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir)));
+        $file = $directory . DIRECTORY_SEPARATOR . "directories.json";
+        if (file_exists($file))
+        {
+            $ardir = json_decode(file_get_contents($file), true);
+        } else {
+            $jroot = new JORootDirectory($directory, $rootdir);
+            $ret = $jroot->findDirs($directory, $rootdir, true);
+            $count = $jroot->getcount();
+            $ardir = array();
+            $jroot->outputarray($ardir);
+            file_put_contents($file, json_encode($ardir));
+        }
+        return $ardir;
+    }
+    
     public static function getCategoryAccess($catID)
     {
         $db = Factory::getDBO();

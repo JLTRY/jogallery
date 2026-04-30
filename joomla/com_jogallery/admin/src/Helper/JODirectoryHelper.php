@@ -52,9 +52,9 @@ abstract class JODirectoryHelper
         $document = Factory::getDocument();
         JOGalleryHelper::loadLibrary(array('jogallery' => true));
         $jroot = new JORootDirectory($dir, $directory);
-        list($ret, $count) = $jroot->findDirs($dir, $directory, true);
+        $ret = $jroot->findDirs($dir, $directory, true);
         if ($ret != 0) {
-            $content = $count;
+            $content = "err";
         } else {
             $jroot->outputdirs($type, $id, $content);
         }

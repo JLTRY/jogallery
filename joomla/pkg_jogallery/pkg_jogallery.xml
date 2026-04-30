@@ -2,13 +2,15 @@
 <extension type="package" version="4.0" method="upgrade">
 	<name>PKG_JOGALLERY</name>
 	<packagename>jogallery</packagename>
-	<version>3.0.5</version>
-	<creationDate>April  2, 2026</creationDate>
+	<version>3.0.5.1</version>
+	<creationDate>April 7, 2026</creationDate>
 	<copyright>(C) 2007-2024 JL Tryoen. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<author>J.L. Tryoen</author>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
+    <authorUrl>https://joomla.jltryoen.fr</authorUrl>
 	<packager>J.L. Tryoen</packager>
+    <packagerurl>https://github.com/JLTRY/jogallery</packagerurl>
 	<description>PKG_JOGALLERY_DESCRIPTION</description>
 
 	<files folder="packages">

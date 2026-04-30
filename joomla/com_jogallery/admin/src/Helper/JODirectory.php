@@ -48,6 +48,15 @@ class JODirectory
         $this->tmpl = $tmpl;
         $this->children = array();
     }
+    
+    public function getcount()
+    {
+        $count = 1;
+        foreach ($this->children as $subdir) {
+            $count += $subdir->getcount();
+        }
+        return $count;
+    }
 
     public function getbasename()
     {
@@ -67,6 +76,7 @@ class JODirectory
             }
         }
     }
+
 
 
     public function getbase64path()
@@ -165,7 +175,7 @@ class JODirectory
         $sid = 'jogalleryselect' . $id;
         $urlroot = Uri::root(true);
         $selectdirs = array();
-// no line for folder
+        // no line for folder
         if ($this->basename != null) {
             array_push($selectdirs, array($this->getbase64path(), JOGalleryHelper::joinPaths($this->basename)));
         }

@@ -39,7 +39,7 @@
 				label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS">
 			<field
 					name="show_category"
-					type="list"
+					type="hidden"
 					label="COM_JOGALLERY_JOGALLERY_FIELD_SHOW_CATEGORY_LABEL"
 					description="COM_JOGALLERY_JOGALLERY_FIELD_SHOW_CATEGORY_DESC"
 					default="">
@@ -49,21 +49,5 @@
 			</field>
 		</fieldset>
 	</fields>
-	<fieldset
-			name="accesscontrol"
-			label="COM_JOGALLERY_FIELDSET_RULES">
-		<field
-				name="asset_id"
-				type="hidden"
-				filter="unset"/>
-		<field
-				name="rules"
-				type="rules"
-				label="COM_JOGALLERY_FIELD_RULES_LABEL"
-				filter="rules"
-				validate="rules"
-				class="inputbox"
-				component="com_jogallery"
-				section="message"/>
-	</fieldset>
+
 </form>

@@ -25,12 +25,11 @@ HTMLHelper::_('jquery.framework');
         <?php foreach ($this->form->getFieldsets() as $name => $fieldset) :
             ?>
             <fieldset class="adminform">
-                <legend><?php echo Text::_($fieldset->label); ?></legend>
                 <div class="row-fluid">
                     <div class="span6">
                         <?php 
                             $options = [];
-                            echo $this->form->renderFieldset('details', $options);
+                            echo $this->form->renderFieldset($name, $options);
                         ?>
                     </div>
                 </div>

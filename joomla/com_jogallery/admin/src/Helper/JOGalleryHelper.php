@@ -10,11 +10,7 @@
 
 namespace JLTRY\Component\JOGallery\Administrator\Helper;
 
-use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
-use JLTRY\Component\JOGallery\Administrator\Helper\JODirectory;
-use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryImage;
-use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
-use JLTRY\Component\JOGallery\Administrator\Helper\JThumbsHelper;
+
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -24,6 +20,13 @@ use Joomla\CMS\Image\Image;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Component\ComponentHelper;
+
+use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JODirectory;
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryImage;
+use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JThumbsHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;

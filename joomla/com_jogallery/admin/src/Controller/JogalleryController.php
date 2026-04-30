@@ -94,7 +94,6 @@ class JOGalleryController extends FormController
     {
         $input = Factory::getApplication()->getInput();
         $directory64 = $input->getVar('directory64', '');
-// tell the view which tmpl to use
         $post_data = $input->getVar('images', array());
         $keep = $input->getVar('keep', 1);
         $errors = array();
