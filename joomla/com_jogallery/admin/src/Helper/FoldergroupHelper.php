@@ -39,22 +39,51 @@ use Joomla\CMS\Layout\LayoutHelper;
  */
 abstract class FoldergroupHelper
 {
-    public static function folders($path)
+
+    public static function getFolders($path)
     {
+        $startTime = microtime(true);
+        
         $rootdir = JParametersHelper::getrootdir();
         $directory = utf8_decode(html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir)));
         $file = $directory . DIRECTORY_SEPARATOR . "directories.json";
+        $regenerateCache = false;
         if (file_exists($file))
         {
+            $fileModTime = filemtime($file);
+            //$regenerateCache = self::isDirectoryModifiedAfter($directory, $fileModTime);
+            
             $ardir = json_decode(file_get_contents($file), true);
-        } else {
+            foreach ($ardir as $dir)
+            {
+                $dirModTime = filemtime(JPATH_SITE . DIRECTORY_SEPARATOR . $dir['name']);
+                Log::add("checkFileTime?" . JPATH_SITE . DIRECTORY_SEPARATOR . $dir['name']);
+                if ($dirModTime > $fileModTime) {
+                    $regenerateCache = true;
+                    Log::add("checkFileTime:yes:" . JPATH_SITE . DIRECTORY_SEPARATOR . $dir['name']);
+                    break;
+                }
+            }
+            $checkDateTimeDuration = microtime(true) - $startTime;
+            Log::add("checkFileTime in {$checkDateTimeDuration} seconds", Log::INFO, 'com_jogallery');
+        } 
+        if ( $regenerateCache  ) {
+            $cacheStartTime = microtime(true);
+            
             $jroot = new JORootDirectory($directory, $rootdir);
             $ret = $jroot->findDirs($directory, $rootdir, true);
             $count = $jroot->getcount();
             $ardir = array();
             $jroot->outputarray($ardir);
             file_put_contents($file, json_encode($ardir));
+            
+            $cacheDuration = microtime(true) - $cacheStartTime;
+            Log::add("Cache file created in {$cacheDuration} seconds", Log::INFO, 'com_jogallery');
         }
+        
+        $duration = microtime(true) - $startTime;
+        Log::add("folders() function completed in {$duration} seconds", Log::INFO, 'com_jogallery');
+        
         return $ardir;
     }
     
