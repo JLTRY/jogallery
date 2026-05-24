@@ -26,6 +26,7 @@ function recthumbretriever($, sid, id, urlroot, json)
     this._keep = false;
 
     this.getthumb = function (directory, index, length, imgname, params) {
+        console.log("recthumbretriever:getthumb:" + imgname);
         url = this._urlroot + "/administrator/index.php?option=com_jogallery&view=jogallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
                  + directory + "&image64=" + btoa(imgname) + "&force=" + Number(this._forced);
         $.map(params, function (value, key) {

@@ -7,7 +7,7 @@ function decode_utf8(s) {
 }
 
 function thumbretriever($, id, urlroot, directory, values, menu) {
-	this._values = values;
+	this._listimages = values;
 	this._id = id;
 	this._directory = directory;
 	this._isstarted = false;
@@ -133,7 +133,7 @@ function thumbretriever($, id, urlroot, directory, values, menu) {
 			+ '<td><label>large_width<input type="text" name="small_width" id="large_width' + id +'" value="1024" size="5"></label></td>'
 			+'</tr></table>';
 		var onchange = this.onchange.bind(this);
-		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._values, {'checked':true, 'name': true, 'moddate': true}, onchange, []);
+		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._listimages, {'checked':true, 'name': true, 'moddate': true}, onchange, []);
 		if (menu) {
 			$("#jmenuthumbs"+this._id).html(html);
 		}

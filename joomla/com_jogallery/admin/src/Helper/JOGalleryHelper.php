@@ -274,8 +274,8 @@ class JOGalleryHelper
                 $exist = false;
                 foreach ($listfiles as $file) {
                     if ($file->filename == $pathinfo['filename']) {
-                            $exist = true;
-                            break;
+                        $exist = true;
+                        break;
                     }
                 }
                 if ($exist) {
@@ -288,7 +288,7 @@ class JOGalleryHelper
                 } else {
                     self::guessDate(basename($filename), $moddate);
                     if ($moddate == -1) {
-                                $moddate = filectime($filename);
+                        $moddate = filemtime($filename);
                     }
                 }
                 $urlfilename = JThumbsHelper::getthumbformat("large", basename($filename));
