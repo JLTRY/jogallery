@@ -74,7 +74,7 @@ abstract class FoldergroupHelper
             $ret = $jroot->findDirs($directory, $rootdir, true);
             $count = $jroot->getcount();
             $ardir = array();
-            $jroot->outputarray($ardir);
+            $jroot->_outputarray($ardir);
             file_put_contents($file, json_encode($ardir));
             
             $cacheDuration = microtime(true) - $cacheStartTime;

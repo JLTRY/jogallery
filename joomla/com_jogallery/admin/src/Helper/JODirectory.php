@@ -176,13 +176,7 @@ class JODirectory
         $urlroot = Uri::root(true);
         $selectdirs = array();
         // no line for folder
-        if ($this->basename != null) {
-            array_push($selectdirs, array($this->getbase64path(), JOGalleryHelper::joinPaths($this->basename)));
-        }
-        foreach ($this->children as $child) {
-            array_push($selectdirs, array($child->getbase64path(),
-                JOGalleryHelper::joinPaths($child->dirname, $child->basename)));
-        }
+        $this->_outputselect($selectdirs);
         $content .= LayoutHelper::render(
             'selectdirs',
             array('sid' => $sid, 'selectdirs' => $selectdirs),
@@ -276,22 +270,31 @@ class JODirectory
     }
 
 
-    public function outputarray(&$arr)
+    public function _outputarray(&$arr)
     {
-        if (($this->parent != null) || (!count($this->children))) {
+        if (($this->parent != null)  || !count($this->children)) {
             array_push($arr, array("name" => JOGalleryHelper::joinPaths($this->dirname, $this->basename),
                                 "relative" => $this->getrelativepath(),
                                 "value" => $this->getbase64path()));
         }
         foreach ($this->children as $child) {
-            $child->outputarray($arr);
+            $child->_outputarray($arr);
         }
     }
+
+    public function _outputselect(&$arr)
+    {
+        array_push($arr, array($this->getbase64path(), ($this->parent == NULL)?$this->basename : JOGalleryHelper::joinPaths($this->dirname, $this->basename)));
+        foreach ($this->children as $child) {
+            $child->_outputselect($arr);
+        }
+    }
+
 
     public function outputjson(&$json)
     {
         $arr = array();
-        $this->outputarray($arr);
+        $this->_outputarray($arr);
         $json = json_encode($arr);
     }
 
