@@ -81,6 +81,11 @@ class HtmlView extends BaseHtmlView
             $modelGallery = new JOGalleryModel();
             $modelGallery->setState("jogallery.id", $this->id);
             $this->item = $modelGallery->getItem($this->id);
+        } else {
+            $model = new JOGalleryModel();
+            $this->setModel($model);
+            $this->item = $model->getItem((int)$this->id);
+            //$this->form->bind($this->item);
         }
         if (($this->item) && ($this->item->directory)) {
             $this->directory = $this->item->directory;
@@ -91,6 +96,7 @@ class HtmlView extends BaseHtmlView
                 }
             }
         }
+        $this->getparam('editor', 'editor');
         $this->getparam('force', 'force');
         $this->small_width = $this->large_width = 0;
         $this->getparam('small_width', 'small_width');
@@ -118,14 +124,19 @@ class HtmlView extends BaseHtmlView
         }
 
         // Set the toolbar
-        $this->addToolBar();
+        $this->getparam('tmpl', 'tmpl');
+        if ($this->tmpl != 'component') {
+            $this->addToolBar();
+        }
         $language = Factory::getLanguage();
         $language->load('joomla', JPATH_ADMINISTRATOR);
         $language->load('com_jogallery', JPATH_ADMINISTRATOR, null, true);
-        // Display the template
-        parent::display($tpl);
         // Set the document
         $this->setDocument(Factory::getDocument());
+        //print_r(Factory::getDocument());
+        // Display the template
+        parent::display($tpl);
+
     }
 
     /**
@@ -138,7 +149,7 @@ class HtmlView extends BaseHtmlView
     protected function addToolBar()
     {
         $input = Factory::getApplication()->getInput();
-// Hide Joomla Administrator Main menu
+        // Hide Joomla Administrator Main menu
         $input->set('hidemainmenu', true);
         $isNew = (($this->item) && ($this->item->id == 0));
         switch ($this->getLayout()) {

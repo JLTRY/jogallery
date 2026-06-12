@@ -36,7 +36,7 @@
 		<field  name="folders"
 				type="mediafolderlist"
 				layout="joomla.form.field.list-fancy-select"
-				hide_none="true"
+				hide_none="false"
 				hide_default="true"
 				recursive="true"
 				label="COM_MEDIA_FOLDERS"

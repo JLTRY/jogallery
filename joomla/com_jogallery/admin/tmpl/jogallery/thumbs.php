@@ -32,8 +32,8 @@ $bar->appendButton(
     JODirectoryHelper::display(
         1,
         array("dir" => JOGalleryHelper::joinPaths($this->directory),
-                                        "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
-                    "type" => "selectdirsmenu")
+              "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
+              "type" => "selectdirsmenu")
     ),
     ""
 );
@@ -42,9 +42,9 @@ $bar->appendButton(
     LayoutHelper::render(
         'menuthumbs',
         array('id' => 1,
-                                            'small_width' => JParametersHelper::get('thumb_small_width'),
-                                            'large_width' => JParametersHelper::get('thumb_large_width'),
-                    )
+              'small_width' => JParametersHelper::get('thumb_small_width'),
+              'large_width' => JParametersHelper::get('thumb_large_width'),
+       )
     ),
     ""
 );

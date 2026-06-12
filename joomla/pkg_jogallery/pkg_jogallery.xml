@@ -2,8 +2,8 @@
 <extension type="package" version="4.0" method="upgrade">
 	<name>PKG_JOGALLERY</name>
 	<packagename>jogallery</packagename>
-	<version>3.0.5.1</version>
-	<creationDate>April 7, 2026</creationDate>
+	<version>3.0.6</version>
+	<creationDate>June 12, 2026</creationDate>
 	<copyright>(C) 2007-2024 JL Tryoen. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<author>J.L. Tryoen</author>
@@ -16,6 +16,7 @@
 	<files folder="packages">
 		<file type="component" id="com_jogallery">com_jogallery.zip</file>
 		<file type="plugin" id="jogallery"  group="content" client="site">jogallery.zip</file>
+		<file type="plugin" id="jogallery"  group="editors-xtd" client="site">jogalleryineditor_plugin.zip</file>
 		<file type="library" id="lib_jltry">lib_jltry.zip</file>
 	</files>
     <languages>

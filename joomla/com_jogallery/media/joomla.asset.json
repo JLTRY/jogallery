@@ -91,6 +91,11 @@
             "uri": "com_jogallery/jogallery.css"
         },
         {
+            "name": "com_jogallery.insertjogallery",
+            "type": "script",
+            "uri": "com_jogallery/insertjogallery.js"
+        },
+        {
             "name": "com_jogallery.radiobox",
             "type": "script",
             "uri": "com_jogallery/radiobox.js"

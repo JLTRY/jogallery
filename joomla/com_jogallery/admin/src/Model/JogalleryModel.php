@@ -62,7 +62,9 @@ class JOGalleryModel extends AdminModel
     public function getForm($data = array(), $loadData = true)
     {
         // Get the form.
-        $form = $this->loadForm('com_jogallery.jogallery', 'jogallery', array(
+        $app = Factory::getApplication();
+        $layout = $app->input->get('layout', 'jogallery'); // Default to form
+        $form = $this->loadForm('com_jogallery.jogallery', $layout, array(
                 'control' => 'jform',
                 'load_data' => $loadData
             ));

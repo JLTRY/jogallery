@@ -175,7 +175,6 @@ class JODirectory
         $sid = 'jogalleryselect' . $id;
         $urlroot = Uri::root(true);
         $selectdirs = array();
-        // no line for folder
         $this->_outputselect($selectdirs);
         $content .= LayoutHelper::render(
             'selectdirs',
@@ -235,15 +234,40 @@ class JODirectory
         $sid = 'jogalleryselect' . $id;
         $urlroot = Uri::root(true);
         $content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
-        JOGalleryHelper::loadLibrary(array("jimages" => true, "jthumbs" => true,
-            "fancybox" => true, "jogallery" => true));
+        JOGalleryHelper::loadLibrary(array("jimages" => true,
+                                            "jthumbs" => true,
+                                            "jogallery" => true));
         JOGalleryHelper::loadLibrary(array("inline" =>
                                         array('(function($) {
                                             $(document).ready(function() {
                                                 jthumbs_getimages($, "' . $sid . '", "' .
                                                 $id . '", "' .
-                                                $urlroot . '", false);
+                                                $urlroot . '",
+                                                function(list) {console.log(list);});
                                                 })})(jQuery);')));
+    }
+    
+    public function outputinsertjogallery($id, &$content)
+    {
+        $sid = 'jform_folders';
+        $urlroot = Uri::root(true);
+        $content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
+        JOGalleryHelper::loadLibrary(array("jimages" => true, 
+                                           "jthumbs" => true,
+                                           "jogallery" => true,
+                                           "insertjogallery" => true));
+        JOGalleryHelper::loadLibrary(array("inline" =>
+                                        array('(function($) {
+                                            $(document).ready(function() {
+                                                jthumbs_getimages($, "' . $sid . '", "' .
+                                                $id . '", "' .
+                                                $urlroot . '",
+                                                true,
+                                                fillselect);
+                                                })})(jQuery);',
+                                              ['position' => 'after'],
+                                              [],
+                                              ['com_jogallery.insertjogallery'])));
     }
 
 
@@ -268,6 +292,7 @@ class JODirectory
                                                          $urlroot . '", false);
                                                     })})(jQuery);')));
     }
+
 
 
     public function _outputarray(&$arr)
@@ -342,6 +367,7 @@ class JODirectory
                                             [],
                                             ['com_jogallery.jrecthumbs'])));
     }
+    
 
     public function outputdirectories($id, &$content)
     {
@@ -369,6 +395,9 @@ class JODirectory
         switch ($type) {
             case 'selectthumbs':
                 $this->outputselectthumbs($id, $content);
+                break;
+            case 'insertjogallery':
+                $this->outputinsertjogallery($id, $content);
                 break;
             case 'selectcomments':
                 $this->outputselectcomments($id, $content);

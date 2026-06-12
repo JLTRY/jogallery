@@ -76,6 +76,9 @@ class JOGalleryHelper
             $wa->useScript('com_jogallery.jogallery');
             $wa->useStyle('com_jogallery.jogallery');
         }
+        if (isset($libraries['insertjogallery'])) {
+            $wa->useScript('com_jogallery.insertjogallery');
+        }
         if (isset($libraries['jselectdirs'])) {
             $wa->useScript('com_jogallery.jselectdirs');
         }

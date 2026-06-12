@@ -12,9 +12,7 @@
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
-use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Layout\LayoutHelper;
@@ -30,9 +28,9 @@ $bar->appendButton(
     LayoutHelper::render(
         'menurecthumbs',
         array('id' => 1,
-                                            'small_width' => JParametersHelper::get('thumb_small_width'),
-                                            'large_width' => JParametersHelper::get('thumb_large_width'),
-                    )
+              'small_width' => JParametersHelper::get('thumb_small_width'),
+              'large_width' => JParametersHelper::get('thumb_large_width'),
+       )
     ),
     ""
 );
@@ -40,7 +38,7 @@ $bar->appendButton(
 
 
 <form action="<?php echo Route::_('index.php?option=com_jogallery&layout=thumbs&id=' . (int) $this->item->id); ?>"
-    method="post" name="adminForm" id="adminForm" class="form-validate">
+      method="post" name="adminForm" id="adminForm" class="form-validate">
     <input type="hidden" name="task" value="jogallery.thumbs" />
     <?php echo HTMLHelper::_('form.token'); ?>
 </form>
