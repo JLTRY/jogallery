@@ -236,14 +236,15 @@ class JODirectory
         $content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
         JOGalleryHelper::loadLibrary(array("jimages" => true,
                                             "jthumbs" => true,
+                                            "fancybox" => true,
                                             "jogallery" => true));
         JOGalleryHelper::loadLibrary(array("inline" =>
                                         array('(function($) {
                                             $(document).ready(function() {
                                                 jthumbs_getimages($, "' . $sid . '", "' .
-                                                $id . '", "' .
-                                                $urlroot . '",
-                                                function(list) {console.log(list);});
+                                                                $id . '", "' .
+                                                                $urlroot . '"
+                                                );
                                                 })})(jQuery);')));
     }
     
