@@ -37,7 +37,7 @@ return new class () implements ServiceProviderInterface {
      public function register(Container $container)
 
         {
-        if (!PluginHelper::isEnabled('editors-xtd', 'jofbkpost')) {
+        if (!PluginHelper::isEnabled('editors-xtd', 'jogallery')) {
             return;
         }
 

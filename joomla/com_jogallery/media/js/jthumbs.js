@@ -6,7 +6,7 @@ function decode_utf8(s) {
   return decodeURIComponent(escape(s));
 }
 
-function thumbretriever($, id, urlroot, directory, values, callback) {
+function thumbretriever($, id, urlroot, directory, values, callback = null) {
 	this._listimages = values;
 	this._id = id;
 	this._directory = directory;
@@ -65,7 +65,9 @@ function thumbretriever($, id, urlroot, directory, values, callback) {
 	};
 	this.onchange = function($, listvalues) {
 		this._listimages = listvalues;
-		this._callback($, listvalues);
+		if (this.__callback) {
+			this._callback($, listvalues);
+		}
 	}
 	this.isstarted = function() {
 		return this._isstarted;
@@ -165,7 +167,7 @@ function thumbretriever($, id, urlroot, directory, values, callback) {
 	return this;
 }
 
-function jthumbs_ajax($, id, urlroot, value, callback) {
+function jthumbs_ajax($, id, urlroot, value, callback = null) {
 	var dir = value;
 	var url = urlroot + "/administrator/index.php?option=com_jogallery&view=jogallery&tmpl=component&layout=json&directory64="
 			 + value + "&XDEBUG_SESSION_START=test";

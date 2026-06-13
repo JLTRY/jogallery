@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset	addfieldprefix="JLTRY\Component\JOGallery\Administrator\Field"
+				name="details">
+		<field name="insert" type="text" id="insert" size="50" showon="selectall:0" />
+		<field  name="folders"
+				type="mediafolderlist"
+				hide_default="true"
+				recursive="true"
+				label="COM_MEDIA_FOLDERS"
+				exclude="thumbs"
+				multiple="false"
+		/>
+		<field name="selectall" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+           label="COM_MEDIA_SELECT_ALL"
+           >
+		  <option value="0">JNO</option>
+		  <option value="1">JYES</option>
+		</field>
+		<field name="startdate" type="date" default="NOW"
+			label="COM_JOCOACHING_EVENT_START_DATE_LABEL"
+			timepair="timepair"
+			validate="datepair"
+			enddate="enddate"
+			size="15"
+			showtime="false"
+			format="%Y-%m-%d"
+			translateformat="false"
+			description="COM_JOCOACHING_EVENT_START_DATE_DESC" class="date start inputbox validate-startdate input-small"
+			timeclass="time start validate-starttime input-small" required="true" 
+			position="left"/> 
+	</fieldset>
+</form>

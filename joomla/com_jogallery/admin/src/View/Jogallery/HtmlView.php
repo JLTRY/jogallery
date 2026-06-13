@@ -116,7 +116,7 @@ class HtmlView extends BaseHtmlView
             $form->setFieldAttribute("directory", "directory", $this->rootdir);
         }
         // What Access Permissions does this user have? What can (s)he do?
-        $this->canDo = $this->item && JOGalleryHelper::getActions($this->item->id);
+        $this->canDo = JOGalleryHelper::getActions($this->item->id?? 0);
         // Check for errors.
         if (is_array($errors) && count($errors = $this->get('Errors'))) {
             Factory::getApplication()->enqueueMessage(implode('<br />', $errors), 'error');

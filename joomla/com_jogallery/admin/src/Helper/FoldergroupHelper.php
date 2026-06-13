@@ -66,7 +66,9 @@ abstract class FoldergroupHelper
             }
             $checkDateTimeDuration = microtime(true) - $startTime;
             Log::add("checkFileTime in {$checkDateTimeDuration} seconds", Log::INFO, 'com_jogallery');
-        } 
+        } else {
+            $regenerateCache = true;
+        }
         if ( $regenerateCache  ) {
             $cacheStartTime = microtime(true);
             

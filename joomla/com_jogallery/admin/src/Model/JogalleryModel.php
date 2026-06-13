@@ -12,9 +12,11 @@ namespace JLTRY\Component\JOGallery\Administrator\Model;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
+
 
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 
@@ -64,9 +66,11 @@ class JOGalleryModel extends AdminModel
         // Get the form.
         $app = Factory::getApplication();
         $layout = $app->input->get('layout', 'jogallery'); // Default to form
+        Log::add("getForm:" . $layout, Log::WARNING, 'com_jogallery');
         $form = $this->loadForm('com_jogallery.jogallery', $layout, array(
                 'control' => 'jform',
-                'load_data' => $loadData
+                'load_data' => $loadData,
+                'form_path' => JPATH_ADMINISTRATOR . '/components/com_jogallery/forms'
             ));
         if (empty($form)) {
             return false;

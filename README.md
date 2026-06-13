@@ -1,4 +1,4 @@
-# com_jogallery 3.0.x
+# com_jogallery 3.0.6
 
 ![jogallery](https://github.com/user-attachments/assets/a6fdcead-fc31-4fe9-a23d-fa281f33d6a4)
 
@@ -21,6 +21,10 @@ located in subfolders of the /images **Joomla** directory.
 The galleries can be simply configured by selecting one of the folders. The images/videos are retrieved recursively.
 The thumbs can be built automatically.
 Once configured, the galleries can be shown in articles.
+
+## 2025-06-16 version 3.0.6
+
+
 
 ## 2025-12-08 version 3.0.3
 
