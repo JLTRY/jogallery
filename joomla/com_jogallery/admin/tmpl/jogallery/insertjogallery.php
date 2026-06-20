@@ -19,12 +19,14 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper as Html;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
 
 // No direct access to this file
 defined('_JEXEC') or die;
+define("JPATH_LAYOUTS", JPATH_ADMINISTRATOR . '/components/com_jogallery/layouts');
 
 /** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
 $wa = Factory::getDocument()->getWebAssetManager();
@@ -36,19 +38,32 @@ $language = Factory::getLanguage();
 $language->load('com_media', JPATH_ADMINISTRATOR);
 $language->load('com_media', JPATH_SITE);
 $language->load('com_jogallery', JPATH_ADMINISTRATOR, null, true);
+$urlroot = Uri::root(true);
+JOGalleryHelper::loadLibrary(array( "jquery" => true,
+                                    "jimages" => true, 
+                                    "jthumbs" => true,
+                                    "jogallery" => true,
+                                    "insertjogallery" => true));
+JOGalleryHelper::loadLibrary(array("inline" =>
+                                array('(function($) {
+                                    $(document).ready(function() {
+                                        new insertjogallery($,"jform_folders", "jimages1", ' .
+                                                       '"' . $urlroot . '"' .
+                                    ')})})(jQuery);',
+                                      ['position' => 'after'],
+                                      [],
+                                      ['com_jogallery.insertjogallery'])));
 ?>
-<form  action="<?php echo Route::_('index.php?option=com_jofacebook&view=jofbkpost&layout=' . $layout . $tmpl . '&id='. (int) $this->item->id . $this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
-
+<form name="adminForm" id="adminForm" class="form-validate timepair">
 <div class="main-card">
     <button type="button" class="btn btn-success" onclick="insertJoGallery(jQuery, '<?php echo $this->editor ?>');">
         <?php echo Text::_('COM_JOGALLERY_INSERT_GALLERY'); ?>
     </button>
     <form method="post" name="adminForm" id="adminForm" class="form-validate">
         <?php 
+        echo $this->form->renderFieldset('folders', array()); 
         echo $this->form->renderFieldset('details', array()); 
-        echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::joinPaths(""),
-                                        "rootdir" => JOGalleryHelper::joinPaths($this->rootdir),
-                                        "type" => "insertjogallery")); 
+        echo LayoutHelper::render('jimages', array('id' => 1), JPATH_LAYOUTS);
         ?>
     </form>
 </div>

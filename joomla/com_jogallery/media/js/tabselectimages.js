@@ -6,6 +6,8 @@ function _tabselectimages($, idp, values, options, callback, params)
     this._callback = callback;
     this._params = params;
     this._options = options;
+    this._minmoddate = Date.now();
+	this._maxmoddate = 0;
     this.callback = function () {
         var listselected = [];
         $(this._idp).find("[class='tabselectimages']").each(function () {
@@ -15,13 +17,15 @@ function _tabselectimages($, idp, values, options, callback, params)
         });
         this._callback($, listselected, this._params);
     }
-
+    this.getmoddate = function () {
+		return [this._minmoddate, this._maxmoddate];
+	};
     this.checkall = function (checked) {
         $(this._idp).find("[class='tabselectimages']").each(function () {
                     $(this).prop('checked', checked);
         });
         this.callback();
-    }
+    };
     this.check = function (value, checked) {
         $(this._idp).find('[class="tabselectimages"]').each(function () {
             if ($(this).attr("for") == value) {
@@ -48,6 +52,10 @@ function _tabselectimages($, idp, values, options, callback, params)
             var btclass = (checked) ? "btn btn-sm btn-info" : "btn btn-sm btn-light";
             var checkedattr = (checked) ? "checked" : "";
             var id = name;
+			if (moddate != "-1") {
+				that._minmoddate = Math.min(that._minmoddate, Number(moddate));
+				that._maxmoddate = Math.max(that._maxmoddate, Number(moddate));
+			}
             text += "<tr>";
             if (that._options['checked']) {
                 text += "<td ><input style=\"float:left;font-size:50%;\" class=\"tabselectimages\" type=\"checkbox\" " +  checkedattr + " id=\"" + name  +

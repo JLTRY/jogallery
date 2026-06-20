@@ -12,11 +12,16 @@
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
+
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Toolbar\Toolbar;
+
+use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
+use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
+
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
 echo JODirectoryHelper::display(1, array("dir" => JOGalleryHelper::joinPaths($this->directory),

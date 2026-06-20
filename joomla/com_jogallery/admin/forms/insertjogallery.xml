@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form>
-	<fieldset	addfieldprefix="JLTRY\Component\JOGallery\Administrator\Field"
-				name="details">
-		<field name="insert" type="text" id="insert" size="50" showon="selectall:0" />
+<form id="insertjogallery" class="form-validate timepair">
+	<fieldset addfieldprefix="JLTRY\Component\JOGallery\Administrator\Field"
+			  name="folders">
 		<field  name="folders"
 				type="mediafolderlist"
 				hide_default="true"
@@ -11,14 +10,19 @@
 				exclude="thumbs"
 				multiple="false"
 		/>
-		<field name="selectall" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+	</fieldset>
+	<fieldset addfieldprefix="JLTRY\Lib\Field"
+			  name="details">
+		<field name="select" type="radio" default="0"
            label="COM_MEDIA_SELECT_ALL"
            >
-		  <option value="0">JNO</option>
-		  <option value="1">JYES</option>
+		  <option value="0">All</option>
+		  <option value="1">Select</option>
+		  <option value="2">Date</option>
 		</field>
-		<field name="startdate" type="date" default="NOW"
-			label="COM_JOCOACHING_EVENT_START_DATE_LABEL"
+		<field name="insert" type="text" id="insert" size="50" showon="select:1" />
+		<field name="startdate"  type="datetime" default="NOW"
+			label="COM_JOGALLERY_START_DATE_LABEL"
 			timepair="timepair"
 			validate="datepair"
 			enddate="enddate"
@@ -26,8 +30,17 @@
 			showtime="false"
 			format="%Y-%m-%d"
 			translateformat="false"
-			description="COM_JOCOACHING_EVENT_START_DATE_DESC" class="date start inputbox validate-startdate input-small"
+			description="COM_JOGALLERY_START_DATE_DESC" class="date start inputbox validate-startdate input-small"
 			timeclass="time start validate-starttime input-small" required="true" 
-			position="left"/> 
+			showon="select:2"/>
+		<field name="enddate" type="datetime" default="+1 hour"
+			timepair="timepair" label="COM_JOGALLERY_END_DATE_LABEL"
+			size="15"
+			showtime="false"
+			format="%Y-%m-%d"
+			translateformat="false"
+			description="COM_JOGALLERY_END_DATE_DESC" class="date end inputbox validate-enddate input-small"
+			timeclass="time end validate-endtime input-small" required="true" 
+			showon="select:2"/>
 	</fieldset>
 </form>

@@ -6,16 +6,43 @@ function decode_utf8(s) {
   return decodeURIComponent(escape(s));
 }
 
-function thumbretriever($, id, urlroot, directory, values, callback = null) {
-	this._listimages = values;
+function thumbretriever($, id, urlroot) {
+	this._sid = "jogalleryselect" + id;
+	this._simgid = "jimages" + id;
 	this._id = id;
-	this._directory = directory;
 	this._isstarted = false;
 	this._urlroot = urlroot;
 	this._forced = false;
 	this._keep = false;
-	this._callback = callback;
+	this._listimages = [];
 
+	this.updateimages = function($, value) {
+		var url = this._urlroot + "/administrator/index.php?option=com_jogallery&view=jogallery&tmpl=component&layout=json&directory64="
+				 + value;
+		console.log(url);
+		$.ajax({
+			url:  url,
+			type: "POST",
+			context: this,
+			dataType: "json",
+			success: function(rdata) {
+				console.log("ok thumbs");
+				var onchange = this.onchange.bind(this);
+				this._tabselectimages =  tabselectimages($, "#" + this._simgid , rdata, {'checked':true, 'name': true, 'moddate': true}, onchange, []);
+			},
+			error: function(xhr, status, text) {
+				var response = $.parseJSON(xhr.responseText);
+				console.log('Failure thumbs!');
+				if (response) {
+					console.log(response['data']['error']);
+				} else {
+					// This would mean an invalid response from the server - maybe the site went down or whatever...
+				}
+			}
+		});
+		this._directory = value;
+	};
+	
 	this.getthumb = function(index, params) {
 		if (index < this._listimages.length) {
 			var imgname = this._listimages[index];
@@ -34,7 +61,7 @@ function thumbretriever($, id, urlroot, directory, values, callback = null) {
 				async: 'false',
 				context: this,
 				success: function(tvalue) {
-					var txt = this. index.toString().padStart(4, ' ') + "/" + this._listimages.length + " " + decode_utf8(atob(this._directory)) + " " + tvalue[0] + "=>" + tvalue[1] + ":" + tvalue[2][0] + "<br/>";
+					var txt = this.index.toString().padStart(4, ' ') + "/" + this._listimages.length + " " + decode_utf8(atob(this._directory)) + " " + tvalue[0] + "=>" + tvalue[1] + ":" + tvalue[2][0] + "<br/>";
 					$("#jogallerylog"+this._id).html(txt);
 					var imge = $("img[id='"+ imgname + "']");
 					imge.attr('src', imge.attr('src')+"?timestamp=" + new Date().getTime());
@@ -51,6 +78,8 @@ function thumbretriever($, id, urlroot, directory, values, callback = null) {
 				}
 			});
 			setTimeout($.proxy(this.getthumb, this), 500, index+1, params);
+		} else {
+			$('#thumbs'+this._id).blur(); 
 		}
 	};
 	this.checkall = function(checked) {
@@ -65,9 +94,6 @@ function thumbretriever($, id, urlroot, directory, values, callback = null) {
 	};
 	this.onchange = function($, listvalues) {
 		this._listimages = listvalues;
-		if (this.__callback) {
-			this._callback($, listvalues);
-		}
 	}
 	this.isstarted = function() {
 		return this._isstarted;
@@ -125,30 +151,28 @@ function thumbretriever($, id, urlroot, directory, values, callback = null) {
 			}
 		});
 	};
-	this.show = function($) {
+
+	this.init = function($) {
+		$("#"+ this._sid).data('thumbretriever', this);
+		$("#"+ this._sid).change(function() {
+			$(this).data('thumbretriever').updateimages($, this.value);
+		});
 		var onchange = this.onchange.bind(this);
-		this._tabselectimages =  tabselectimages($, "#jimages" + this._id , this._listimages, {'checked':true, 'name': true, 'moddate': true}, onchange, []);
 		$('#thumbs'+this._id).data('thumbretriever', this);
-		$('#delete'+this._id).data('thumbretriever', this);
-		$('#thumbs'+this._id).click($.proxy(function() {
-			var dataretriever = $('#thumbs'+this._id).data('thumbretriever');
+		$('#thumbs'+this._id).click(function() {
+			var dataretriever = $(this).data('thumbretriever');
 			if (dataretriever.isstarted()) {
 				dataretriever.stopthumbs();
 			} else {
-				dataretriever.startthumbs({'small_width': $('#small_width' + this._id).val(),
-										   'large_width': $('#large_width' + this._id).val()}
+				dataretriever.startthumbs({'small_width': $('#small_width' + dataretriever._id).val(),
+										   'large_width': $('#large_width' + dataretriever._id).val()}
 				);
 			}
-		}, this));
+		});
+		$('#delete'+this._id).data('thumbretriever', this);
 		$( '#delete'+this._id).click(function() {
 			var dataretriever = $(this).data('thumbretriever');
 			dataretriever.deleteselection();
-		});
-		$('#jogalleryimage'+this._id).data('thumbretriever', this);
-		$("#jogalleryimage"+id).change(function() {
-			var lvalues = $('#jogalleryimage'+id+' option:selected')
-				.toArray().map(item => item.value);
-			$(this).data('thumbretriever').change(lvalues);
 		});
 		$('input[type="checkbox"][name="checkall"]').data('thumbretriever', this);
 		$('input[type="checkbox"][name="checkall"]').change(function() {
@@ -163,42 +187,11 @@ function thumbretriever($, id, urlroot, directory, values, callback = null) {
 			 $(this).data('thumbretriever').setkeep(this.checked);
 		 });
 	}
-	this.show($);
+	this.init($);
 	return this;
 }
 
-function jthumbs_ajax($, id, urlroot, value, callback = null) {
-	var dir = value;
-	var url = urlroot + "/administrator/index.php?option=com_jogallery&view=jogallery&tmpl=component&layout=json&directory64="
-			 + value + "&XDEBUG_SESSION_START=test";
-	console.log(url);
-	$.ajax({
-		url:  url,
-		type: "POST",
-		context: {"callback" : callback },
-		dataType: "json",
-		success: function(rdata) {
-			console.log("ok thumbs");
-			var thmb = new thumbretriever($, id, urlroot, dir, rdata, this.callback);
-			thmb.show($);
-		},
-		error: function(xhr, status, text) {
-			var response = $.parseJSON(xhr.responseText);
-			console.log('Failure thumbs!');
-			if (response) {
-				console.log(response['data']['error']);
-			} else {
-				// This would mean an invalid response from the server - maybe the site went down or whatever...
-			}
-		}
-	});
-}
 
 
-function jthumbs_getimages($, sid, id, urlroot, base64 = false, callback = null)
-{
-	$("#"+sid).change(function() {
-		jthumbs_ajax($, id, urlroot, (base64)?btoa(encode_utf8(this.value)): this.value, callback);
-	});
-}
+
 

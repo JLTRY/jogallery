@@ -229,46 +229,6 @@ class JODirectory
     }
 
 
-    public function outputselectthumbs($id, &$content)
-    {
-        $sid = 'jogalleryselect' . $id;
-        $urlroot = Uri::root(true);
-        $content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
-        JOGalleryHelper::loadLibrary(array("jimages" => true,
-                                            "jthumbs" => true,
-                                            "fancybox" => true,
-                                            "jogallery" => true));
-        JOGalleryHelper::loadLibrary(array("inline" =>
-                                        array('(function($) {
-                                            $(document).ready(function() {
-                                                jthumbs_getimages($, "' . $sid . '", "' .
-                                                                $id . '", "' .
-                                                                $urlroot . '"
-                                                );
-                                                })})(jQuery);')));
-    }
-    
-    public function outputinsertjogallery($id, &$content)
-    {
-        $sid = 'jform_folders';
-        $urlroot = Uri::root(true);
-        $content .= LayoutHelper::render('jimages', array('id' => $id), JPATH_LAYOUTS);
-        JOGalleryHelper::loadLibrary(array("jimages" => true, 
-                                           "jthumbs" => true,
-                                           "jogallery" => true,
-                                           "insertjogallery" => true));
-        JOGalleryHelper::loadLibrary(array("inline" =>
-                                        array('(function($) {
-                                            $(document).ready(function() {
-                                                prepareInsertJoGallery($,' .
-                                                               '"' . $sid . '", '.
-                                                               '"' . $id . '", ' .
-                                                               '"' . $urlroot . '"' .
-                                            ')})})(jQuery);',
-                                              ['position' => 'after'],
-                                              [],
-                                              ['com_jogallery.insertjogallery'])));
-    }
 
 
     public function outputselectcomments($id, &$content)
@@ -395,9 +355,6 @@ class JODirectory
         switch ($type) {
             case 'selectthumbs':
                 $this->outputselectthumbs($id, $content);
-                break;
-            case 'insertjogallery':
-                $this->outputinsertjogallery($id, $content);
                 break;
             case 'selectcomments':
                 $this->outputselectcomments($id, $content);
