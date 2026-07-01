@@ -424,7 +424,7 @@ class JOGalleryHelper
             $urlshortfilename = JThumbsHelper::getthumburl(
                 JOGalleryHelper::joinPaths($rootdir, $directory),
                 $icon,
-                $file->basename
+                $file['basename']
             );
         }
         if ($width == "?") {
@@ -534,7 +534,7 @@ class JOGalleryHelper
         if (array_key_exists('title', $_params)) {
             $title = (bool)$_params['title'];
         } else {
-            $width = true;
+            $title = "";
         }
         if (array_key_exists('page', $_params)) {
             $page = $_params['page'];
