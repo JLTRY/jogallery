@@ -2,8 +2,8 @@
 <extension type="package" version="4.0" method="upgrade">
 	<name>PKG_JOGALLERY</name>
 	<packagename>jogallery</packagename>
-	<version>3.0.6</version>
-	<creationDate>June 12, 2026</creationDate>
+	<version>3.0.7</version>
+	<creationDate>July  6, 2026</creationDate>
 	<copyright>(C) 2007-2024 JL Tryoen. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<author>J.L. Tryoen</author>
