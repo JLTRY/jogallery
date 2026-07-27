@@ -51,10 +51,29 @@ function psw_imagesviewer($, id, values)
     return this;
 }
 
-function psw_images_getimages($, id, listfiles)
+
+
+function psw_force_fullscreen($) {
+	$(document).ready(function() {
+		document.querySelectorAll('a[data-pswp-src]').forEach(function(link) {
+		link.addEventListener('click', function() {
+		  if (/mobi|android|webos|iphone|ipad|ipod|blackberry|opera mini/i.test(navigator.userAgent)) {
+			setTimeout(function() {
+				$('button.pswp__button--fullscreen-button').trigger('click');
+			}, 100);
+		  }
+		});
+	  });
+	});
+}
+
+function psw_images_getimages($, id, listfiles, options)
 {
     var thmb = new psw_imagesviewer($, id, listfiles);
     thmb.show($, 0, 1500);
+	if (options['fullscreen']?? false) {
+	  psw_force_fullscreen($);
+	}
 }
 
 function init_psw($, id)

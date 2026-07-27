@@ -104,16 +104,6 @@ class JOGalleryHelper
         if (isset($libraries['fancybox'])) {
             $wa->useScript('fancybox');
             $wa->useStyle('fancybox');
-            HTMLHelper::_('jquery.framework');
-            $wa->addInlineScript(
-                'window.addEventListener("DOMContentLoaded", 
-                                    function() {
-                                        initfancybox(jQuery);
-                                        });',
-                ['position' => 'after'],
-                [],
-                ['fancybox', 'com_jogallery.jimages', "jquery"]
-            );
         }
         if (isset($libraries['lazyload'])) {
             $wa->useScript('lazyload');
@@ -371,7 +361,7 @@ class JOGalleryHelper
     }
 
 
-    public static function outputfancybox($id, $directory, $listfiles, $page, &$content)
+    public static function outputfancybox($id, $directory, $listfiles, &$content, $options)
     {
         $sid = "jogallery" . $id;
         $content .= LayoutHelper::render(
@@ -384,14 +374,15 @@ class JOGalleryHelper
                                                array('(function($) {
                                                         $(document).ready(function() {
                                                               jimages_getimages($, "' .
-                                                                  $sid . '", ' . json_encode($listfiles) . ');
+                                                                  $sid . '", ' . json_encode($listfiles) .' ,' . json_encode($options).');
+                                                              initfancybox($ );
                                                           })})(jQuery);',
                                                     ['position' => 'after'],
                                                     [],
                                                     ['com_jogallery.jimages'])));
     }
 
-    public static function outputphotoswipe($id, $directory, $listfiles, $page, &$content)
+    public static function outputphotoswipe($id, $directory, $listfiles, $page, &$content, $options)
     {
         $sid = "jogallery" . $id;
         $content .= LayoutHelper::render(
@@ -406,7 +397,7 @@ class JOGalleryHelper
                                                                 (function($) {
                                                                   $(document).ready(function() {
                                                                   psw_images_getimages($, "' . $sid .
-                                                                      '", ' . json_encode($listfiles) . ');
+                                                                      '", ' . json_encode($listfiles) . ' ,' . json_encode($options).');
                                                                   init_psw($, "' . $sid . '");
                                                             })})(jQuery);',
                                                             ['position' => 'after'],
@@ -433,7 +424,15 @@ class JOGalleryHelper
         $content .= "<a data-fancybox=\"" . $name . "\"  href=\"$urlfilename\">
                         <img src=\"$urlshortfilename\"/ width=\"$width\">
                      </a>";
-        JOGalleryHelper::loadLibrary(array( "fancybox" => true));
+        JOGalleryHelper::loadLibrary(array( "fancybox" => true, "jimages" => true));
+        JOGalleryHelper::loadLibrary(array("inline" => 
+                                               array('(function($) {
+                                                        $(document).ready(function() {
+                                                              initfancybox($ );
+                                                          })})(jQuery);',
+                                                    ['position' => 'after'],
+                                                    [],
+                                                    ['com_jogallery.jimages'])));
     }
 
 
@@ -446,27 +445,27 @@ class JOGalleryHelper
         $parentlevel,
         &$content,
         $type = 'radio',
-        $media = "ALL",
-        $lightbox = "fancybox"
+        $options = array()
     ) {
         $document = Factory::getDocument();
         $jroot = new JORootDirectory($dir, $directory, $parentlevel, $galid);
         $ret = $jroot->findDirs($dir, $directory, true);
         if (($ret > 0) || ($jroot->parentlevel > 0)) {
-            $jroot->outputdirs($type, $id, $content, $type, $media, $lightbox);
+            $jroot->outputdirs($type, $id, $content, $options);
         }
         return $ret;
     }
 
-    public static function outputfiles($id, $directory, $listfiles, $page, &$content, $lightbox = 'fancybox')
+    public static function outputfiles($id, $directory, $listfiles, &$content, $options = array())
     {
-        $content .= "<!--" . $type . "-->";
+        $content .= "<!-- ouputfiles " . $lightbox . "-->";
+        $lightbox = $options['lightbox']?? 'fancybox';
         switch ($lightbox) {
             case 'fancybox':
-                self::outputfancybox($id, $directory, $listfiles, $page, $content);
+                self::outputfancybox($id, $directory, $listfiles, $content, $options);
                 break;
             case 'photoswipe':
-                self::outputphotoswipe($id, $directory, $listfiles, $page, $content);
+                self::outputphotoswipe($id, $directory, $listfiles, $page, $content, $options);
                 break;
         }
     }
@@ -483,18 +482,7 @@ class JOGalleryHelper
         if (is_array($_params) == false) {
             return  "errorf:" . print_r($_params, true);
         }
-        if (! array_key_exists('directory', $_params) &&
-            ! array_key_exists('dir', $_params)) {
-            return  "errorf: missing dir/directory param" . print_r($_params, true);
-        }
-        $directory = null;
-        $keys = array('dir', 'directory');
-        foreach ($keys as $key) {
-            if (array_key_exists($key, $_params)) {
-                $directory = $_params[$key];
-                break;
-            }
-        }
+        $directory = $_params['dir']?? $_params['directory']?? null;
         if ($directory == null) {
             return  "errorf: missing dir/directory param" . print_r($_params, true);
         }
@@ -506,61 +494,19 @@ class JOGalleryHelper
             $end = new Date($_params['end']);
             $enddate = $end->toUnix();
         }
-        if (array_key_exists('rootdir', $_params)) {
-            $rootdir = $_params['rootdir'];
-        } else {
-            $rootdir = ".";
-        }
-        if (array_key_exists('parent', $_params)) {
-            $parent = $_params['parent'];
-        } else {
-            $parent = 0;
-        }
-        if (array_key_exists('name', $_params)) {
-            $name = $_params['name'];
-        } else {
-            $name = "gallery";
-        }
-        if (array_key_exists('icon', $_params)) {
-            $icon = $_params['icon'];
-        } else {
-            $icon = "small";
-        }
-        if (array_key_exists('width', $_params)) {
-            $width = $_params['width'];
-        } else {
-            $width = "?";
-        }
-        if (array_key_exists('title', $_params)) {
-            $title = (bool)$_params['title'];
-        } else {
-            $title = "";
-        }
-        if (array_key_exists('page', $_params)) {
-            $page = $_params['page'];
-        } else {
-            $page = -1;
-        }
-        if (array_key_exists('id', $_params)) {
-            $id = $_params['id'];
-        } else {
-            $id = rand(1, 1024);
-        }
-        if (array_key_exists('media', $_params)) {
-            $media = $_params['media'];
-        } else {
-            $media = "IMAGES";
-        }
-        if (array_key_exists('lightbox', $_params)) {
-            $lightbox = $_params['lightbox'];
-        } else {
-            $lightbox = "fancybox";
-        }
-        if (array_key_exists('type', $_params)) {
-            $type = $_params['type'];
-        } else {
-            $type = 'directories';
-        }
+        $rootdir = $_params['rootdir']?? ".";
+        $parent = $_params['parent']?? 0;
+        $name = $_params['name']??"gallery";
+        $icon = $_params['icon']?? "small";
+        $width = $_params['width']?? "?";
+        $title = (bool)$_params['title']?? false;
+        $id = $_params['id']?? rand(1, 1024);
+        $options = array();
+        $options['media'] = $_params['media']?? "IMAGES";
+        $options['lightbox'] = $_params['lightbox']?? "fancybox";
+        $options['fullscreen'] = $_params['fullscreen']?? false;
+        $options['page'] = $_params['page']?? -1;
+        $type = $_params['type']?? 'directories';
         $document = Factory::getDocument();
         if (array_key_exists('img', $_params)) {
             $listfiles = self::getFiles($rootdir, $directory, "ALL", $startdate, $enddate);
@@ -578,12 +524,12 @@ class JOGalleryHelper
         } else {
             //sub directories
             $sdir = html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir, $directory));
-            if (self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $media, $lightbox) >= 0) {
-                $listfiles = self::getFiles($rootdir, $directory, $media, $startdate, $enddate);
+            if (self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $options) >= 0) {
+                $listfiles = self::getFiles($rootdir, $directory, $options['media'], $startdate, $enddate);
                 if ($parent != 0 && count($listfiles)) {
                     $content .= "<hr/>";
                 }
-                self::outputfiles($id, $directory, $listfiles, $page, $content, $lightbox);
+                self::outputfiles($id, $directory, $listfiles, $content, $options);
             } else {
                 $content = "Directory does not exist $directory";
             }

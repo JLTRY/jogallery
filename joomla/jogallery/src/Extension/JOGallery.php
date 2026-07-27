@@ -51,18 +51,6 @@ class JOGallery extends CMSPlugin implements SubscriberInterface
         ];
     }
 
-    public function getparam($name, $param)
-    {
-        $found = false;
-        $app     = Factory::getApplication();
-        $input   = $app->getInput();
-        if ($input->get($param) !== null) {
-            $this->{$name} = $input->get($param);
-            $found = true;
-        }
-        return $found;
-    }
-
 
     protected static function parseAttributes($string, &$retarray)
     {
@@ -118,10 +106,8 @@ class JOGallery extends CMSPlugin implements SubscriberInterface
                     } else {
                         $params = Utility::parseAttributes($matches[1]);
                     }
-                    if ($this->getparam('page', 'page')) {
-                        $params['page'] = $this->page;
-                    }
                     $params['rootdir'] = JParametersHelper::getrootdir();
+                    $params['fullscreen'] = $params['fullscreen']?? 1;
                     if (array_key_exists('img', $params)) {
                         $p_content = JOGalleryHelper::display($params);
                     } elseif (array_key_exists('browse', $params)) {
@@ -131,9 +117,9 @@ class JOGallery extends CMSPlugin implements SubscriberInterface
                         $params['id'] = $id;
                         $p_content = FolderGroupHelper::display($params);
                     } else {
-                        $p_content = "<!-- display -->" .
+                        $p_content = "<!-- plugin display -->" .
                                     JOGalleryHelper::display($params) .
-                                    "<!-- display end -->";
+                                    "<!-- plugin display end -->";
                     }
                     return $p_content;
                 }

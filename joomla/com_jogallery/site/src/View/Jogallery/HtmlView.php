@@ -33,18 +33,21 @@ use Joomla\CMS\Helper\ModuleHelper;
  */
 class HtmlView extends BaseHtmlView
 {
-    public function getparam($name, $param)
+    public function getparam($param, $default = null)
     {
         $found = false;
         $app     = Factory::getApplication();
         $input   = $app->getInput();
         $params  = $app->getParams();
         if ($params->get($param) !== null) {
-            $this->{$name} = $params->get($param);
+            $this->{$param} = $params->get($param);
             $found = true;
-        } elseif ($input->get($param) !== null) {
-            $this->{$name} = $input->get($param);
+        } elseif ($input->get($param, $default) !== null) {
+            $this->{$param} = $input->get($param);
             $found = true;
+        }
+        if (!$found) {
+            $this->{$param} = $default;
         }
         return $found;
     }
@@ -58,14 +61,11 @@ class HtmlView extends BaseHtmlView
     public function display($tpl = null)
     {
         $canview = false;
-//$this->item = $this->get('Item');
         $catid = -1;
-        $this->id = -1;
-        $this->getparam('id', 'id');
-        $this->media = "ALL";
-        $this->getparam('media', 'media');
-        $this->lightbox = "fancybox";
-        $this->getparam('lightbox', 'lightbox'); 
+        $this->getparam('id', '-1');
+        $this->getparam('media', "ALL");
+        $this->getparam('lightbox', "fancybox"); 
+        $this->getparam('fullscreen', "0"); 
         if ($this->item == null) {
             if ($this->id !== -1) {
                 $model = new JOGalleryModel();
@@ -74,8 +74,8 @@ class HtmlView extends BaseHtmlView
                 $catid = $this->item->catid;
             }
         }
-        if (!$this->getparam('directory', 'directory')) {
-            if ($this->getparam('directory64', 'directory64')) {
+        if (!$this->getparam('directory')) {
+            if ($this->getparam('directory64')) {
                 $this->directory = utf8_decode(base64_decode($this->directory64));
             }
         }
@@ -103,14 +103,12 @@ class HtmlView extends BaseHtmlView
             } else {
                 $errors = $this->get('Errors');
             }
-            $this->getparam('image', 'image');
-            $this->page = -1;
-            $this->getparam('page', 'page');
-            if ($this->getparam('image64', 'image64')) {
+            $this->getparam('image', null);
+            $this->getparam('page', '-1');
+            if ($this->getparam('image64', null)) {
                 $this->image = utf8_decode(base64_decode($this->image64));
             }
-            $this->parent = false;
-            $this->getparam('parent', 'parent');
+            $this->getparam('parent', false);
 // Check for errors.
             if (is_array($errors) && count($errors)) {
                 Log::add(implode('<br />', $errors), Log::WARNING, 'jerror');

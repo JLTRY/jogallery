@@ -56,36 +56,54 @@ function imagesviewer($, id, values)
     return this;
 }
 
-function jimages_getimages($, id, listfiles)
+function forcefullscreen($) {
+	$(document).ready(function() {
+		document.querySelectorAll('a[data-fancybox]').forEach(function(link) {
+		link.addEventListener('click', function() {
+		  if (/mobi|android|webos|iphone|ipad|ipod|blackberry|opera mini/i.test(navigator.userAgent)) {
+			setTimeout(function() {
+				$('button[data-fullscreen-action]').trigger('click');
+			}, 100);
+		  }
+		});
+	  });
+	});
+}
+
+
+function jimages_getimages($, id, listfiles, options)
 {
     var thmb = new imagesviewer($, id, listfiles);
     thmb.show($, 0, 1500);
+	if (options['fullscreen']?? false) {
+	  forcefullscreen($);
+	}
 }
 
-function initfancybox($, page=null)
+
+
+function initfancybox($)
 {
-    Fancybox.bind("[data-fancybox]", {
-       zoomEffect: false,
-       theme: "auto",
-       Carousel: {
-          Autoplay: {
-              autoStart: false,
-              timeout: 3000,
-       },
-       Toolbar: {
-          display: {
-            left: [],
-            middle: [],
-            right: ['autoplay',
-                'fullScreen',
-                'thumbs',
-                'zoomIn',
-                'zoomOut',
-                'close'],
-            },
-        }
-    }
-    });
+  Fancybox.bind("[data-fancybox]", {
+    Zoom: {
+      enabled: true, // Enable zoom functionality
+    },
+  theme: "auto",
+  contentClick: "iterateZoom",
+  Carousel: {
+    Autoplay: {
+      autoStart: false,
+      timeout: 3000,
+    },
+    Toolbar: {
+        display: {
+          left: [],
+          middle: [],
+          right: ['autoplay', 'fullscreen', 'zoomIn', 'zoomOut', 'thumbs', 'close'],
+        },
+    },
+  }
+  });
 }
 
 

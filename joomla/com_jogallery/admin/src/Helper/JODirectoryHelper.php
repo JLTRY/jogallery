@@ -47,7 +47,7 @@ abstract class JODirectoryHelper
 
 
     // $dir is the full path sdir is the directory as parameter
-    public static function outputdirs($id, $dir, $directory, &$content, $type = 'radio')
+    public static function outputdirs($id, $dir, $directory, &$content, $type = 'radio', $options = array())
     {
         $document = Factory::getDocument();
         JOGalleryHelper::loadLibrary(array('jogallery' => true));
@@ -56,7 +56,7 @@ abstract class JODirectoryHelper
         if ($ret != 0) {
             $content = "err";
         } else {
-            $jroot->outputdirs($type, $id, $content);
+            $jroot->outputdirs($type, $id, $content, $options);
         }
     }
 
@@ -69,23 +69,18 @@ abstract class JODirectoryHelper
         if (! array_key_exists('dir', $_params)) {
             return  "errorf: missing dir param" . print_r($_params, true);
         }
-        if (array_key_exists('rootdir', $_params)) {
-            $rootdir = $_params['rootdir'];
-        } else {
-            $rootdir =  JParametersHelper::getrootdir();
-        }
-        if (array_key_exists('type', $_params)) {
-            $type = $_params['type'];
-        } else {
-            $type = 'radio';
-        }
+        $rootdir = $_params['rootdir']?? JParametersHelper::getrootdir();
+        $type = $_params['type']?? 'radio';
         $directory = $_params['dir'];
+        $options = array();
+        $options['media'] = $_params['media']?? "IMAGES";
+        $options['lightbox'] = $_params['lightbox']?? "fancybox";
+        $options['fullscreen'] = $_params['fullscreen']?? "0";
         $dir = utf8_decode(html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir, $directory)));
         if (!is_dir($dir)) {
             $content .= "Directory does not exists :" . $dir;
         } else {
-            JOGalleryHelper::loadLibrary(array("fancybox" => true));
-            self::outputDirs($id, $dir, $directory, $content, $type);
+            self::outputDirs($id, $dir, $directory, $content, $type, $options);
         }
         return $content;
     }

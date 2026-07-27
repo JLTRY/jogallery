@@ -1,10 +1,11 @@
 
 
-function directoriesdisplay($, sid, icon, directories)
+function directoriesdisplay($, sid, icon, directories, options=[])
 {
     this._directories = directories;
     this._sid = sid;
     this._icon = icon;
+	this._options = options;
 
     this.show = function ($) {
         var content = '<table><tr>';
@@ -21,6 +22,14 @@ function directoriesdisplay($, sid, icon, directories)
                 var urlfilename =  value.url;
                 var dirname = value.name;
                 var nbcar = dirname.len;
+				console.log("show")
+				console.log(this._options);
+				if (this._options)
+				{
+					console.log("show:len" + this._options);
+					urlfilename += "&media=" + (this._options['media'] ?? "ALL") + "&lightbox=" + (this._options['lightbox'] ?? "fancybox");
+					urlfilename += "&fullscreen=" + (this._options['fullscreen'] ?? "0");
+				}
                 content += '<td><a href="' + urlfilename + '" data-placement="left" data-bs-toggle="tooltip" title="' + dirname + '">';
                 content +=  '<img src="' + this._icon + '">' +
                                 '<input style="border: 0; text-overflow:ellipsis;" size="15" type="text" name="' + dirname + '" value=" ' + dirname + '" readonly >';
@@ -47,8 +56,11 @@ function directoriesdisplay($, sid, icon, directories)
     return this;
 }
 
-function jdirectories_show($, id, icon, listdirectories)
+function jdirectories_show($, id, icon, listdirectories, options=[])
 {
-    var tdir = new directoriesdisplay($, id, icon, listdirectories);
+    var tdir = new directoriesdisplay($, id, icon, listdirectories, options);
+	console.log("jdirectories_show");
+	console.log(listdirectories);
+	console.log(options);
     tdir.show($);
 }

@@ -184,10 +184,12 @@ class JODirectory
     }
 
 
-    public function outputselectdirs($id, &$content, $media, $lightbox)
+    public function outputselectdirs($id, &$content, $options)
     {
         $sid = 'jogalleryselect' . $id;
         $imagesid = 'jogallery' . $id;
+        $lightbox = $options['lightbox']?? 'fancybox';
+        $media = $options['media']?? "IMAGES";
         $urlroot = Uri::root(true);
         $selectdirs = array();
         // no line for folder
@@ -283,29 +285,30 @@ class JODirectory
         $json = json_encode($arr);
     }
 
-    public function outputradio($id, &$content, $media, $lightbox)
+    public function outputradio($id, &$content, $options = array())
     {
         $json = "";
+        $lightbox = $options['lightbox']?? 'fancybox';
+        $media = $options['media']?? "IMAGES";
+        $options["uriroot"] = Uri::root();
         $this->outputjson($json);
         $sid = "findir" . $id;
-        $sidg = "jogallery" . $id;
+        $sidg = "#jogallery" . $id;
         $content .= LayoutHelper::render('radiobox', array('sid' => $sid), JPATH_LAYOUTS);
         $content .= LayoutHelper::render('jogallery', array('id' => $id), JPATH_LAYOUTS);
-        JOGalleryHelper::loadLibrary(array("radiobox" => true));
+        JOGalleryHelper::loadLibrary(array("radiobox" => true, "fancybox" => true));
         JOGalleryHelper::loadLibrary(array("inline" =>
                                             array('$(document).ready(function() {
                                                         initradiobox($, "#' .
                                                         $sid . '" ,' .
                                                         $json .
-                                                        ',  fillgallery, [ "#' .
-                                                        $sidg . '", '.
-                                                        '"' . Uri::root() . '", ' .
-                                                        '"' . $media . '", '.
-                                                        '"' . $lightbox . '"]);' .
+                                                        ',  fillgallery, '.
+                                                        json_encode(array_merge(array("sidg" => $sidg), $options)) .
+                                                        ');' .
                                                     '});',
                                                     ['position' => 'after'],
                                                     [],
-                                                    ['com_jogallery.radiobox'])));
+                                                    ['com_jogallery.radiobox', 'jquery'])));
     }
 
 
@@ -329,10 +332,11 @@ class JODirectory
     }
     
 
-    public function outputdirectories($id, &$content)
+    public function outputdirectories($id, &$content, $options = array())
     {
         $sid = "jogallerydir"  . $id;
         $json = $this->getjsondirectories();
+        $jsonoptions = json_encode($options);
         $icon = "/media/com_jogallery/images/icon-folder-medium.png";
         $content .= LayoutHelper::render('directories', array('id' => $id), JPATH_LAYOUTS);
         JOGalleryHelper::loadLibrary(array("jdirectories" => true, "bootstrap.tooltip" => true));
@@ -341,7 +345,7 @@ class JODirectory
                                                     $(document).ready(function() {
                                                         jdirectories_show($, "' .
                                                         $sid . '","' .
-                                                        $icon . '",' . $json . ');
+                                                        $icon . '",' . $json . ',' . $jsonoptions . ');
                                                     })
                                                 })(jQuery);',
                                                 ['position' => 'after'],
@@ -349,7 +353,7 @@ class JODirectory
                                                 ['com_jogallery.jdirectories'])));
     }
 
-    public function outputdirs($type, $id, &$content, $media = "ALL", $lightbox = "fancybox")
+    public function outputdirs($type, $id, &$content, $options = array())
     {
         $content .= "<!--" . $type . "-->";
         switch ($type) {
@@ -360,7 +364,7 @@ class JODirectory
                 $this->outputselectcomments($id, $content);
                 break;
             case 'selectdirs':
-                $this->outputselectdirs($id, $content, $media, $lightbox);
+                $this->outputselectdirs($id, $content, $options);
                 break;
             case 'selectdirsmenu':
                 $this->outputselectdirsmenu($id, $content);
@@ -369,10 +373,10 @@ class JODirectory
                 $this->outputrecthumbs($id, $content);
                 break;
             case 'directories':
-                $this->outputdirectories($id, $content);
+                $this->outputdirectories($id, $content, $options);
                 break;
             default:
-                $this->outputradio($id, $content, $media, $lightbox);
+                $this->outputradio($id, $content, $options);
                 break;
         }
         $content .= "<!--" . $type . "end -->";

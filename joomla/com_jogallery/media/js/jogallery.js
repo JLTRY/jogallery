@@ -1,10 +1,11 @@
 function fillgallery($, value, params)
 {
-    id = params[0];
-    rootdir = params[1];
-    media = params[2];
-    lightbox = params[3];
+    id = params["sidg"];
+    rootdir = params['uriroot'];
+    media = params['media'];
+    lightbox = params['lightbox'];
     url =  rootdir + "index.php?option=com_jogallery&view=jogallery&tmpl=component&directory64=" + value +"&media=" + media + "&lightbox=" + lightbox;
+    url += "&fullscreen=" + (params['fullscreen'] ?? "0");
     $.ajax({
         url: url,
         type: "POST",

@@ -21,4 +21,5 @@ echo JOGalleryHelper::display(array("dir" => JOGalleryHelper::joinPaths($this->d
                                     "parent" => $this->parent,
                                     "page" => $this->page,
                                     "media" => $this->media,
-                                    "lightbox" => $this->lightbox));
+                                    "lightbox" => $this->lightbox,
+                                    "fullscreen" => $this->fullscreen));

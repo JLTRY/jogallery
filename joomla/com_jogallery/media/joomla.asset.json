@@ -8,12 +8,13 @@
         {
             "name": "fancybox",
             "type": "script",
-            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.7/dist/fancybox/fancybox.umd.js"
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.js",
+            "dependencies": ["jquery"]
         },
         {
             "name": "fancybox",
             "type": "style",
-            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.7/dist/fancybox/fancybox.css"
+            "uri": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.css"
         },
         {
             "name": "photoswipe",
@@ -36,8 +37,7 @@
             "name": "com_jogallery.jimages",
             "type": "script",
             "uri": "com_jogallery/jimages.js",
-            "dependencies": [
-                "jquery"]
+            "dependencies": [ "fancybox", "jquery" ]
         },
         {
             "name": "com_jogallery.jimages",

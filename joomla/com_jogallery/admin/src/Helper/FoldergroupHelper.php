@@ -143,16 +143,11 @@ abstract class FoldergroupHelper
         } else {
             $tmpl = null;
         }
-        if (array_key_exists('type', $_params)) {
-            $type = $_params['type'];
-        } else {
-            $type = 'directories';
-        }
-        if (array_key_exists('media', $_params)) {
-            $media = $_params['media'];
-        } else {
-            $media = "IMAGES";
-        }
+        $type = $_params['type']?? 'directories';
+        $options = array();
+        $options['media'] = $_params['media']?? "IMAGES";
+        $options['lightbox'] = $_params['lightbox']?? "fancybox";
+        $options['fullscreen'] = $_params['fullscreen']?? "0";
         if ($parent == 0) {
             $content .= "<h2>" . $name . "</h2>";
         }
@@ -160,18 +155,18 @@ abstract class FoldergroupHelper
         $dir = utf8_decode(html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir, $directory)));
         $jroot = new JOFolderGroup($dir, $directory, $parent, $id, $tmpl);
         $jroot->findDirs($dir, $directory, true);
-        $jroot->outputdirs($type, $id, $content);
+        $jroot->outputdirs($type, $id, $content, $options);
         if ($directory != null && $parent != 0) {
             $content .= "<hr/>";
             $id = rand(1, 1024);
-            $listfilteredfiles = JOGalleryHelper::getFiles($rootdir, $directory, $media, -1, -1);
+            $listfilteredfiles = JOGalleryHelper::getFiles($rootdir, $directory, $options['media'], -1, -1);
             $content .= LayoutHelper::render(
                 'jogallery',
                 array('id' => $id),
                 JPATH_ADMINISTRATOR .
                 '/components/com_jogallery/layouts'
             );
-            JOGalleryHelper::outputfiles($id, $directory, $listfilteredfiles, -1, $content);
+            JOGalleryHelper::outputfiles($id, $directory, $listfilteredfiles, $content, $options);
         }
         return $content;
     }

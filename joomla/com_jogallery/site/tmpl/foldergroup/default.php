@@ -22,4 +22,5 @@ echo FoldergroupHelper::display(array("folders" => $this->folders,
                                    "name" => $this->name,
                                    "tmpl" => $this->tmpl,
                                    "type" => $this->type,
-                                   "media" => $this->media));
+                                   "media" => $this->media,
+                                   "lightbox" => $this->lightbox));
