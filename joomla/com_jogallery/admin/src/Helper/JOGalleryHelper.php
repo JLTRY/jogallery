@@ -375,14 +375,14 @@ class JOGalleryHelper
                                                         $(document).ready(function() {
                                                               jimages_getimages($, "' .
                                                                   $sid . '", ' . json_encode($listfiles) .' ,' . json_encode($options).');
-                                                              initfancybox($ );
+                                                              initfancybox($,' . json_encode($options) .' );
                                                           })})(jQuery);',
                                                     ['position' => 'after'],
                                                     [],
                                                     ['com_jogallery.jimages'])));
     }
 
-    public static function outputphotoswipe($id, $directory, $listfiles, $page, &$content, $options)
+    public static function outputphotoswipe($id, $directory, $listfiles, &$content, $options)
     {
         $sid = "jogallery" . $id;
         $content .= LayoutHelper::render(
@@ -465,7 +465,7 @@ class JOGalleryHelper
                 self::outputfancybox($id, $directory, $listfiles, $content, $options);
                 break;
             case 'photoswipe':
-                self::outputphotoswipe($id, $directory, $listfiles, $page, $content, $options);
+                self::outputphotoswipe($id, $directory, $listfiles, $content, $options);
                 break;
         }
     }

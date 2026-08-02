@@ -200,7 +200,7 @@ abstract class JThumbsHelper
                 }
                 // Bail out if the image resource is not OK
                 if (!$source) {
-                    array_push($errors, "Error in source");
+                    array_push($errors, "Error in source:" .$type);
                     $ret = false;
                 } else {
                     $width  = imagesx($source);

@@ -115,41 +115,21 @@ abstract class FoldergroupHelper
         if (is_array($_params) == false) {
             return  "errorf:" . print_r($_params, true);
         }
-        if (array_key_exists('parent', $_params)) {
-            $parent = $_params['parent'];
-        } else {
-            $parent = 0;
-        }
-        if (array_key_exists('rootdir', $_params)) {
-            $rootdir = $_params['rootdir'];
-        } else {
-            $rootdir = ".";
-        }
-        if (array_key_exists('directory', $_params)) {
-            $directory = $_params['directory'];
-            if ($parent > 1) {
-                $name = $directory;
-            }
-        } else {
-            $directory = null;
-        }
-        if (array_key_exists('id', $_params)) {
-            $id = $_params['id'];
-        } else {
-            $id = -1;
-        }
-        if (array_key_exists('tmpl', $_params)) {
-            $tmpl = $_params['tmpl'];
-        } else {
-            $tmpl = null;
-        }
+        $parent = $_params['parent']?? 0;
+        $rootdir = $_params['rootdir']?? ".";
+        $directory = $_params['directory']?? null;
+        $id = $_params['id']?? -1;
+        $tmpl = $_params['tmpl']?? null;;
         $type = $_params['type']?? 'directories';
         $options = array();
-        $options['media'] = $_params['media']?? "IMAGES";
+        $options['media'] = $_params['media']?? "ALL";
         $options['lightbox'] = $_params['lightbox']?? "fancybox";
         $options['fullscreen'] = $_params['fullscreen']?? "0";
         if ($parent == 0) {
             $content .= "<h2>" . $name . "</h2>";
+        }
+        if ($parent > 1) {
+           $name = $directory;
         }
         JOGalleryHelper::loadLibrary(array("lazyload" => true, "fancybox" => true, "jogallery" => true));
         $dir = utf8_decode(html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir, $directory)));

@@ -23,10 +23,11 @@ function imagesviewer($, id, values)
     this._start = 0;
     this._vidextensions = ["mp4", "m2ts", "mov", "MOV"];
 
-    this.show = function ($, start, modulo) {
+    this.show = function ($, start, modulo, options=[]) {
         var divid = $('#' + this._id);
 
         divid.html("");
+        var page = options['page']?? -1;
         for (let i = start; i < start + modulo; i++) {
             if (i < this._values.length) {
                 var content = "";
@@ -37,6 +38,10 @@ function imagesviewer($, id, values)
                 var basename = tvalue['basename'];
                 var moddate = tvalue['moddate'];
                 var extension = basename.split(".").at(-1);
+                var datapage = "";
+				if ((page != -1) && (i == page -1)) {
+					datapage = " autoclick ";
+				}
                 if (moddate != -1) {
                     date = new Date(moddate * 1000);
                     sdate =  "<b>" + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " </b>";
@@ -44,10 +49,10 @@ function imagesviewer($, id, values)
                     sdate = "";
                 }
                 if (this._vidextensions.includes(extension)) {
-                    content += "<a data-fancybox=\"gallery\" loading=\"lazy\" href=\"" + urlfilename + "\"  data-caption=\"" +  sdate + tvalue['comment'] + "\">" +
+                    content += "<a data-fancybox=\"gallery\" " + datapage + "loading=\"lazy\" href=\"" + urlfilename + "\"  data-caption=\"" +  sdate + tvalue['comment'] + "\">" +
                                 "<span class=\"parent\"><img class=\"image2\" width=\"128\"  loading=\"lazy\" id=\"" + sid + "\" src=\"" + urlshortfilename + " \"/><i class=\"fa-solid fa-video image1\"></i></span></a>";
                 } else {
-                    content += "<a data-fancybox=\"gallery\"  href=\"" + urlfilename + "\"  data-caption=\"" +  sdate + tvalue['comment'] + "\"><img  loading=\"lazy\" id=\"" + sid + "\" src=\"" + urlshortfilename + "\" /></a>";
+                    content += "<a data-fancybox=\"gallery\"  " + datapage +  "href=\"" + urlfilename + "\"  data-caption=\"" +  sdate + tvalue['comment'] + "\"><img  loading=\"lazy\" id=\"" + sid + "\" src=\"" + urlshortfilename + "\" /></a>";
                 }
                 divid.append(content);
             }
@@ -57,7 +62,7 @@ function imagesviewer($, id, values)
 }
 
 function forcefullscreen($) {
-	$(document).ready(function() {
+  $(document).ready(function() {
 		document.querySelectorAll('a[data-fancybox]').forEach(function(link) {
 		link.addEventListener('click', function() {
 		  if (/mobi|android|webos|iphone|ipad|ipod|blackberry|opera mini/i.test(navigator.userAgent)) {
@@ -67,34 +72,39 @@ function forcefullscreen($) {
 		  }
 		});
 	  });
+	// foreceFullscreen will fail
+	$("a[autoclick]").each(function(index, value) {
+		$(value)[0].click();
 	});
+  });
 }
 
 
 function jimages_getimages($, id, listfiles, options)
 {
-    var thmb = new imagesviewer($, id, listfiles);
-    thmb.show($, 0, 1500);
-	if (options['fullscreen']?? false) {
-	  forcefullscreen($);
-	}
+  var thmb = new imagesviewer($, id, listfiles);
+  thmb.show($, 0, 1500, options);
+  if (options['fullscreen']?? false) {
+    forcefullscreen($, options);
+  }
+  
 }
 
 
 
-function initfancybox($)
+function initfancybox($, options = [])
 {
   Fancybox.bind("[data-fancybox]", {
     Zoom: {
       enabled: true, // Enable zoom functionality
     },
-  theme: "auto",
-  contentClick: "iterateZoom",
-  Carousel: {
-    Autoplay: {
-      autoStart: false,
-      timeout: 3000,
-    },
+    theme: "auto",
+    contentClick: "iterateZoom",
+    Carousel: {
+      Autoplay: {
+        autoStart: false,
+        timeout: 3000,
+      },
     Toolbar: {
         display: {
           left: [],
@@ -102,7 +112,7 @@ function initfancybox($)
           right: ['autoplay', 'fullscreen', 'zoomIn', 'zoomOut', 'thumbs', 'close'],
         },
     },
-  }
+   }
   });
 }
 
