@@ -2,14 +2,16 @@
 <extension version="1.0" type="plugin" group="content">
 	<name>Content - JDirectory</name>
 	<author>Jean-Luc TRYOEN</author>
-	<creationDate>July  6, 2026</creationDate>
+	<creationDate>August  8, 2026</creationDate>
 	<copyright>Copyright (C) 2021 Jean-Luc TRYOEN. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>jltryoen@orange.fr</authorEmail>
 	<authorUrl>www.jltryoen.fr</authorUrl>
-	<version>3.0.7</version>
+	<version>3.0.7.3.3</version>
 	<description>JDirectory plugin, use it with {jdirectory directory=dir}</description>
+	<namespace path="src">JLTRY\Plugin\Content\JODirectory</namespace>						 
 	<files>
-		<filename plugin="jdirectory">jdirectory.php</filename>
+		<folder plugin="jodirectory">services</folder>
+		<folder>src</folder>
 	</files>
 </extension>

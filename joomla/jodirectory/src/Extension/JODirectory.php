@@ -9,16 +9,21 @@
 *
 */
 
+namespace JLTRY\Plugin\Content\JODirectory\Extension;
+
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Utility\Utility;
+use Joomla\CMS\Event\Content\ContentPrepareEvent;
+use Joomla\Event\SubscriberInterface;
 use JLTRY\Component\JOGallery\Administrator\Model\JOGalleryModel;
 use JLTRY\Component\JOGallery\Administrator\Helper\JParametersHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JODirectoryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\JOGalleryCategoryHelper;
 use JLTRY\Component\JOGallery\Administrator\Helper\FoldergroupHelper;
-use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Factory;
-use Joomla\Event\Event;
-use Joomla\Event\SubscriberInterface;
+
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -29,7 +34,7 @@ define('PF_REGEX_JDIRECTORYI_PATTERN', "#{jdirectory (.*?)}#s");
 * Directory Content Plugin
 *
 */
-class plgContentJODirectory extends JPlugin
+class JODirectory extends CMSPlugin implements SubscriberInterface
 {
     protected static $_ID = 0;
 /**
@@ -41,47 +46,50 @@ class plgContentJODirectory extends JPlugin
     function __construct(&$subject, $params)
     {
         parent::__construct($subject, $params);
-        plgContentJODirectory::$_ID++;
+        JODirectory::$_ID++;
     }
+
+
 
     /**
-    * Example prepare content method in Joomla 1.5
-    *
-    * Method is called by the view
-    *
-    * @param object The article object. Note $article->text is also available
-    * @param object The article params
-    * @param int The 'page' number
-    */
-    function onPrepareContent(&$article, &$params, $limitstart)
+     * Returns an array of events this subscriber will listen to.
+     *
+     * @return  array
+     */
+    public static function getSubscribedEvents(): array
     {
-        return $this->OnPrepareRow($article);
+        return [
+            'onContentPrepare' => 'onContentPrepare'
+        ];
     }
-
-    /**
-    * Example prepare content method in Joomla 1.6/1.7/2.5
-    *
-    * Method is called by the view
-    *
-    * @param object The article object. Note $article->text is also available
-    * @param object The article params
-    */
-    function onContentPrepare($context, &$row, &$params, $page = 0)
+ 
+     /**
+     * The content plugin that inserts the galleries into content items
+     *
+     * @param    Event $event The event object
+     *
+     * @return true if anything has been inserted into the content object
+     */
+    public function onContentPrepare(ContentPrepareEvent $event)
     {
-        return $this->OnPrepareRow($row);
-    }
-
-    function onPrepareRow(&$row)
-    {
+        //Escape fast
+        if (!$this->getApplication()->isClient('site')) {
+            return;
+        }
         //Escape fast
         if (!$this->params->get('enabled', 1)) {
             return true;
         }
+        // use this format to get the arguments for both Joomla 4 and Joomla 5
+        // In Joomla 4 a generic Event is passed
+        // In Joomla 5 a concrete ContentPrepareEvent is passed
+        [$context, $article, $params, $page] = array_values($event->getArguments());
 
-        if (strpos($row->text, '{jdirectory') === false) {
+
+        if (strpos($article->text, '{jdirectory') === false) {
             return true;
         }
-        preg_match_all(PF_REGEX_JDIRECTORYI_PATTERN, $row->text, $matches);
+        preg_match_all(PF_REGEX_JDIRECTORYI_PATTERN, $article->text, $matches);
 // Number of plugins
         $count = count($matches[0]);
          // plugin only processes if there are any instances of the plugin in the text
@@ -97,8 +105,8 @@ class plgContentJODirectory extends JPlugin
                             $_result[$key] = $value;
                     }
                     $_result['rootdir'] = JParametersHelper::getrootdir();
-                    $p_content = JODirectoryHelper::display(plgContentJODirectory::$_ID, $_result);
-                    $row->text = str_replace("{jdirectory " . $matches[1][$i] . "}", $p_content, $row->text);
+                    $p_content = JODirectoryHelper::display(JODirectory::$_ID, $_result);
+                    $article->text = str_replace("{jdirectory " . $matches[1][$i] . "}", $p_content, $article->text);
                 }
             }
         }

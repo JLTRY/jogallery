@@ -438,7 +438,6 @@ class JOGalleryHelper
 
 // $dir is the full path sdir is the directory as parameter
     public static function outputdirs(
-        $galid,
         $id,
         $dir,
         $directory,
@@ -448,9 +447,9 @@ class JOGalleryHelper
         $options = array()
     ) {
         $document = Factory::getDocument();
-        $jroot = new JORootDirectory($dir, $directory, $parentlevel, $galid);
+        $jroot = new JORootDirectory($dir, $directory, $parentlevel);
         $ret = $jroot->findDirs($dir, $directory, true);
-        if (($ret > 0) || ($jroot->parentlevel > 0)) {
+        if (($ret > 0) || ($jroot->parentlevel >= 0)) {
             $jroot->outputdirs($type, $id, $content, $options);
         }
         return $ret;
@@ -524,7 +523,7 @@ class JOGalleryHelper
         } else {
             //sub directories
             $sdir = html_entity_decode(JOGalleryHelper::joinPaths(JPATH_SITE, $rootdir, $directory));
-            if (self::outputdirs($galid, $id, $sdir, $directory, $parent, $content, $type, $options) >= 0) {
+            if (self::outputdirs($id, $sdir, $directory, $parent, $content, $type, $options) >= 0) {
                 $listfiles = self::getFiles($rootdir, $directory, $options['media'], $startdate, $enddate);
                 if ($parent != 0 && count($listfiles)) {
                     $content .= "<hr/>";

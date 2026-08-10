@@ -80,7 +80,7 @@ function forcefullscreen($) {
 }
 
 
-function jimages_getimages($, id, listfiles, options)
+function jimages_getimages($, id, listfiles, options = [])
 {
   var thmb = new imagesviewer($, id, listfiles);
   thmb.show($, 0, 1500, options);
@@ -105,14 +105,15 @@ function initfancybox($, options = [])
         autoStart: false,
         timeout: 3000,
       },
+	initialPage: 3,
     Toolbar: {
         display: {
           left: [],
           middle: [],
           right: ['autoplay', 'fullscreen', 'zoomIn', 'zoomOut', 'thumbs', 'close'],
         },
-    },
-   }
+    }
+	}
   });
 }
 

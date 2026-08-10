@@ -46,7 +46,7 @@ function thumbretriever($, id, urlroot) {
 	this.getthumb = function(index, params) {
 		if (index < this._listimages.length) {
 			var imgname = this._listimages[index];
-			this.index = index;
+			this._index = index;
 			url = this._urlroot + "/administrator/index.php?option=com_jogallery&view=jogallery&tmpl=component&XDEBUG_SESSION_START=test&layout=thumb&directory64="
 					 + this._directory +"&image64=" + btoa(encode_utf8(imgname)) +"&force=" + Number(this._forced);
 			$.map(params, function(value, key) {
@@ -61,11 +61,13 @@ function thumbretriever($, id, urlroot) {
 				async: 'false',
 				context: this,
 				success: function(tvalue) {
-					var txt = this.index.toString().padStart(4, ' ') + "/" + this._listimages.length + " " + decode_utf8(atob(this._directory)) + " " + tvalue[0] + "=>" + tvalue[1] + ":" + tvalue[2][0] + "<br/>";
+					var index = (this._index) + 1;
+					var txt = index.toString().padStart(4, ' ') + "/" + this._listimages.length + " " + decode_utf8(atob(this._directory)) + " " + tvalue[0] + "=>" + tvalue[1] + ":" + tvalue[2][0] + "<br/>";
 					$("#jogallerylog"+this._id).html(txt);
 					var imge = $("img[id='"+ imgname + "']");
 					imge.attr('src', imge.attr('src')+"?timestamp=" + new Date().getTime());
 					this._tabselectimages.check(tvalue[0], false);
+					this._timeOut = (tvalue[1] =="ERR")?5: 500;
 				},
 				error: function(xhr, status, text) {
 					var response = xhr.responseText;
@@ -75,9 +77,10 @@ function thumbretriever($, id, urlroot) {
 					} else {
 						// This would mean an invalid response from the server - maybe the site went down or whatever...
 					}
+					this._timeOut = 5;
 				}
 			});
-			setTimeout($.proxy(this.getthumb, this), 500, index+1, params);
+			setTimeout($.proxy(this.getthumb, this), this._timeOut, index+1, params);
 		} else {
 			$('#thumbs'+this._id).blur(); 
 		}

@@ -14,6 +14,7 @@ function jselectdirs_ajax($, id, urlroot, value, media, lightbox)
             if (lightbox == "fancybox") {
                 var thmb = new imagesviewer($, id, rdata);
                 thmb.show($, 0, 1500);
+                initfancybox($);
             } else {
                 psw_images_getimages($, id, rdata);
                 init_psw($, id);

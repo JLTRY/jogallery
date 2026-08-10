@@ -1,4 +1,4 @@
-VERSION = "3.0.7.2"
+VERSION = "3.0.7.3"
 VERSION2 = $(shell echo $(VERSION)|sed 's/ /-/g')
 PACKAGE = pkg_jogallery
 ZIPFILE = $(PACKAGE)-$(VERSION2).zip
@@ -10,7 +10,7 @@ mkfile_dir := $(dir $(mkfile_path))
 
 all: parts $(ZIPFILE) fixsha
 
-INSTALLS = com_jogallery jogallery lib_jltry jogalleryineditor_plugin
+INSTALLS = com_jogallery jogallery jodirectory lib_jltry jogalleryineditor_plugin
 
 EXTRAS = 
 

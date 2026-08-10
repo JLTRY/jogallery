@@ -70,7 +70,7 @@ abstract class JODirectoryHelper
             return  "errorf: missing dir param" . print_r($_params, true);
         }
         $rootdir = $_params['rootdir']?? JParametersHelper::getrootdir();
-        $type = $_params['type']?? 'radio';
+        $type = $_params['type']?? $_params['output']?? 'radio';
         $directory = $_params['dir'];
         $options = array();
         $options['media'] = $_params['media']?? "IMAGES";

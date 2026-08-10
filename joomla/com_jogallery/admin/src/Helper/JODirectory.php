@@ -339,6 +339,7 @@ class JODirectory
         $jsonoptions = json_encode($options);
         $icon = "/media/com_jogallery/images/icon-folder-medium.png";
         $content .= LayoutHelper::render('directories', array('id' => $id), JPATH_LAYOUTS);
+        $content .= LayoutHelper::render('jogallery', array('id' => $id), JPATH_LAYOUTS);
         JOGalleryHelper::loadLibrary(array("jdirectories" => true, "bootstrap.tooltip" => true));
         JOGalleryHelper::loadLibrary(array("inline" =>
                                         array('(function($) {
